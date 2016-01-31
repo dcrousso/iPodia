@@ -89,7 +89,7 @@ main > form > input[type="submit"] {
 	width: 75px;
 	height: 30px;
 	margin-top: 10px;
-	margin-left: calc(100% - 75px);
+	margin-left: calc(100% - 76px);
 	padding: 0 12px 2px;
 	font-size: 14px;
 	line-height: 28px;
@@ -101,9 +101,14 @@ main > form > input[type="submit"] {
 	background-color: #0085ba;
 	border-width: 1px;
 	border-style: solid;
-	border-color: #0073aa #006799 #006799;
+	border-color: #0073aa;
 	border-radius: 3px;
-	-webkit-box-shadow: 0 1px 0 #006799;
-	        box-shadow: 0 1px 0 #006799;
+	box-shadow: 0 1px 0 #006799;
+	outline: none;
 	cursor: pointer;
+}
+
+main > form > input[type="submit"]:active {
+	border-style: inset;
+	box-shadow: 0 1px 0 #006799 inset;
 }
