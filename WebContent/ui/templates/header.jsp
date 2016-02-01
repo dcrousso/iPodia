@@ -2,7 +2,6 @@
 <html>
 	<head>
 		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<link rel="icon" href="/ui/images/favicon.png" type="image/png" />
 		<title>iPodia - ${param.title}</title>
 		<meta name="keywords" content="iPodia, iPodia Initiative, Inverted Classroom">
 		<meta name="description" content="TODO">
