@@ -94,10 +94,6 @@ main > form > input[type="submit"] {
 	font-size: 14px;
 	line-height: 28px;
 	color: #fff;
-	text-shadow: 0  -1px 1px #006799,
-	             1px 0   1px #006799,
-	             0   1px 1px #006799,
-	            -1px 0   1px #006799;
 	background-color: #0085ba;
 	border-width: 1px;
 	border-style: solid;

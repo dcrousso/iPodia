@@ -44,7 +44,7 @@ if (request != null) {
 	}
 }
 %>
-<jsp:include page="/ui/templates/header.jsp">
+<jsp:include page="/WEB-INF/header.jsp">
 	<jsp:param name="pagetype" value="home"/>
 	<jsp:param name="title" value="Home"/>
 </jsp:include>
@@ -62,4 +62,4 @@ if (request != null) {
 				<input type="submit" value="Submit">
 			</form>
 		</main>
-<jsp:include page="/ui/templates/footer.jsp"/>
+<jsp:include page="/WEB-INF/footer.jsp"/>
