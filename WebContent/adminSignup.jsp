@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>after signing up</title>
+<title>Admin post sign up page</title>
 </head>
 <body>
 
