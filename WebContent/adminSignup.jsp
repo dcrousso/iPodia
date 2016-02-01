@@ -26,7 +26,7 @@
 	String university = request.getParameter("university");
 	String classes = request.getParameter("classes");
 	
-	String query= "INSERT into students(firstName, lastName, password, email, university, classes) values (?, ?, ?, ?, ?, ?)";
+	String query= "INSERT into admins(firstName, lastName, password, email, university, classes) values (?, ?, ?, ?, ?, ?)";
 	PreparedStatement ps = dbConnection.prepareStatement(query);
 	ps.setString(1, firstName);
 	ps.setString(2, lastName);
