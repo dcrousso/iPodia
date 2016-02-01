@@ -14,7 +14,7 @@ body {
 main {
 	width: 100%;
 	max-width: 320px;
-	margin: 20% auto 0;
+	margin: 20vh auto 0;
 	padding: 10px 20px 30px;
 	background-color: white;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
