@@ -12,7 +12,7 @@ if (user.getType() == null || !user.isStudent()) {
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 </head>
-<h1> Welcome to class: <%=request.getParameter("class") %></h1>
+<h1> Welcome to class: <%= request.getParameter("class") %></h1>
 
 <body>
 
