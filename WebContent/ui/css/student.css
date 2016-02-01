@@ -19,3 +19,14 @@ a {
 a:hover {
 	color: #277bb6;
 }
+
+main {
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+main > h4,
+main > ul {
+	margin: 0;
+}

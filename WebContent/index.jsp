@@ -1,5 +1,12 @@
-<%@ include file="WEB-INF/Database.jsp" %>
+<%@ include file="/WEB-INF/Session.jsp" %>
+<%@ include file="/WEB-INF/Database.jsp" %>
 <%
+User user = ((User) session.getAttribute("user"));
+if (user.getType() != null) {
+	response.sendRedirect(request.getContextPath() + "/" + user.getType());
+	return;
+}
+
 boolean invalidCredentials = false;
 if (request != null) {
 	String email = request.getParameter("email");
@@ -8,14 +15,22 @@ if (request != null) {
 		PreparedStatement ps = null;
 
 		// Check students
-		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+		ps = dbConnection.prepareStatement("SELECT * FROM students WHERE email = ?");
 		ps.setString(1, email);
-		ResultSet users = ps.executeQuery();
-		while (users.next()) {
-			if (password.equals(users.getString("password"))) {
-				response.sendRedirect(request.getContextPath() + "/student");
-				return;
-			}
+		ResultSet students = ps.executeQuery();
+		while (students.next()) {
+			if (!password.equals(students.getString("password")))
+				continue;
+
+			user.setId(students.getInt("id"));
+			user.setType(User.Student);
+			user.setUsername(email);
+			user.setName(students.getString("firstName"), students.getString("lastName"));
+			user.setUniversity(students.getString("university"));
+			user.setClasses(students.getString("classes"));
+
+			response.sendRedirect(request.getContextPath() + "/student");
+			return;
 		}
 
 		// Check admins
@@ -23,10 +38,18 @@ if (request != null) {
 		ps.setString(1, email);
 		ResultSet admins = ps.executeQuery();
 		while (admins.next()) {
-			if (password.equals(admins.getString("password"))) {
-				response.sendRedirect(request.getContextPath() + "/admin");
-				return;
-			}
+			if (!password.equals(admins.getString("password")))
+				continue;
+
+			user.setId(admins.getInt("id"));
+			user.setType(User.Admin);
+			user.setUsername(email);
+			user.setName(admins.getString("firstName"), admins.getString("lastName"));
+			user.setUniversity(admins.getString("university"));
+			user.setClasses(admins.getString("classes"));
+
+			response.sendRedirect(request.getContextPath() + "/admin");
+			return;
 		}
 
 		// User not found
