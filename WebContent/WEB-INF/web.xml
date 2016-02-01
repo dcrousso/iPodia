@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<error-page>
+	    <error-code>404</error-code>
+	    <location>/404.html</location>
+	</error-page>
+
+	<servlet>
+		<servlet-name>home-jsp-extension</servlet-name>
+		<jsp-file>/index.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>home-jsp-extension</servlet-name>
+		<url-pattern>/index</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>admin-jsp-extension</servlet-name>
+		<jsp-file>/admin/index.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>admin-jsp-extension</servlet-name>
+		<url-pattern>/admin/index</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>student-jsp-extension</servlet-name>
+		<jsp-file>/student/index.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>student-jsp-extension</servlet-name>
+		<url-pattern>/student/index</url-pattern>
+	</servlet-mapping>
+</web-app>
