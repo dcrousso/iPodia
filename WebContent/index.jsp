@@ -1,17 +1,7 @@
-<%@ page import="java.sql.DriverManager" %>
-<%@ page import="java.sql.PreparedStatement" %>
-<%@ page import="java.sql.ResultSet" %>
-<%@ page import="java.sql.SQLException" %>
-<%@ page import="java.sql.Connection" %>
+<%@ include file="WEB-INF/Database.jsp" %>
 <%
+boolean invalidCredentials = false;
 if (request != null) {
-	String dbDriver = "com.mysql.jdbc.Driver";
-	String dbURL = "jdbc:mysql://localhost:3306/ipodia";
-	String dbUsername = "root";
-	String dbPassword = "";
-	Class.forName(dbDriver);
-	Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
 	String email = request.getParameter("email");
 	String password = request.getParameter("password");
 	if (email != null && password != null) {
@@ -40,16 +30,19 @@ if (request != null) {
 		}
 
 		// User not found
-		System.out.println("Invalid Email or Password");
+		invalidCredentials = true;
 	}
 }
 %>
-<jsp:include page="/WEB-INF/header.jsp">
+<jsp:include page="/WEB-INF/templates/header.jsp">
 	<jsp:param name="pagetype" value="home"/>
 	<jsp:param name="title" value="Home"/>
 </jsp:include>
 		<main>
 			<h1>iPodia</h1>
+<% if (invalidCredentials) { %>
+			<h4>Email/Password Invalid</h4>
+<% } %>
 			<form method="post">
 				<div>
 					<label for="email">Email</label>
@@ -62,4 +55,4 @@ if (request != null) {
 				<input type="submit" value="Submit">
 			</form>
 		</main>
-<jsp:include page="/WEB-INF/footer.jsp"/>
+<jsp:include page="/WEB-INF/templates/footer.jsp"/>

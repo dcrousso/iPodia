@@ -21,7 +21,19 @@ main {
 }
 
 main > h1 {
+	margin: 0.8em 0 0;
 	text-align: center;
+}
+
+main > h4 {
+	margin: 0.7em 0 0;
+	text-align: center;
+	font-size: 70%;
+	color: red;
+}
+
+main > h1 + form {
+	margin-top: 1.35em;
 }
 
 main > form > div {
