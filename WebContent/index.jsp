@@ -1,19 +1,7 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<link rel="icon" href="/ui/images/favicon.png" type="image/png" />
-		<title>iPodia - Home</title>
-		<meta name="keywords" content="iPodia, iPodia Initiative, Inverted Classroom">
-		<meta name="description" content="TODO">
-		<meta name="HandheldFriendly" content="True">
-		<meta name="MobileOptimized" content="320">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		
-		<link rel="stylesheet" href="ui/css/home.css">
-	</head>
-	<body>
+<jsp:include page="/ui/templates/header.jsp">
+	<jsp:param name="pagetype" value="home"/>
+	<jsp:param name="title" value="Home"/>
+</jsp:include>
 		<main>
 			
 			<%@page import= "java.sql.DriverManager" %>
@@ -82,5 +70,4 @@
 			%>
 			
 		</main>
-	</body>
-</html>
+<jsp:include page="/ui/templates/footer.jsp"/>
