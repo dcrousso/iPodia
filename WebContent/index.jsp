@@ -40,7 +40,7 @@ if (request != null) {
 		ps.setString(1, email);
 		ResultSet admins = ps.executeQuery();
 		while (admins.next()) {
-			if (!password.equals(admins.getString("password")))
+			if (!encryptedPassword.equals(admins.getString("password")))
 				continue;
 
 			user.setId(admins.getInt("id"));

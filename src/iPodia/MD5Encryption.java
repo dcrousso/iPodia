@@ -15,8 +15,6 @@ public class MD5Encryption {
 			BigInteger number = new BigInteger(1, digest);
 			String encryptedString = number.toString();
 			
-			//this gives you the 32 character bit encryption
-			
 			return encryptedString;
 			
 		} catch (NoSuchAlgorithmException e) {
