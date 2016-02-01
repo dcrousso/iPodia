@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS users (
 	password varchar(255),
 	email varchar(255),
 	university varchar(255),
+	classes varchar(255),
 	PRIMARY KEY (userID)
 );
 
@@ -26,5 +27,6 @@ CREATE TABLE IF NOT EXISTS admins (
 	password varchar(255),
 	email varchar(255),
 	university varchar(255),
+	classes varchar(255),
 	PRIMARY KEY (userID)
 );
