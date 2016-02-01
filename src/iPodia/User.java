@@ -81,4 +81,5 @@ public class User {
 	public void setClasses(String classes) {
 		m_classes = Arrays.asList(classes.split("\\s*,\\s*")).stream().mapToInt(item -> Integer.parseInt(item)).toArray();
 	}
+	
 }
