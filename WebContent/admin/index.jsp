@@ -18,5 +18,21 @@ if (user.getType() == null || !user.isAdmin()) {
 				<li><a href="${pageContext.request.contextPath}/admin?class=<%= Integer.toString(classID) %>"><%= Integer.toString(classID) %></a></li>
 <% } %>
 			</ul>
+			
+			<form method = "POST">
+			Create a new class: <input type="text" name="new-class">
+			<input type="submit" value="Submit" />
+			</form>
+			
+			<%
+				if (request != null) {
+					String input = request.getParameter("new-class");
+					if (input != null) {
+						Integer classId = Integer.valueOf(input);		
+					}
+					
+					//now run a sql command to create a table in the database for this class 
+				}
+			%>
 		</main>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>

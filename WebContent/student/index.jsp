@@ -10,12 +10,13 @@ if (user.getType() == null || !user.isStudent()) {
 	<jsp:param name="pagetype" value="student"/>
 	<jsp:param name="title" value="Student"/>
 </jsp:include>
+
 		<main>
-			<h1>Student</h1>
+			<h1>Welcome <%=user.getName() %></h1>
 			<h4>Please select a class:</h4>
 			<ul>
 <% for (int classID : user.getClasses()) { %>
-				<li><a href="${pageContext.request.contextPath}/student?class=<%= Integer.toString(classID) %>"><%= Integer.toString(classID) %></a></li>
+				<li><a href="${pageContext.request.contextPath}/student/class.jsp?class=<%= Integer.toString(classID) %>"><%= Integer.toString(classID) %></a></li>
 <% } %>
 			</ul>
 		</main>

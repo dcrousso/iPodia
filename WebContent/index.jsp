@@ -1,3 +1,4 @@
+<%@page import="iPodia.MD5Encryption"%>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
 <%
@@ -11,6 +12,7 @@ boolean invalidCredentials = false;
 if (request != null) {
 	String email = request.getParameter("email");
 	String password = request.getParameter("password");
+	String encryptedPassword = MD5Encryption.encrypt(password);
 	if (email != null && password != null) {
 		PreparedStatement ps = null;
 
@@ -19,7 +21,7 @@ if (request != null) {
 		ps.setString(1, email);
 		ResultSet students = ps.executeQuery();
 		while (students.next()) {
-			if (!password.equals(students.getString("password")))
+			if (!encryptedPassword.equals(students.getString("password")))
 				continue;
 
 			user.setId(students.getInt("id"));
@@ -38,7 +40,7 @@ if (request != null) {
 		ps.setString(1, email);
 		ResultSet admins = ps.executeQuery();
 		while (admins.next()) {
-			if (!password.equals(admins.getString("password")))
+			if (!encryptedPassword.equals(admins.getString("password")))
 				continue;
 
 			user.setId(admins.getInt("id"));
