@@ -9,7 +9,6 @@ if (user.getType() == null || !user.isStudent()) {
 	<jsp:param name="pagetype" value="student"/>
 	<jsp:param name="title" value="Student"/>
 </jsp:include>
-
 		<main>
 			<h1>Welcome <%=user.getName() %></h1>
 			<h4>Please select a class:</h4>

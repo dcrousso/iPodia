@@ -5,15 +5,11 @@ if (user.getType() == null || !user.isStudent()) {
 	return;
 }
 %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title></title>
-</head>
-<h1> Welcome to class: <%= request.getParameter("class") %></h1>
-
-<body>
-
-</body>
-</html>
+<jsp:include page="/WEB-INF/templates/header.jsp">
+	<jsp:param name="pagetype" value="student"/>
+	<jsp:param name="title" value="Student"/>
+</jsp:include>
+		<main>
+			<h1>Welcome to class: <%= request.getParameter("class") %></h1>
+		</main>
+<jsp:include page="/WEB-INF/templates/footer.jsp"/>
