@@ -1,4 +1,4 @@
-<%@page import="iPodia.MD5Encryption"%>
+<%@ page import="iPodia.MD5Encryption"%>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
 <%
@@ -12,8 +12,8 @@ boolean invalidCredentials = false;
 if (request != null) {
 	String email = request.getParameter("email");
 	String password = request.getParameter("password");
-	String encryptedPassword = MD5Encryption.encrypt(password);
 	if (email != null && password != null) {
+		String encryptedPassword = MD5Encryption.encrypt(password);
 		PreparedStatement ps = null;
 
 		// Check students
