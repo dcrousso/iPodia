@@ -9,24 +9,48 @@ USE ipodia;
 
 /* Creating the table of students */
 CREATE TABLE IF NOT EXISTS students (
-	id int NOT NULL AUTO_INCREMENT,
+	
+	email varchar(255),
 	firstName varchar(255),
 	lastName varchar(255),
 	password varchar(255),
-	email varchar(255),
 	university varchar(255),
 	classes varchar(255),
-	PRIMARY KEY (id)
+	PRIMARY KEY (email)
 );
 
 /* Creating the table of teachers */
 CREATE TABLE IF NOT EXISTS admins (
-	id int NOT NULL AUTO_INCREMENT,
+	email varchar(255),
 	firstName varchar(255),
 	lastName varchar(255),
 	password varchar(255),
-	email varchar(255),
 	university varchar(255),
 	classes varchar(255),
+	PRIMARY KEY (email)
+);
+
+/* Creating the table of quizzes for a specific class */
+CREATE TABLE IF NOT EXISTS class_test_quiz (
+	id varchar(255),
+    question varchar (255),
+    answer1 varchar (255),
+    answer2 varchar (255),
+    answer3 varchar (255),
+    answer4 varchar (255),
+    answer5 varchar (255),
+    correctAnswer varchar (255),
+    dueDate timestamp,
+    topic varchar (255), 
 	PRIMARY KEY (id)
 );
+
+/* Creating the table for the painIndex for a specific class */
+CREATE TABLE IF NOT EXISTS class_test_painIndex (
+	id varchar(255),
+    dueDate timestamp,
+    topic varchar (255), 
+	PRIMARY KEY (id)
+);
+
+

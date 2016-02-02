@@ -1,4 +1,5 @@
 <%@ include file="/WEB-INF/Session.jsp" %>
+<%@ page import="iPodia.User"%>
 <%
 if (user.getType() == null || !user.isAdmin()) {
 	response.sendRedirect(request.getContextPath() + "/");
