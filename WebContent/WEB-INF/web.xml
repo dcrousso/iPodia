@@ -39,6 +39,15 @@
 		<servlet-name>home-extension</servlet-name>
 		<url-pattern>/index</url-pattern>
 	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>logout-extension</servlet-name>
+		<jsp-file>/logout.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>logout-extension</servlet-name>
+		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>admin-extension</servlet-name>
