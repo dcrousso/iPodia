@@ -26,7 +26,7 @@ if (request != null) {
 			<h4>Please select a class:</h4>
 			<ul>
 <% for (int classID : user.getClasses()) { %>
-				<li><a href="${pageContext.request.contextPath}/admin?class=<%= Integer.toString(classID) %>"><%= Integer.toString(classID) %></a></li>
+				<li><a href="${pageContext.request.contextPath}/admin/class.jsp?class=<%= Integer.toString(classID) %>"><%= Integer.toString(classID) %></a></li>
 <% } %>
 			</ul>
 			
