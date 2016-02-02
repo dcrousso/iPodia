@@ -2,7 +2,6 @@
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
 <%
-User user = ((User) session.getAttribute("user"));
 if (user.getType() != null) {
 	response.sendRedirect(request.getContextPath() + "/" + user.getType());
 	return;
