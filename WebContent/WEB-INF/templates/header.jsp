@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta http-equiv="content-type" content="text/html; charset=UTF-8">
-		<title>iPodia - ${param.title}</title>
-		<meta name="keywords" content="iPodia, iPodia Initiative, Inverted Classroom">
-		<meta name="description" content="TODO">
-		<meta name="HandheldFriendly" content="True">
-		<meta name="MobileOptimized" content="320">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-		<link rel="stylesheet" href="${pageContext.request.contextPath}/ui/css/${param.pagetype}.css">
-	</head>
-	<body>
+		<header>
+			<nav>
+				<a href="${pageContext.request.contextPath}/" title="Home">${param.username}</a>
+				<a href="${pageContext.request.contextPath}/logout" title="Logout">Logout</a>
+			</nav>
+		</header>

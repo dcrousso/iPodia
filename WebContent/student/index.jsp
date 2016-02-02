@@ -5,9 +5,12 @@ if (user.getType() == null || !user.isStudent()) {
 	return;
 }
 %>
-<jsp:include page="/WEB-INF/templates/header.jsp">
+<jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="student"/>
 	<jsp:param name="title" value="Student"/>
+</jsp:include>
+<jsp:include page="/WEB-INF/templates/header.jsp">
+	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
 			<h1>Welcome <%=user.getName() %></h1>

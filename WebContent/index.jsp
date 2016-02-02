@@ -58,7 +58,7 @@ if (request != null) {
 	}
 }
 %>
-<jsp:include page="/WEB-INF/templates/header.jsp">
+<jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="home"/>
 	<jsp:param name="title" value="Home"/>
 </jsp:include>
