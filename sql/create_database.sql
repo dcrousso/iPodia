@@ -9,7 +9,6 @@ USE ipodia;
 
 /* Creating the table of students */
 CREATE TABLE IF NOT EXISTS students (
-	
 	email varchar(255),
 	firstName varchar(255),
 	lastName varchar(255),
@@ -30,27 +29,33 @@ CREATE TABLE IF NOT EXISTS admins (
 	PRIMARY KEY (email)
 );
 
+/* Create the table of class ids to names */
+CREATE TABLE IF NOT EXISTS classIndex
+	id int NOT NULL,
+	name varchar(255),
+	contact varchar(255),
+	PRIMARY KEY (id)
+);
+
 /* Creating the table of quizzes for a specific class */
 CREATE TABLE IF NOT EXISTS class_test_quiz (
 	id varchar(255),
-    question varchar (255),
-    answer1 varchar (255),
-    answer2 varchar (255),
-    answer3 varchar (255),
-    answer4 varchar (255),
-    answer5 varchar (255),
-    correctAnswer varchar (255),
-    dueDate timestamp,
-    topic varchar (255), 
+	question varchar(255),
+	answer1 varchar(255),
+	answer2 varchar(255),
+	answer3 varchar(255),
+	answer4 varchar(255),
+	answer5 varchar(255),
+	correctAnswer varchar(255),
+	dueDate timestamp,
+	topic varchar(255),
 	PRIMARY KEY (id)
 );
 
 /* Creating the table for the painIndex for a specific class */
 CREATE TABLE IF NOT EXISTS class_test_painIndex (
 	id varchar(255),
-    dueDate timestamp,
-    topic varchar (255), 
+	dueDate timestamp,
+	topic varchar (255),
 	PRIMARY KEY (id)
 );
-
-
