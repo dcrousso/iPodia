@@ -31,7 +31,7 @@ CREATE TABLE IF NOT EXISTS admins (
 
 /* Create the table of class ids to names */
 CREATE TABLE IF NOT EXISTS classIndex (
-	id int NOT NULL,
+	id int NOT NULL AUTO_INCREMENT,
 	name varchar(255),
 	contact varchar(255),
 	PRIMARY KEY (id)
@@ -56,6 +56,6 @@ CREATE TABLE IF NOT EXISTS class_test_quiz (
 CREATE TABLE IF NOT EXISTS class_test_painIndex (
 	id varchar(255),
 	dueDate timestamp,
-	topic varchar (255),
+	topic varchar(255),
 	PRIMARY KEY (id)
 );
