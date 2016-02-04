@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS admins (
 );
 
 /* Create the table of class ids to names */
-CREATE TABLE IF NOT EXISTS classIndex
+CREATE TABLE IF NOT EXISTS classIndex (
 	id int NOT NULL,
 	name varchar(255),
 	contact varchar(255),
