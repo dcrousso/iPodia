@@ -1,6 +1,8 @@
 package iPodia;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class User {
 	public static final String Admin = "admin";
@@ -69,4 +71,10 @@ public class User {
 		m_classes = classes.split("\\s*,\\s*");
 	}
 	
+	public void addClass (String aClass) {
+		List<String> myClassesList = new ArrayList<String>(Arrays.asList(m_classes));
+		myClassesList.add(aClass);
+		m_classes = new String[myClassesList.size()];
+		m_classes = myClassesList.toArray(m_classes);
+	}
 }
