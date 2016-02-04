@@ -6,28 +6,18 @@ public class User {
 	public static final String Admin = "admin";
 	public static final String Student = "student";
 
-	private int m_id;
 	private String m_type;
-	private String m_username;
+	private String m_email;
 	private String m_name;
 	private String m_university;
-	private int[] m_classes;
+	private String[] m_classes;
 
 	public User() {
-		m_id = 0;
 		m_type = null;
-		m_username = null;
+		m_email = null;
 		m_name = null;
 		m_university = null;
 		m_classes = null;
-	}
-
-	public int getId() {
-		return m_id;
-	}
-
-	public void setId(int id) {
-		m_id = id;
 	}
 
 	public String getType() {
@@ -46,12 +36,12 @@ public class User {
 		return m_type.equals(Student);
 	}
 
-	public String getUsername() {
-		return m_username;
+	public String getEmail() {
+		return m_email;
 	}
 
-	public void setUsername(String username) {
-		m_username = username;
+	public void setEmail(String email) {
+		m_email = email;
 	}
 
 	public String getName() {
@@ -70,16 +60,13 @@ public class User {
 		m_university = university;
 	}
 
-	public int[] getClasses() {
+	public String[] getClasses() {
 		return m_classes;
 	}
 
-	public void setClasses(int[] classes) {
-		m_classes = classes;
-	}
-
 	public void setClasses(String classes) {
-		m_classes = Arrays.asList(classes.split("\\s*,\\s*")).stream().mapToInt(item -> Integer.parseInt(item)).toArray();
+//		m_classes = Arrays.asList(classes.split("\\s*,\\s*")).stream().mapToInt(item -> Integer.parseInt(item)).toArray();
+		m_classes = classes.split("\\s*,\\s*");
 	}
 	
 }

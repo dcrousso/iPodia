@@ -13,11 +13,11 @@ if (user.getType() == null || !user.isStudent()) {
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
-			<h1>Welcome <%=user.getName() %></h1>
+			<h1>Welcome ${user.getName()}</h1>
 			<h4>Please select a class:</h4>
 			<ul>
-<% for (int classID : user.getClasses()) { %>
-				<li><a href="${pageContext.request.contextPath}/student/class.jsp?class=<%= Integer.toString(classID) %>"><%= Integer.toString(classID) %></a></li>
+<% for (String className : user.getClasses()) { %>
+				<li><a href="${pageContext.request.contextPath}/student/class.jsp?className=<%= className %>"><%= className %></a></li>
 <% } %>
 			</ul>
 		</main>

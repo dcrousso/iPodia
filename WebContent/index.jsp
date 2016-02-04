@@ -23,9 +23,8 @@ if (request != null) {
 			if (!encryptedPassword.equals(students.getString("password")))
 				continue;
 
-			user.setId(students.getInt("id"));
 			user.setType(User.Student);
-			user.setUsername(email);
+			user.setEmail(email);
 			user.setName(students.getString("firstName"), students.getString("lastName"));
 			user.setUniversity(students.getString("university"));
 			user.setClasses(students.getString("classes"));
@@ -42,9 +41,8 @@ if (request != null) {
 			if (!encryptedPassword.equals(admins.getString("password")))
 				continue;
 
-			user.setId(admins.getInt("id"));
 			user.setType(User.Admin);
-			user.setUsername(email);
+			user.setEmail(email);
 			user.setName(admins.getString("firstName"), admins.getString("lastName"));
 			user.setUniversity(admins.getString("university"));
 			user.setClasses(admins.getString("classes"));
