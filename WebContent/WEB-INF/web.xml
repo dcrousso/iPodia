@@ -30,6 +30,13 @@
 	    <error-code>404</error-code>
 	    <location>/404.html</location>
 	</error-page>
+	
+	<jsp-config>
+		<jsp-property-group>
+			<url-pattern>*.jsp</url-pattern>
+			<trim-directive-whitespaces>true</trim-directive-whitespaces>
+		</jsp-property-group>
+	</jsp-config>
 
 	<servlet>
 		<servlet-name>home-extension</servlet-name>
@@ -47,6 +54,15 @@
 	<servlet-mapping>
 		<servlet-name>logout-extension</servlet-name>
 		<url-pattern>/logout</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>data-extension</servlet-name>
+		<jsp-file>/data.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>data-extension</servlet-name>
+		<url-pattern>/data</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

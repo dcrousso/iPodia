@@ -1,0 +1,1 @@
+/data?class=test&week=test&file=test.txt
