@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
-if (user.getType() == null || !user.isStudent()) {
+if (!user.isAuthenticated() || !user.isStudent()) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }

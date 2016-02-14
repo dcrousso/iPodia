@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/Database.jsp"%>
 <%@ page import="iPodia.User"%>
 <%
-	if (user.getType() == null || !user.isAdmin()) {
+	if (!user.isAuthenticated() || !user.isAdmin()) {
 		response.sendRedirect(request.getContextPath() + "/");
 		return;
 	}

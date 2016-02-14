@@ -4,10 +4,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 public class User {
-	public static final String Admin = "admin";
-	public static final String Student = "student";
+	public static enum Type {
+		Admin,
+		Student,
+		Registrar
+	};
 
-	private String m_type;
+	private User.Type m_type;
 	private String m_email;
 	private String m_name;
 	private String m_university;
@@ -21,20 +24,33 @@ public class User {
 		m_classes = null;
 	}
 
-	public String getType() {
-		return m_type;
-	}
-
-	public void setType(String type) {
-		m_type = type;
+	public boolean isAuthenticated() {
+		return m_type != null;
 	}
 
 	public boolean isAdmin() {
-		return m_type.equals(Admin);
+		return m_type == User.Type.Admin;
 	}
 
 	public boolean isStudent() {
-		return m_type.equals(Student);
+		return m_type == User.Type.Student;
+	}
+
+	public void setType(User.Type type) {
+		m_type = type;
+	}
+
+	public String getHome() {
+		switch (m_type) {
+		case Admin:
+			return "/admin";
+		case Student:
+			return "/student";
+		case Registrar:
+			return "/registrar";
+		default:
+			return"";
+		}
 	}
 
 	public String getEmail() {

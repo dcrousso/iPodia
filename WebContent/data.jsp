@@ -3,7 +3,7 @@
 <%@ page import="java.nio.file.Files" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
-if (user.getType() == null) {
+if (!user.isAuthenticated()) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }

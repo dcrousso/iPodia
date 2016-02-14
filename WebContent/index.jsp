@@ -2,8 +2,8 @@
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
 <%
-if (user.getType() != null) {
-	response.sendRedirect(request.getContextPath() + "/" + user.getType());
+if (user.isAuthenticated()) {
+	response.sendRedirect(request.getContextPath() + user.getHome());
 	return;
 }
 
@@ -23,7 +23,7 @@ if (request != null) {
 			if (!encryptedPassword.equals(students.getString("password")))
 				continue;
 
-			user.setType(User.Student);
+			user.setType(User.Type.Student);
 			user.setEmail(email);
 			user.setName(students.getString("firstName"), students.getString("lastName"));
 			user.setUniversity(students.getString("university"));
@@ -41,7 +41,7 @@ if (request != null) {
 			if (!encryptedPassword.equals(admins.getString("password")))
 				continue;
 
-			user.setType(User.Admin);
+			user.setType(User.Type.Admin);
 			user.setEmail(email);
 			user.setName(admins.getString("firstName"), admins.getString("lastName"));
 			user.setUniversity(admins.getString("university"));
