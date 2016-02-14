@@ -22,4 +22,20 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 				<input type="submit" value="Submit">
 			</form>
 		</main>
+		
+		<script>
+			Array.prototype.forEach.call(document.querySelectorAll("input[name=\"fileToUpload\"]"), function(item) {
+				item.addEventListener("change", handleChange);
+			});
+			
+
+			function handleChange(event) {
+				var input = document.createElement("input");
+				input.type = "file";
+				input.name = "fileToUpload";
+				input.addEventListener("change", handleChange);
+				event.target.removeEventListener("change", handleChange);
+				event.target.parentElement.insertBefore(input, event.target.nextElementSibling);
+			}
+		</script>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>

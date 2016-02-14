@@ -72,19 +72,23 @@ public class FileUploadServlet extends HttpServlet {
 		}
 
 		for (FileItem item : uploadedFiles) {
-			String filePath = Defaults.DATA_DIRECTORY + File.separator
-			+ className + File.separator
-			+ week +  File.separator
-			+ item.getName();
+			
+			//make sure the file has a name
+			if (!item.getName().equals("")) {
+				String filePath = Defaults.DATA_DIRECTORY + File.separator
+				+ className + File.separator
+				+ week +  File.separator
+				+ item.getName();
 
-			File uploadedFile = new File(filePath);
-			if (!uploadedFile.exists())
-				uploadedFile.createNewFile();
+				File uploadedFile = new File(filePath);
+				if (!uploadedFile.exists())
+					uploadedFile.createNewFile();
 
-			try {
-				item.write(uploadedFile);
-			} catch (Exception e) {
-				throw new ServletException(e);
+				try {
+					item.write(uploadedFile);
+				} catch (Exception e) {
+					throw new ServletException(e);
+				}
 			}
 		}
 
