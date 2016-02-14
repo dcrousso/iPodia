@@ -1,8 +1,8 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.HashSet" %>
-<%@ page import="iPodia.Defaults"%>
+<%@ page import="iPodia.Defaults" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
-<%@ include file="/WEB-INF/Database.jsp"%>
+<%@ include file="/WEB-INF/Database.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isRegistrar()) {
 	response.sendRedirect(request.getContextPath() + "/");
@@ -15,9 +15,11 @@ if (classId == null || classId.trim().length() == 0) {
 	return;
 }
 
-String className = user.getClassName(Integer.parseInt(classId));
-if (className == null)
-	className = classId;
+String className = user.getClassName(classId);
+if (className == null || className.trim().length() == 0) {
+	response.sendRedirect(request.getContextPath() + "/");
+	return;
+}
 
 PreparedStatement ps;
 ResultSet results;
@@ -30,6 +32,7 @@ while (results.next()) {
 	if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
 		enrolledTeachers.add(results.getString("email"));
 }
+ps.close();
 
 HashSet<String> enrolledStudents = new HashSet<String>();
 ps = dbConnection.prepareStatement("SELECT * FROM students");
@@ -39,6 +42,7 @@ while (results.next()) {
 	if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
 		enrolledStudents.add(results.getString("email"));
 }
+ps.close();
 
 String[] teachersToEnroll = request.getParameterValues("teacher");
 if (teachersToEnroll != null) {
@@ -54,12 +58,13 @@ if (teachersToEnroll != null) {
 			if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
 				continue;
 
-			ps = dbConnection.prepareStatement("UPDATE admins SET classes = ? WHERE email = ?");
-			ps.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
-			ps.setString(2, teacher);
-			ps.execute();
+			PreparedStatement addClass = dbConnection.prepareStatement("UPDATE admins SET classes = ? WHERE email = ?");
+			addClass.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
+			addClass.setString(2, teacher);
+			addClass.execute();
 		}
 	}
+	ps.close();
 
 	for (String teacher : enrolledTeachers) {
 		if (teachersToEnroll != null && Arrays.asList(teachersToEnroll).contains(teacher))
@@ -69,12 +74,13 @@ if (teachersToEnroll != null) {
 		ps.setString(1, teacher);
 		results = ps.executeQuery();
 		while (results.next()) {
-			ps = dbConnection.prepareStatement("UPDATE admins SET classes = ? WHERE email = ?");
-			ps.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
-			ps.setString(2, teacher);
-			ps.execute();
+			PreparedStatement removeClass = dbConnection.prepareStatement("UPDATE admins SET classes = ? WHERE email = ?");
+			removeClass.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
+			removeClass.setString(2, teacher);
+			removeClass.execute();
 		}
 	}
+	ps.close();
 }
 
 String[] studentsToEnroll = request.getParameterValues("student");
@@ -91,12 +97,13 @@ if (studentsToEnroll != null) {
 			if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
 				continue;
 
-			ps = dbConnection.prepareStatement("UPDATE students SET classes = ? WHERE email = ?");
-			ps.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
-			ps.setString(2, student);
-			ps.execute();
+			PreparedStatement addClass = dbConnection.prepareStatement("UPDATE students SET classes = ? WHERE email = ?");
+			addClass.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
+			addClass.setString(2, student);
+			addClass.execute();
 		}
 	}
+	ps.close();
 
 	for (String student : enrolledStudents) {
 		if (studentsToEnroll != null && Arrays.asList(studentsToEnroll).contains(student))
@@ -106,12 +113,13 @@ if (studentsToEnroll != null) {
 		ps.setString(1, student);
 		results = ps.executeQuery();
 		while (results.next()) {
-			ps = dbConnection.prepareStatement("UPDATE students SET classes = ? WHERE email = ?");
-			ps.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
-			ps.setString(2, student);
-			ps.execute();
+			PreparedStatement removeClass = dbConnection.prepareStatement("UPDATE students SET classes = ? WHERE email = ?");
+			removeClass.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
+			removeClass.setString(2, student);
+			removeClass.execute();
 		}
 	}
+	ps.close();
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">

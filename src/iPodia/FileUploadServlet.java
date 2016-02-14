@@ -49,7 +49,7 @@ public class FileUploadServlet extends HttpServlet {
 		// Set overall request size constraint
 		upload.setSizeMax(MAX_REQUEST_SIZE);
 
-		String className = null;
+		String classId = null;
 		String week = null;
 		HashSet<FileItem> uploadedFiles = new HashSet<FileItem>();
 
@@ -57,41 +57,40 @@ public class FileUploadServlet extends HttpServlet {
 			for (FileItem item : upload.parseRequest(request)) {
 				if (!item.isFormField())
 					uploadedFiles.add(item);
-				else if (item.getFieldName().equals("className"))
-					className = item.getString();
-				 else if (item.getFieldName().equals("week"))
+				else if (item.getFieldName().equals("id"))
+					classId = item.getString();
+				 else if (item.getFieldName().equals("num"))
 					week = item.getString();
 			}
 		} catch (FileUploadException e) {
 			throw new ServletException(e);
 		}
 
-		if (className == null || week == null) {
+		if (classId == null || week == null) {
 			response.sendRedirect(request.getContextPath() + "/");
 			return;
 		}
 
 		for (FileItem item : uploadedFiles) {
-			
-			//make sure the file has a name
-			if (!item.getName().equals("")) {
-				String filePath = Defaults.DATA_DIRECTORY + File.separator
-				+ className + File.separator
-				+ week +  File.separator
-				+ item.getName();
+			if (item.getName() == null || item.getName().trim().length() == 0)
+				continue;
 
-				File uploadedFile = new File(filePath);
-				if (!uploadedFile.exists())
-					uploadedFile.createNewFile();
+			String filePath = Defaults.DATA_DIRECTORY + File.separator
+			+ classId + File.separator
+			+ week +  File.separator
+			+ item.getName();
 
-				try {
-					item.write(uploadedFile);
-				} catch (Exception e) {
-					throw new ServletException(e);
-				}
+			File uploadedFile = new File(filePath);
+			if (!uploadedFile.exists())
+				uploadedFile.createNewFile();
+
+			try {
+				item.write(uploadedFile);
+			} catch (Exception e) {
+				throw new ServletException(e);
 			}
 		}
 
-		response.sendRedirect(request.getContextPath() + "/admin/week.jsp?className=" + className +"&week=" + week);
+		response.sendRedirect(request.getContextPath() + "/admin/week.jsp?id=" + classId +"&num=" + week);
 	}
 }

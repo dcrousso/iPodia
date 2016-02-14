@@ -1,3 +1,4 @@
+<%@ page import="java.util.HashMap" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isStudent()) {
@@ -16,8 +17,8 @@ if (!user.isAuthenticated() || !user.isStudent()) {
 			<h1>Welcome ${user.getName()}</h1>
 			<h4>Please select a class:</h4>
 			<ul>
-<% for (String className : user.getClasses()) { %>
-				<li><a href="${pageContext.request.contextPath}/student/class.jsp?className=<%= className %>"><%= className %></a></li>
+<% for (HashMap.Entry<Integer, String> entry : user.getClasses().entrySet()) { %>
+				<li><a href="${pageContext.request.contextPath}/student/class.jsp?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
 <% } %>
 			</ul>
 		</main>

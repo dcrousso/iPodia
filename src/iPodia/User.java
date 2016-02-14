@@ -92,7 +92,15 @@ public class User {
 		m_classes.put(classId, className);
 	}
 
+	public void addClass(String classId, String className) {
+		addClass(Integer.parseInt(classId), className);
+	}
+
 	public String getClassName(int classId) {
 		return m_classes.get(classId);
+	}
+
+	public String getClassName(String classId) {
+		return getClassName(Integer.parseInt(classId));
 	}
 }

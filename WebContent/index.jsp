@@ -15,66 +15,81 @@ if (request != null) {
 	if (email != null && password != null) {
 		String encryptedPassword = MD5Encryption.encrypt(password);
 		PreparedStatement ps = null;
+		ResultSet results;
 
 		// Check admins
 		ps = dbConnection.prepareStatement("SELECT * FROM admins WHERE email = ?");
 		ps.setString(1, email);
-		ResultSet admins = ps.executeQuery();
-		while (admins.next()) {
-			if (!encryptedPassword.equals(admins.getString("password")))
+		results = ps.executeQuery();
+		while (results.next()) {
+			if (!encryptedPassword.equals(results.getString("password")))
 				continue;
 
 			user.setType(User.Type.Admin);
 			user.setEmail(email);
-			user.setName(admins.getString("firstName"), admins.getString("lastName"));
-			user.setUniversity(admins.getString("university"));
-			for (String className : admins.getString("classes").split(Defaults.CSV_REGEXP)) {
-				user.addClass(0, className);
+			user.setName(results.getString("firstName"), results.getString("lastName"));
+			user.setUniversity(results.getString("university"));
+			for (String classId : results.getString("classes").split(Defaults.CSV_REGEXP)) {
+				PreparedStatement cl = dbConnection.prepareStatement("SELECT * FROM classListing WHERE id = ?");
+				cl.setString(1, classId);
+				ResultSet classes = cl.executeQuery();
+				while (classes.next())
+					user.addClass(classId, classes.getString("name"));
 			}
 
+			ps.close();
 			response.sendRedirect(request.getContextPath() + "/admin");
 			return;
 		}
+		ps.close();
 
 		// Check students
 		ps = dbConnection.prepareStatement("SELECT * FROM students WHERE email = ?");
 		ps.setString(1, email);
-		ResultSet students = ps.executeQuery();
-		while (students.next()) {
-			if (!encryptedPassword.equals(students.getString("password")))
+		results = ps.executeQuery();
+		while (results.next()) {
+			if (!encryptedPassword.equals(results.getString("password")))
 				continue;
 
 			user.setType(User.Type.Student);
 			user.setEmail(email);
-			user.setName(students.getString("firstName"), students.getString("lastName"));
-			user.setUniversity(students.getString("university"));
-			for (String className : students.getString("classes").split(Defaults.CSV_REGEXP)) {
-				user.addClass(0, className);
+			user.setName(results.getString("firstName"), results.getString("lastName"));
+			user.setUniversity(results.getString("university"));
+			for (String classId : results.getString("classes").split(Defaults.CSV_REGEXP)) {
+				PreparedStatement cl = dbConnection.prepareStatement("SELECT * FROM classListing WHERE id = ?");
+				cl.setString(1, classId);
+				ResultSet classes = cl.executeQuery();
+				while (classes.next())
+					user.addClass(classId, classes.getString("name"));
 			}
 
+			ps.close();
 			response.sendRedirect(request.getContextPath() + "/student");
 			return;
 		}
+		ps.close();
 		
 		// Check registrars
 		ps = dbConnection.prepareStatement("SELECT * FROM registrars WHERE email = ?");
 		ps.setString(1, email);
-		ResultSet registrars = ps.executeQuery();
-		while (registrars.next()) {
-			if (!encryptedPassword.equals(registrars.getString("password")))
+		results = ps.executeQuery();
+		while (results.next()) {
+			if (!encryptedPassword.equals(results.getString("password")))
 				continue;
 
 			user.setType(User.Type.Registrar);
 			user.setEmail(email);
-			user.setName(registrars.getString("firstName"), registrars.getString("lastName"));
+			user.setName(results.getString("firstName"), results.getString("lastName"));
 			
-			ResultSet classes  = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
+			ResultSet classes = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
 			while (classes.next())
 				user.addClass(classes.getInt("id"), classes.getString("name"));
 
+			ps.close();
 			response.sendRedirect(request.getContextPath() + "/registrar");
 			return;
 		}
+		ps.close();
 
 		// User not found
 		invalidCredentials = true;

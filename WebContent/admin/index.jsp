@@ -1,4 +1,5 @@
-<%@ include file="/WEB-INF/Session.jsp"%>
+<%@ page import="java.util.HashMap" %>
+<%@ include file="/WEB-INF/Session.jsp" %>
 <%
 	if (!user.isAuthenticated() || !user.isAdmin()) {
 		response.sendRedirect(request.getContextPath() + "/");
@@ -16,8 +17,8 @@
 			<h1>Admin</h1>
 			<h4>Please select a class:</h4>
 			<ul>
-<% for (String className : user.getClasses()) { %>
-				<li><a href="${pageContext.request.contextPath}/admin/class.jsp?className=<%= className %>"><%=className%></a></li>
+<% for (HashMap.Entry<Integer, String> entry : user.getClasses().entrySet()) { %>
+				<li><a href="${pageContext.request.contextPath}/admin/class.jsp?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
 <% } %>
 			</ul>
 		</main>

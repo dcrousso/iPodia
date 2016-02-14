@@ -6,36 +6,34 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
-	<jsp:param name="pagetype" value="student"/>
-	<jsp:param name="title" value="Student"/>
+	<jsp:param name="pagetype" value="admin"/>
+	<jsp:param name="title" value="Upload"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/templates/header.jsp">
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
 			<form method="post" action="uploadFile" enctype="multipart/form-data">
-				<input type="text" name="className" value="${param.className}" hidden>
-				<input type="text" name="week" value="${param.week}" hidden>
-
-				<input type="file" name="fileToUpload">
-
+				<input type="text" name="id" value="${param.id}" hidden>
+				<input type="text" name="num" value="${param.num}" hidden>
+				<input type="file" name="upload">
 				<button>Submit</button>
 			</form>
 		</main>
 		
 		<script>
-			Array.prototype.forEach.call(document.querySelectorAll("input[name=\"fileToUpload\"]"), function(item) {
-				item.addEventListener("change", handleChange);
-			});
-			
-
-			function handleChange(event) {
-				var input = document.createElement("input");
-				input.type = "file";
-				input.name = "fileToUpload";
-				input.addEventListener("change", handleChange);
-				event.target.removeEventListener("change", handleChange);
-				event.target.parentElement.insertBefore(input, event.target.nextElementSibling);
-			}
+			(function() {
+				function handleChange(event) {
+					var input = document.createElement("input");
+					input.type = "file";
+					input.name = "upload";
+					input.addEventListener("change", handleChange);
+					this.removeEventListener("change", handleChange);
+					this.parentElement.insertBefore(input, this.nextElementSibling);
+				}
+				Array.prototype.forEach.call(document.querySelectorAll("input[type=\"file\"]"), function(item) {
+					item.addEventListener("change", handleChange);
+				});
+			})();
 		</script>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>
