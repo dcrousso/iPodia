@@ -29,6 +29,15 @@ CREATE TABLE IF NOT EXISTS admins (
 	PRIMARY KEY (email)
 );
 
+/* Creating the table of registrars */
+CREATE TABLE IF NOT EXISTS registrars (
+	email varchar(255),
+	firstName varchar(255),
+	lastName varchar(255),
+	password varchar(255),
+	PRIMARY KEY (email)
+);
+
 /* Create the table of class ids to names */
 CREATE TABLE IF NOT EXISTS classIndex (
 	id int NOT NULL AUTO_INCREMENT,

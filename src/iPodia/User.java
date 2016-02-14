@@ -36,6 +36,10 @@ public class User {
 		return m_type == User.Type.Student;
 	}
 
+	public boolean isRegistrar() {
+		return m_type == User.Type.Registrar;
+	}
+
 	public void setType(User.Type type) {
 		m_type = type;
 	}

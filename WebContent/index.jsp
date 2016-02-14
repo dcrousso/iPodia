@@ -15,6 +15,24 @@ if (request != null) {
 		String encryptedPassword = MD5Encryption.encrypt(password);
 		PreparedStatement ps = null;
 
+		// Check admins
+		ps = dbConnection.prepareStatement("SELECT * FROM admins WHERE email = ?");
+		ps.setString(1, email);
+		ResultSet admins = ps.executeQuery();
+		while (admins.next()) {
+			if (!encryptedPassword.equals(admins.getString("password")))
+				continue;
+
+			user.setType(User.Type.Admin);
+			user.setEmail(email);
+			user.setName(admins.getString("firstName"), admins.getString("lastName"));
+			user.setUniversity(admins.getString("university"));
+			user.setClasses(admins.getString("classes"));
+
+			response.sendRedirect(request.getContextPath() + "/admin");
+			return;
+		}
+
 		// Check students
 		ps = dbConnection.prepareStatement("SELECT * FROM students WHERE email = ?");
 		ps.setString(1, email);
@@ -32,22 +50,20 @@ if (request != null) {
 			response.sendRedirect(request.getContextPath() + "/student");
 			return;
 		}
-
-		// Check admins
-		ps = dbConnection.prepareStatement("SELECT * FROM admins WHERE email = ?");
+		
+		// Check registrars
+		ps = dbConnection.prepareStatement("SELECT * FROM registrars WHERE email = ?");
 		ps.setString(1, email);
-		ResultSet admins = ps.executeQuery();
-		while (admins.next()) {
-			if (!encryptedPassword.equals(admins.getString("password")))
+		ResultSet registrars = ps.executeQuery();
+		while (registrars.next()) {
+			if (!encryptedPassword.equals(registrars.getString("password")))
 				continue;
 
-			user.setType(User.Type.Admin);
+			user.setType(User.Type.Registrar);
 			user.setEmail(email);
-			user.setName(admins.getString("firstName"), admins.getString("lastName"));
-			user.setUniversity(admins.getString("university"));
-			user.setClasses(admins.getString("classes"));
+			user.setName(registrars.getString("firstName"), registrars.getString("lastName"));
 
-			response.sendRedirect(request.getContextPath() + "/admin");
+			response.sendRedirect(request.getContextPath() + "/registrar");
 			return;
 		}
 

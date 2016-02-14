@@ -14,3 +14,4 @@
 		<link rel="stylesheet" href="${pageContext.request.contextPath}/ui/css/${param.pagetype}.css">
 	</head>
 	<body>
+		
