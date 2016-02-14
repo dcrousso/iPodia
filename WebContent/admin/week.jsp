@@ -13,7 +13,7 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
-			<form method="post" action="processWeek.jsp" enctype="multipart/form-data">
+			<form method="post" action="uploadFile" enctype="multipart/form-data">
 				<input type="text" name="className" value="${param.className}" hidden>
 				<input type="text" name="week" value="${param.week}" hidden>
 				
@@ -119,7 +119,7 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 				for (var i = 0; i < answerArray.length; ++i) {
 					var radioButton = document.createElement("input");
 					radioButton.type = "radio";
-					radioButton.name = topic.id + "Question" + questionNumber + "CorrectAnswer";
+					radioButton.name = topic.id + "Question" + questionNumber + "correctAnswer";
 					var label = document.createElement("label");
 					var textForLabel = document.createTextNode(answerArray[i] + ": ");
 					label.appendChild(textForLabel);

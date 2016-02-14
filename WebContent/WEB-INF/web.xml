@@ -74,14 +74,14 @@
 		<url-pattern>/admin/index</url-pattern>
 	</servlet-mapping>
 
-	<!-- <servlet>
+	<servlet>
 		<servlet-name>FileUploadServlet</servlet-name>
 		<servlet-class>iPodia.FileUploadServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FileUploadServlet</servlet-name>
-		<url-pattern>/admin/processWeek.jsp</url-pattern>
-	</servlet-mapping> -->
+		<url-pattern>/admin/uploadFile</url-pattern>
+	</servlet-mapping>
 
 	<servlet>
 		<servlet-name>student-extension</servlet-name>
