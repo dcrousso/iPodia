@@ -39,9 +39,7 @@ public class FileUploadServlet extends HttpServlet {
 		// the configured size threshold. We use temporary directory for java
 		factory.setRepository(new File(System.getProperty("java.io.tmpdir")));
 
-		File dataFolder = new File(Defaults.DATA_DIRECTORY);
-		if (!dataFolder.exists() || !dataFolder.isDirectory())
-			dataFolder.mkdir();
+		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY);
 
 		// Create a new file upload handler
 		ServletFileUpload upload = new ServletFileUpload(factory);
@@ -71,21 +69,21 @@ public class FileUploadServlet extends HttpServlet {
 			return;
 		}
 
+		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId);
+		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId + File.separator + week);
+
 		for (FileItem item : uploadedFiles) {
-			if (item.getName() == null || item.getName().trim().length() == 0)
+			String fileName = item.getName();
+			if (fileName == null || fileName.trim().length() == 0)
 				continue;
 
 			String filePath = Defaults.DATA_DIRECTORY + File.separator
 			+ classId + File.separator
 			+ week +  File.separator
-			+ item.getName();
-
-			File uploadedFile = new File(filePath);
-			if (!uploadedFile.exists())
-				uploadedFile.createNewFile();
+			+ fileName;
 
 			try {
-				item.write(uploadedFile);
+				item.write(Defaults.createFileIfNotExists(filePath));
 			} catch (Exception e) {
 				throw new ServletException(e);
 			}

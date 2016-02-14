@@ -14,10 +14,8 @@ public class MD5Encryption {
 			MessageDigest md = MessageDigest.getInstance("MD5");
 			BigInteger number = new BigInteger(1, md.digest(initialString.getBytes()));
 			return number.toString();
-
 		} catch (NoSuchAlgorithmException e) {
 			return initialString;
 		}
-	
 	}
 }
