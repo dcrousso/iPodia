@@ -11,7 +11,7 @@ if (request.getParameter("className") == null) {
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="student"/>
-	<jsp:param name="title" value="Class ${param.className}"/>
+	<jsp:param name="title" value="${param.className}"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/templates/header.jsp">
 	<jsp:param name="username" value="${user.getName()}"/>

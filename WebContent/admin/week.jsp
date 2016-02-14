@@ -19,7 +19,7 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 
 				<input type="file" name="fileToUpload">
 
-				<input type="submit" value="Submit">
+				<button>Submit</button>
 			</form>
 		</main>
 		

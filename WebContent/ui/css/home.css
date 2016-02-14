@@ -1,7 +1,6 @@
 main {
-	width: 100%;
 	max-width: 320px;
-	margin: 20vh auto 0;
+	margin-top: 20vh;
 	padding: 10px 20px 30px;
 	background-color: white;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
@@ -23,11 +22,11 @@ main > h1 + form {
 	margin-top: 1.35em;
 }
 
-main > form > div {
+main > form > section {
 	margin-bottom: 15px;
 }
 
-main > form > div > label {
+main > form > section > label {
 	margin-left: 1px;
 	font-size: 70%;
 	color: #777;
@@ -38,72 +37,4 @@ main > form > div > label {
 	   -moz-user-select: none;
 	    -ms-user-select: none;
 	        user-select: none;
-}
-
-main > form > div > input {
-	width: 100%;
-	padding: 3px;
-	font-size: 100%;
-	background-color: #fbfbfb;
-	border: 1px solid #ddd;
-	outline: none;
-	box-shadow: 0 0 0 0 steelblue;
-	-webkit-transition: border-color 300ms, box-shadow 300ms;
-	   -moz-transition: border-color 300ms, box-shadow 300ms;
-	    -ms-transition: border-color 300ms, box-shadow 300ms;
-	     -o-transition: border-color 300ms, box-shadow 300ms;
-	        transition: border-color 300ms, box-shadow 300ms;
-}
-
-main > form > div > input:focus {
-	border-color: steelblue;
-	-webkit-animation: anim-shadow 300ms forwards;
-	   -moz-animation: anim-shadow 300ms forwards;
-	    -ms-animation: anim-shadow 300ms forwards;
-	     -o-animation: anim-shadow 300ms forwards;
-	        animation: anim-shadow 300ms forwards;
-}
-
-@-webkit-keyframes anim-shadow {
-	to { box-shadow: 0px 0px 25px 12.5px transparent; }
-}
-
-@-moz-keyframes anim-shadow {
-	to { box-shadow: 0px 0px 25px 12.5px transparent; }
-}
-
-@-ms-keyframes anim-shadow {
-	to { box-shadow: 0px 0px 25px 12.5px transparent; }
-}
-
-@-o-keyframes anim-shadow {
-	to { box-shadow: 0px 0px 25px 12.5px transparent; }
-}
-
-@keyframes anim-shadow {
-	to { box-shadow: 0px 0px 25px 12.5px transparent; }
-}
-
-main > form > input[type="submit"] {
-	width: 75px;
-	height: 30px;
-	margin-top: 10px;
-	margin-left: calc(100% - 76px);
-	padding: 0 12px 2px;
-	font-size: 14px;
-	line-height: 28px;
-	color: #fff;
-	background-color: #0085ba;
-	border-width: 1px;
-	border-style: solid;
-	border-color: #0073aa;
-	border-radius: 3px;
-	box-shadow: 0 1px 0 #006799;
-	outline: none;
-	cursor: pointer;
-}
-
-main > form > input[type="submit"]:active {
-	border-style: inset;
-	box-shadow: 0 1px 0 #006799 inset;
 }

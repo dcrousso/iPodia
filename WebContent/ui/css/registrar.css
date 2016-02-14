@@ -1,10 +1,12 @@
-main {
-	width: 100%;
-	max-width: 800px;
-	margin: 0 auto;
+main > form > section {
+	margin: 20px;
 }
 
-main > h4,
-main > ul {
-	margin: 0;
+main > form > section + button::before {
+	position: absolute;
+	bottom: 35px;
+	left: 0;
+	width: 100%;
+	content: "";
+	border-top: 1px solid lightgrey;
 }

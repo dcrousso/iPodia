@@ -1,3 +1,4 @@
+<%@ page import="iPodia.Defaults"%>
 <%@ page import="iPodia.MD5Encryption"%>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
@@ -27,7 +28,9 @@ if (request != null) {
 			user.setEmail(email);
 			user.setName(admins.getString("firstName"), admins.getString("lastName"));
 			user.setUniversity(admins.getString("university"));
-			user.addClasses(admins.getString("classes"));
+			for (String className : admins.getString("classes").split(Defaults.CSV_REGEXP)) {
+				user.addClass(0, className);
+			}
 
 			response.sendRedirect(request.getContextPath() + "/admin");
 			return;
@@ -45,7 +48,9 @@ if (request != null) {
 			user.setEmail(email);
 			user.setName(students.getString("firstName"), students.getString("lastName"));
 			user.setUniversity(students.getString("university"));
-			user.addClasses(students.getString("classes"));
+			for (String className : students.getString("classes").split(Defaults.CSV_REGEXP)) {
+				user.addClass(0, className);
+			}
 
 			response.sendRedirect(request.getContextPath() + "/student");
 			return;
@@ -65,7 +70,7 @@ if (request != null) {
 			
 			ResultSet classes  = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
 			while (classes.next())
-				user.addClass(classes.getString("id"));
+				user.addClass(classes.getInt("id"), classes.getString("name"));
 
 			response.sendRedirect(request.getContextPath() + "/registrar");
 			return;
@@ -86,15 +91,15 @@ if (request != null) {
 			<h4>Email/Password Invalid</h4>
 <% } %>
 			<form method="post">
-				<div>
+				<section>
 					<label for="email">Email</label>
 					<input type="text" name="email" id="email">
-				</div>
-				<div>
+				</section>
+				<section>
 					<label for="password">Password</label>
 					<input type="password" name="password" id="password">
-				</div>
-				<input type="submit" value="Submit">
+				</section>
+				<button>Submit</button>
 			</form>
 		</main>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>

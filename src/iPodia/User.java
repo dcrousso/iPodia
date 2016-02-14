@@ -1,7 +1,6 @@
 package iPodia;
 
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.HashMap;
 
 public class User {
 	public static enum Type {
@@ -14,14 +13,14 @@ public class User {
 	private String m_email;
 	private String m_name;
 	private String m_university;
-	private HashSet<String> m_classes;
+	private HashMap<Integer, String> m_classes;
 
 	public User() {
 		m_type = null;
 		m_email = null;
 		m_name = null;
 		m_university = null;
-		m_classes = new HashSet<String>();
+		m_classes = new HashMap<Integer, String>();
 	}
 
 	public boolean isAuthenticated() {
@@ -81,19 +80,19 @@ public class User {
 		m_university = university;
 	}
 
-	public HashSet<String> getClasses() {
+	public HashMap<Integer, String> getClasses() {
 		return m_classes;
 	}
 
 	public boolean hasClass(String className) {
-		return m_classes.contains(className);
+		return m_classes.containsValue(className);
 	}
 
-	public void addClass(String className) {
-		m_classes.add(className);
+	public void addClass(int classId, String className) {
+		m_classes.put(classId, className);
 	}
-	
-	public void addClasses(String classes) {
-		Arrays.asList(classes.split("\\s*,\\s*")).forEach(className -> addClass(className));
+
+	public String getClassName(int classId) {
+		return m_classes.get(classId);
 	}
 }
