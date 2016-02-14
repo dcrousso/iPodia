@@ -3,11 +3,16 @@
 <%@ page import="java.nio.file.Files" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
+if (user.getType() == null) {
+	response.sendRedirect(request.getContextPath() + "/");
+	return;
+}
+
 String classId = request.getParameter("class");
 String weekNumber = request.getParameter("week");
 String fileName = request.getParameter("file");
-if (user.getType() == null || classId == null || weekNumber == null || fileName == null) {
-	response.sendRedirect(request.getContextPath() + "/");
+if (classId == null || !user.hasClass(classId) || weekNumber == null || fileName == null) {
+	response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	return;
 }
 

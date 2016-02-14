@@ -1,8 +1,7 @@
 package iPodia;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 
 public class User {
 	public static final String Admin = "admin";
@@ -12,7 +11,7 @@ public class User {
 	private String m_email;
 	private String m_name;
 	private String m_university;
-	private String[] m_classes;
+	private HashSet<String> m_classes;
 
 	public User() {
 		m_type = null;
@@ -62,19 +61,19 @@ public class User {
 		m_university = university;
 	}
 
-	public String[] getClasses() {
+	public HashSet<String> getClasses() {
 		return m_classes;
 	}
 
 	public void setClasses(String classes) {
-//		m_classes = Arrays.asList(classes.split("\\s*,\\s*")).stream().mapToInt(item -> Integer.parseInt(item)).toArray();
-		m_classes = classes.split("\\s*,\\s*");
+		m_classes = new HashSet<String>(Arrays.asList(classes.split("\\s*,\\s*")));
 	}
-	
-	public void addClass (String aClass) {
-		List<String> myClassesList = new ArrayList<String>(Arrays.asList(m_classes));
-		myClassesList.add(aClass);
-		m_classes = new String[myClassesList.size()];
-		m_classes = myClassesList.toArray(m_classes);
+
+	public boolean hasClass(String className) {
+		return m_classes.contains(className);
+	}
+
+	public void addClass(String className) {
+		m_classes.add(className);
 	}
 }

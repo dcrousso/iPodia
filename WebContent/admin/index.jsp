@@ -53,22 +53,16 @@
 <jsp:include page="/WEB-INF/templates/header.jsp">
 	<jsp:param name="username" value="${user.getName()}" />
 </jsp:include>
-<main>
-<h1>Admin</h1>
-<h4>Please select a class:</h4>
-<ul>
-	<%
-		for (String className : user.getClasses()) {
-	%>
-	<li><a
-		href="${pageContext.request.contextPath}/admin/class.jsp?className=<%= className %>"><%=className%></a></li>
-	<%
-		}
-	%>
-</ul>
-<form method="post">
-	Create a new class: <input type="text" name="newClassName"> <input
-		type="submit" value="Submit" />
-</form>
-</main>
+		<main>
+			<h1>Admin</h1>
+			<h4>Please select a class:</h4>
+			<ul>
+<% for (String className : user.getClasses()) { %>
+				<li><a href="${pageContext.request.contextPath}/admin/class.jsp?className=<%= className %>"><%=className%></a></li>
+<% } %>
+			</ul>
+			<form method="post">
+				Create a new class: <input type="text" name="newClassName"> <input type="submit" value="Submit" />
+			</form>
+		</main>
 <jsp:include page="/WEB-INF/templates/footer.jsp" />
