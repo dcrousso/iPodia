@@ -1,0 +1,34 @@
+main > form > section {
+	margin: 5px 10px 20px;
+}
+
+main > form > section + button {
+	margin-top: 40px;
+}
+
+main > form > section + button::before {
+	position: absolute;
+	bottom: 45px;
+	left: 0;
+	width: 100%;
+	content: "";
+	border-top: 1px solid lightgrey;
+}
+
+main > form .quiz-item > .correct {
+	display: -webkit-flex;
+	display:    -moz-flex;
+	display:     -ms-flexbox;
+	display:         flex;
+	justify-content: center;
+	align-items: center;
+}
+
+main > form .quiz-item > .correct > label {
+	margin-left: 20px;
+	font-size: large;
+}
+
+main > form .quiz-item > .correct > label:first-child {
+	margin-left: 0;
+}

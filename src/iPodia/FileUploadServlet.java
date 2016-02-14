@@ -20,11 +20,11 @@ public class FileUploadServlet extends HttpServlet {
 	private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 10; // 10MB
 	private static final int MAX_REQUEST_SIZE = 1024 * 1024; // 1MB
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.sendRedirect(request.getContextPath() + "/");
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Check that we have a file upload request
 		if (!ServletFileUpload.isMultipartContent(request))
 			return;
@@ -59,7 +59,7 @@ public class FileUploadServlet extends HttpServlet {
 					uploadedFiles.add(item);
 				else if (item.getFieldName().equals("id"))
 					classId = item.getString();
-				 else if (item.getFieldName().equals("num"))
+				else if (item.getFieldName().equals("num"))
 					week = item.getString();
 			}
 		} catch (FileUploadException e) {

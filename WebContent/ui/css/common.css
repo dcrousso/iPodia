@@ -21,11 +21,17 @@ a:hover {
 }
 
 nav {
+	display: -webkit-flex;
+	display:    -moz-flex;
+	display:     -ms-flexbox;
+	display:         flex;
+	justify-content: space-around;
+	align-items: center;
 	text-align: center;
 }
 
 nav > a {
-	margin: 20px;
+	margin: 20px 20px 0;
 }
 
 main {
@@ -34,8 +40,8 @@ main {
 	margin: 0 auto;
 }
 
-main > h4,
-main > ul {
+main h4,
+main ul {
 	margin: 0;
 }
 
@@ -43,7 +49,9 @@ main > form {
 	position: relative;
 }
 
-main > form input {
+main > form input,
+main > form textarea {
+	position: relative;
 	width: 100%;
 	padding: 3px;
 	font-size: 100%;
@@ -62,7 +70,18 @@ main > form input[type="file"] {
 	font-size: small;
 }
 
-main > form input:focus {
+main > form input[type="radio"] {
+	width: initial;
+}
+
+main > form textarea {
+	height: 75px;
+	font-size: initial;
+}
+
+main > form input:focus,
+main > form textarea:focus {
+	z-index: 10;
 	border-color: steelblue;
 	-webkit-animation: anim-shadow 300ms forwards;
 	   -moz-animation: anim-shadow 300ms forwards;
