@@ -89,6 +89,6 @@ public class FileUploadServlet extends HttpServlet {
 			}
 		}
 
-		response.sendRedirect(request.getContextPath() + "/admin/week.jsp?id=" + classId +"&num=" + week);
+		response.sendRedirect(request.getContextPath() + "/admin/week?id=" + classId +"&num=" + week);
 	}
 }

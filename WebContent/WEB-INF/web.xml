@@ -30,7 +30,7 @@
 	    <error-code>404</error-code>
 	    <location>/404.html</location>
 	</error-page>
-	
+
 	<jsp-config>
 		<jsp-property-group>
 			<url-pattern>*.jsp</url-pattern>
@@ -46,7 +46,7 @@
 		<servlet-name>home-extension</servlet-name>
 		<url-pattern>/index</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>logout-extension</servlet-name>
 		<jsp-file>/logout.jsp</jsp-file>
@@ -55,7 +55,7 @@
 		<servlet-name>logout-extension</servlet-name>
 		<url-pattern>/logout</url-pattern>
 	</servlet-mapping>
-	
+
 	<servlet>
 		<servlet-name>data-extension</servlet-name>
 		<jsp-file>/data.jsp</jsp-file>
@@ -72,6 +72,24 @@
 	<servlet-mapping>
 		<servlet-name>admin-extension</servlet-name>
 		<url-pattern>/admin/index</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>admin-class-extension</servlet-name>
+		<jsp-file>/admin/class.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>admin-class-extension</servlet-name>
+		<url-pattern>/admin/class</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>admin-week-extension</servlet-name>
+		<jsp-file>/admin/week.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>admin-week-extension</servlet-name>
+		<url-pattern>/admin/week</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -93,6 +111,15 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>student-class-extension</servlet-name>
+		<jsp-file>/student/class.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>student-class-extension</servlet-name>
+		<url-pattern>/student/class</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>registrar-extension</servlet-name>
 		<jsp-file>/registrar/index.jsp</jsp-file>
 	</servlet>
@@ -101,7 +128,16 @@
 		<url-pattern>/registrar/index</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>registrar-class-extension</servlet-name>
+		<jsp-file>/registrar/class.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>registrar-class-extension</servlet-name>
+		<url-pattern>/registrar/class</url-pattern>
+	</servlet-mapping>
+
 	<session-config>
 		<session-timeout>60</session-timeout>
-  	</session-config>
+	</session-config>
 </web-app>

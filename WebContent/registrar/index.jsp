@@ -44,7 +44,7 @@ if (request != null) {
 			);
 			ps.execute();
 			
-			response.sendRedirect(request.getContextPath() + "/registrar/class.jsp?id=" + newClassId);
+			response.sendRedirect(request.getContextPath() + "/registrar/class?id=" + newClassId);
 			return;
 		}
 	}
@@ -62,7 +62,7 @@ if (request != null) {
 			<h4>Please select a class:</h4>
 			<ul>
 <% for (HashMap.Entry<Integer, String> entry : user.getClasses().entrySet()) { %>
-				<li><a href="${pageContext.request.contextPath}/registrar/class.jsp?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
+				<li><a href="${pageContext.request.contextPath}/registrar/class?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
 <% } %>
 			</ul>
 			<form method="post">

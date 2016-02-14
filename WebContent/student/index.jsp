@@ -18,7 +18,7 @@ if (!user.isAuthenticated() || !user.isStudent()) {
 			<h4>Please select a class:</h4>
 			<ul>
 <% for (HashMap.Entry<Integer, String> entry : user.getClasses().entrySet()) { %>
-				<li><a href="${pageContext.request.contextPath}/student/class.jsp?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
+				<li><a href="${pageContext.request.contextPath}/student/class?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
 <% } %>
 			</ul>
 		</main>
