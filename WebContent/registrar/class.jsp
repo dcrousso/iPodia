@@ -1,6 +1,6 @@
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
-if (!user.isAuthenticated() || !user.isAdmin()) {
+if (!user.isAuthenticated() || !user.isRegistrar()) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
@@ -10,7 +10,7 @@ if (request.getParameter("className") == null) {
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
-	<jsp:param name="pagetype" value="admin"/>
+	<jsp:param name="pagetype" value="registrar"/>
 	<jsp:param name="title" value="Class ${param.className}"/>
 </jsp:include>
 <jsp:include page="/WEB-INF/templates/header.jsp">

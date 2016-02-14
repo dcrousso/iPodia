@@ -21,7 +21,7 @@ public class User {
 		m_email = null;
 		m_name = null;
 		m_university = null;
-		m_classes = null;
+		m_classes = new HashSet<String>();
 	}
 
 	public boolean isAuthenticated() {
@@ -85,15 +85,15 @@ public class User {
 		return m_classes;
 	}
 
-	public void setClasses(String classes) {
-		m_classes = new HashSet<String>(Arrays.asList(classes.split("\\s*,\\s*")));
-	}
-
 	public boolean hasClass(String className) {
 		return m_classes.contains(className);
 	}
 
 	public void addClass(String className) {
 		m_classes.add(className);
+	}
+	
+	public void addClasses(String classes) {
+		Arrays.asList(classes.split("\\s*,\\s*")).forEach(className -> addClass(className));
 	}
 }
