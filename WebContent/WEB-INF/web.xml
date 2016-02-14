@@ -75,12 +75,30 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>FileUploadServlet</servlet-name>
+		<servlet-class>iPodia.FileUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>FileUploadServlet</servlet-name>
+		<url-pattern>/admin/uploadFile</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>student-extension</servlet-name>
 		<jsp-file>/student/index.jsp</jsp-file>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>student-extension</servlet-name>
 		<url-pattern>/student/index</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>registrar-extension</servlet-name>
+		<jsp-file>/registrar/index.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>registrar-extension</servlet-name>
+		<url-pattern>/registrar/index</url-pattern>
 	</servlet-mapping>
 
 	<session-config>
