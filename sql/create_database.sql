@@ -39,15 +39,14 @@ CREATE TABLE IF NOT EXISTS registrars (
 );
 
 /* Create the table of class ids to names */
-CREATE TABLE IF NOT EXISTS classIndex (
+CREATE TABLE IF NOT EXISTS classListing (
 	id int NOT NULL AUTO_INCREMENT,
 	name varchar(255),
-	contact varchar(255),
 	PRIMARY KEY (id)
 );
 
 /* Creating the table of quizzes for a specific class */
-CREATE TABLE IF NOT EXISTS class_test_quiz (
+CREATE TABLE IF NOT EXISTS class_test (
 	id varchar(255),
 	question varchar(255),
 	answer1 varchar(255),
@@ -56,14 +55,6 @@ CREATE TABLE IF NOT EXISTS class_test_quiz (
 	answer4 varchar(255),
 	answer5 varchar(255),
 	correctAnswer varchar(255),
-	dueDate timestamp,
-	topic varchar(255),
-	PRIMARY KEY (id)
-);
-
-/* Creating the table for the painIndex for a specific class */
-CREATE TABLE IF NOT EXISTS class_test_painIndex (
-	id varchar(255),
 	dueDate timestamp,
 	topic varchar(255),
 	PRIMARY KEY (id)

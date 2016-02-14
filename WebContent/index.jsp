@@ -27,7 +27,7 @@ if (request != null) {
 			user.setEmail(email);
 			user.setName(admins.getString("firstName"), admins.getString("lastName"));
 			user.setUniversity(admins.getString("university"));
-			user.setClasses(admins.getString("classes"));
+			user.addClasses(admins.getString("classes"));
 
 			response.sendRedirect(request.getContextPath() + "/admin");
 			return;
@@ -45,7 +45,7 @@ if (request != null) {
 			user.setEmail(email);
 			user.setName(students.getString("firstName"), students.getString("lastName"));
 			user.setUniversity(students.getString("university"));
-			user.setClasses(students.getString("classes"));
+			user.addClasses(students.getString("classes"));
 
 			response.sendRedirect(request.getContextPath() + "/student");
 			return;
@@ -62,6 +62,10 @@ if (request != null) {
 			user.setType(User.Type.Registrar);
 			user.setEmail(email);
 			user.setName(registrars.getString("firstName"), registrars.getString("lastName"));
+			
+			ResultSet classes  = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
+			while (classes.next())
+				user.addClass(classes.getString("id"));
 
 			response.sendRedirect(request.getContextPath() + "/registrar");
 			return;
