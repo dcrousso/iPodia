@@ -2,6 +2,7 @@ package iPodia;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -19,16 +20,11 @@ public class FileUploadServlet extends HttpServlet {
 	private static final int MAX_MEMORY_SIZE = 1024 * 1024 * 10; // 10MB
 	private static final int MAX_REQUEST_SIZE = 1024 * 1024; // 1MB
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String className = request.getParameter("className");
-		String week = request.getParameter("week");
-		System.out.println(className);
-		System.out.println(week);
-		if (className == null || week == null) {
-			getServletContext().getRequestDispatcher("/").forward(request, response);
-			return;
-		}
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.sendRedirect(request.getContextPath() + "/");
+	}
 
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Check that we have a file upload request
 		if (!ServletFileUpload.isMultipartContent(request))
 			return;
@@ -53,26 +49,45 @@ public class FileUploadServlet extends HttpServlet {
 		// Set overall request size constraint
 		upload.setSizeMax(MAX_REQUEST_SIZE);
 
+		String className = null;
+		String week = null;
+		HashSet<FileItem> uploadedFiles = new HashSet<FileItem>();
+
 		try {
 			for (FileItem item : upload.parseRequest(request)) {
-				if (item.isFormField())
-					continue;
-
-				String filePath = Defaults.DATA_DIRECTORY + File.separator + item.getName();
-				File uploadedFile = new File(filePath);
-				if (!uploadedFile.exists())
-					uploadedFile.createNewFile();
-
-				item.write(uploadedFile);
+				if (!item.isFormField())
+					uploadedFiles.add(item);
+				else if (item.getFieldName().equals("className"))
+					className = item.getString();
+				 else if (item.getFieldName().equals("week"))
+					week = item.getString();
 			}
-
-		} catch (FileUploadException ex) {
-			throw new ServletException(ex);
-		} catch (Exception ex) {
-			throw new ServletException(ex);
+		} catch (FileUploadException e) {
+			throw new ServletException(e);
 		}
 
-		String redirectURL = "/week.jsp?className=" + className +"&week=" + week;
-		getServletContext().getRequestDispatcher(redirectURL).forward(request, response);
+		if (className == null || week == null) {
+			response.sendRedirect(request.getContextPath() + "/");
+			return;
+		}
+
+		for (FileItem item : uploadedFiles) {
+			String filePath = Defaults.DATA_DIRECTORY + File.separator
+			+ className + File.separator
+			+ week +  File.separator
+			+ item.getName();
+
+			File uploadedFile = new File(filePath);
+			if (!uploadedFile.exists())
+				uploadedFile.createNewFile();
+
+			try {
+				item.write(uploadedFile);
+			} catch (Exception e) {
+				throw new ServletException(e);
+			}
+		}
+
+		response.sendRedirect(request.getContextPath() + "/admin/week.jsp?className=" + className +"&week=" + week);
 	}
 }
