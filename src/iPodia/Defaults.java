@@ -2,6 +2,9 @@ package iPodia;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Optional;
 
 public class Defaults {
 	public static final String DATA_DIRECTORY = "/iPodiaData";
@@ -17,6 +20,10 @@ public class Defaults {
 		regexp += "(?:^\\s*|" + CSV_REGEXP + ")" + classId + "\\s*$";
 		regexp += ")";
 		return regexp;
+	}
+
+	public static HashSet<String> arrayToHashSet(String[] s) {
+		return new HashSet<String>(Arrays.asList(Optional.ofNullable(s).orElse(new String[0])));
 	}
 
 	public static void createFolderIfNotExists(String path) {

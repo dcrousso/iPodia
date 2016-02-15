@@ -7,34 +7,15 @@ USE ipodia;
 /********* Creating the Tables **********/
 /****************************************/
 
-/* Creating the table of students */
-CREATE TABLE IF NOT EXISTS students (
+/* Creating the table of users (students, admins, registrars) */
+CREATE TABLE IF NOT EXISTS users (
 	email varchar(255),
+	level varchar(255),
 	firstName varchar(255),
 	lastName varchar(255),
 	password varchar(255),
 	university varchar(255),
 	classes varchar(255),
-	PRIMARY KEY (email)
-);
-
-/* Creating the table of teachers */
-CREATE TABLE IF NOT EXISTS admins (
-	email varchar(255),
-	firstName varchar(255),
-	lastName varchar(255),
-	password varchar(255),
-	university varchar(255),
-	classes varchar(255),
-	PRIMARY KEY (email)
-);
-
-/* Creating the table of registrars */
-CREATE TABLE IF NOT EXISTS registrars (
-	email varchar(255),
-	firstName varchar(255),
-	lastName varchar(255),
-	password varchar(255),
 	PRIMARY KEY (email)
 );
 

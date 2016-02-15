@@ -1,3 +1,4 @@
+<%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults"%>
 <%@ page import="iPodia.MD5Encryption"%>
 <%@ include file="/WEB-INF/Session.jsp" %>
@@ -14,79 +15,24 @@ if (request != null) {
 	String password = request.getParameter("password");
 	if (email != null && password != null) {
 		String encryptedPassword = MD5Encryption.encrypt(password);
-		PreparedStatement ps = null;
-		ResultSet results;
-
-		// Check admins
-		ps = dbConnection.prepareStatement("SELECT * FROM admins WHERE email = ?");
+		PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
 		ps.setString(1, email);
-		results = ps.executeQuery();
+		ResultSet results = ps.executeQuery();
 		while (results.next()) {
 			if (!encryptedPassword.equals(results.getString("password")))
 				continue;
 
-			user.setType(User.Type.Admin);
-			user.setEmail(email);
-			user.setName(results.getString("firstName"), results.getString("lastName"));
-			user.setUniversity(results.getString("university"));
-			for (String classId : results.getString("classes").split(Defaults.CSV_REGEXP)) {
-				PreparedStatement cl = dbConnection.prepareStatement("SELECT * FROM classListing WHERE id = ?");
-				cl.setString(1, classId);
-				ResultSet classes = cl.executeQuery();
-				while (classes.next())
-					user.addClass(classId, classes.getString("name"));
+			user.initializeFromResultSet(results);
+			HashSet<String> classes = Defaults.arrayToHashSet(results.getString("classes").split(Defaults.CSV_REGEXP));
+			results = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
+			while (results.next()) {
+				String classId = results.getString("id");
+				if (user.isRegistrar() || classes.contains(classId))
+					user.addClass(classId, results.getString("name"));
 			}
 
 			ps.close();
-			response.sendRedirect(request.getContextPath() + "/admin");
-			return;
-		}
-		ps.close();
-
-		// Check students
-		ps = dbConnection.prepareStatement("SELECT * FROM students WHERE email = ?");
-		ps.setString(1, email);
-		results = ps.executeQuery();
-		while (results.next()) {
-			if (!encryptedPassword.equals(results.getString("password")))
-				continue;
-
-			user.setType(User.Type.Student);
-			user.setEmail(email);
-			user.setName(results.getString("firstName"), results.getString("lastName"));
-			user.setUniversity(results.getString("university"));
-			for (String classId : results.getString("classes").split(Defaults.CSV_REGEXP)) {
-				PreparedStatement cl = dbConnection.prepareStatement("SELECT * FROM classListing WHERE id = ?");
-				cl.setString(1, classId);
-				ResultSet classes = cl.executeQuery();
-				while (classes.next())
-					user.addClass(classId, classes.getString("name"));
-			}
-
-			ps.close();
-			response.sendRedirect(request.getContextPath() + "/student");
-			return;
-		}
-		ps.close();
-		
-		// Check registrars
-		ps = dbConnection.prepareStatement("SELECT * FROM registrars WHERE email = ?");
-		ps.setString(1, email);
-		results = ps.executeQuery();
-		while (results.next()) {
-			if (!encryptedPassword.equals(results.getString("password")))
-				continue;
-
-			user.setType(User.Type.Registrar);
-			user.setEmail(email);
-			user.setName(results.getString("firstName"), results.getString("lastName"));
-			
-			ResultSet classes = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
-			while (classes.next())
-				user.addClass(classes.getInt("id"), classes.getString("name"));
-
-			ps.close();
-			response.sendRedirect(request.getContextPath() + "/registrar");
+			response.sendRedirect(request.getContextPath() + user.getHome());
 			return;
 		}
 		ps.close();

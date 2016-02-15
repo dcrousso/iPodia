@@ -24,102 +24,61 @@ if (className == null || className.trim().length() == 0) {
 PreparedStatement ps;
 ResultSet results;
 
-HashSet<String> enrolledTeachers = new HashSet<String>();
-ps = dbConnection.prepareStatement("SELECT * FROM admins");
+HashSet<User> enrolled = new HashSet<User>();
+ps = dbConnection.prepareStatement("SELECT * FROM users");
 results = ps.executeQuery();
 while (results.next()) {
 	String classes = results.getString("classes");
 	if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
-		enrolledTeachers.add(results.getString("email"));
-}
-ps.close();
-
-HashSet<String> enrolledStudents = new HashSet<String>();
-ps = dbConnection.prepareStatement("SELECT * FROM students");
-results = ps.executeQuery();
-while (results.next()) {
-	String classes = results.getString("classes");
-	if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
-		enrolledStudents.add(results.getString("email"));
+		enrolled.add(new User(results));
 }
 ps.close();
 
 String[] teachersToEnroll = request.getParameterValues("teacher");
-if (teachersToEnroll != null) {
-	for (String teacher : teachersToEnroll) {
-		if (teacher == null || teacher.trim().length() == 0 || enrolledTeachers.contains(teacher))
-			continue;
-
-		ps = dbConnection.prepareStatement("SELECT * FROM admins WHERE email = ?");
-		ps.setString(1, teacher);
-		results = ps.executeQuery();
-		while (results.next()) {
-			String classes = results.getString("classes");
-			if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
-				continue;
-
-			PreparedStatement addClass = dbConnection.prepareStatement("UPDATE admins SET classes = ? WHERE email = ?");
-			addClass.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
-			addClass.setString(2, teacher);
-			addClass.execute();
-		}
-	}
-	ps.close();
-
-	for (String teacher : enrolledTeachers) {
-		if (teachersToEnroll != null && Arrays.asList(teachersToEnroll).contains(teacher))
-			continue;
-	
-		ps = dbConnection.prepareStatement("SELECT * FROM admins WHERE email = ?");
-		ps.setString(1, teacher);
-		results = ps.executeQuery();
-		while (results.next()) {
-			PreparedStatement removeClass = dbConnection.prepareStatement("UPDATE admins SET classes = ? WHERE email = ?");
-			removeClass.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
-			removeClass.setString(2, teacher);
-			removeClass.execute();
-		}
-	}
-	ps.close();
-}
-
 String[] studentsToEnroll = request.getParameterValues("student");
-if (studentsToEnroll != null) {
-	for (String student : studentsToEnroll) {
-		if (student == null || student.trim().length() == 0 || enrolledStudents.contains(student))
+
+if (teachersToEnroll != null || studentsToEnroll != null) {
+	HashSet<String> toEnroll = new HashSet<String>();
+	toEnroll.addAll(Defaults.arrayToHashSet(teachersToEnroll));
+	toEnroll.addAll(Defaults.arrayToHashSet(studentsToEnroll));
+	for (String userToEnroll : toEnroll) {
+		if (userToEnroll == null || userToEnroll.trim().length() == 0 || enrolled.contains(userToEnroll))
 			continue;
 
-		ps = dbConnection.prepareStatement("SELECT * FROM students WHERE email = ?");
-		ps.setString(1, student);
+		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+		ps.setString(1, userToEnroll);
 		results = ps.executeQuery();
 		while (results.next()) {
 			String classes = results.getString("classes");
 			if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
 				continue;
 
-			PreparedStatement addClass = dbConnection.prepareStatement("UPDATE students SET classes = ? WHERE email = ?");
+			PreparedStatement addClass = dbConnection.prepareStatement("UPDATE users SET classes = ? WHERE email = ?");
 			addClass.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
-			addClass.setString(2, student);
+			addClass.setString(2, userToEnroll);
 			addClass.execute();
 		}
 	}
 	ps.close();
 
-	for (String student : enrolledStudents) {
-		if (studentsToEnroll != null && Arrays.asList(studentsToEnroll).contains(student))
+	for (User userToEnroll : enrolled) {
+		if (toEnroll.contains(userToEnroll.getEmail()))
 			continue;
 	
-		ps = dbConnection.prepareStatement("SELECT * FROM students WHERE email = ?");
-		ps.setString(1, student);
+		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+		ps.setString(1, userToEnroll.getEmail());
 		results = ps.executeQuery();
 		while (results.next()) {
-			PreparedStatement removeClass = dbConnection.prepareStatement("UPDATE students SET classes = ? WHERE email = ?");
+			PreparedStatement removeClass = dbConnection.prepareStatement("UPDATE users SET classes = ? WHERE email = ?");
 			removeClass.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
-			removeClass.setString(2, student);
+			removeClass.setString(2, userToEnroll.getEmail());
 			removeClass.execute();
 		}
 	}
 	ps.close();
+	
+	response.sendRedirect(request.getContextPath() + "/");
+	return;
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
@@ -133,15 +92,15 @@ if (studentsToEnroll != null) {
 			<h1>Welcome to <%= className %></h1>
 			<form method="post">
 				<section id="teachers">
-<% for (String teacher : enrolledTeachers) { %>
-					<input type="text" name="teacher" value="<%= teacher %>">
-<% } %>
+<% for (User teacher : enrolled) { if (teacher.isAdmin()) { %>
+					<input type="text" name="teacher" value="<%= teacher.getEmail() %>">
+<% } } %>
 					<button type="button">Add Teacher</button>
 				</section>
 				<section id="students">
-<% for (String student : enrolledStudents) { %>
-					<input type="text" name="teacher" value="<%= student %>">
-<% } %>
+<% for (User student : enrolled) { if (student.isStudent()) { %>
+					<input type="text" name="teacher" value="<%= student.getEmail() %>">
+<% } } %>
 					<button type="button">Add Student</button>
 				</section>
 				<button>Submit</button>

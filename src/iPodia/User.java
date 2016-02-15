@@ -1,5 +1,7 @@
 package iPodia;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 
 public class User {
@@ -23,6 +25,18 @@ public class User {
 		m_classes = new HashMap<Integer, String>();
 	}
 
+	public User(ResultSet rs) throws SQLException {
+		initializeFromResultSet(rs);
+	}
+
+	public void initializeFromResultSet(ResultSet rs) throws SQLException {
+		determineType(rs.getString("level"));
+		setEmail(rs.getString("email"));
+		setName(rs.getString("firstName"), rs.getString("lastName"));
+		setUniversity(rs.getString("university"));
+		m_classes = new HashMap<Integer, String>();
+	}
+
 	public boolean isAuthenticated() {
 		return m_type != null;
 	}
@@ -43,6 +57,15 @@ public class User {
 		m_type = type;
 	}
 
+	public void determineType(String type) {
+		if (type.startsWith("admin"))
+			setType(User.Type.Admin);
+		else if (type.startsWith("student"))
+			setType(User.Type.Student);
+		else if (type.startsWith("registrar"))
+			setType(User.Type.Registrar);
+	}
+
 	public String getHome() {
 		switch (m_type) {
 		case Admin:
@@ -52,7 +75,7 @@ public class User {
 		case Registrar:
 			return "/registrar";
 		default:
-			return"";
+			return "/"; // Unknown type
 		}
 	}
 
