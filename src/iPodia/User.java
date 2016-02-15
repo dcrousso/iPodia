@@ -83,6 +83,10 @@ public class User {
 		return m_email;
 	}
 
+	public String getSafeEmail() {
+		return Defaults.createSafeString(m_email);
+	}
+
 	public void setEmail(String email) {
 		m_email = email;
 	}

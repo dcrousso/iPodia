@@ -22,6 +22,10 @@ public class Defaults {
 		return regexp;
 	}
 
+	public static String createSafeString(String s) {
+		return s.replaceAll("\\W", "_");
+	}
+
 	public static HashSet<String> arrayToHashSet(String[] s) {
 		return new HashSet<String>(Arrays.asList(Optional.ofNullable(s).orElse(new String[0])));
 	}
