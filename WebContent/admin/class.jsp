@@ -64,7 +64,7 @@ if (Defaults.isEmpty(className)) {
 				
 				<%  for (int i = 1; i <= numWeeks; i ++) { %>	
 						<li>
-							<a href="${pageContext.request.contextPath}/admin/week?id=${param.id}&num= <%= Integer.toString(i)%>">
+							<a href="${pageContext.request.contextPath}/admin/week?id=${param.id}&num=<%= Integer.toString(i)%>">
 							Week <%= i %></a>
 						</li>
 						
@@ -91,6 +91,7 @@ if (Defaults.isEmpty(className)) {
 				
 				var listOfWeeks = this.previousElementSibling;
 				var numOfWeeks = listOfWeeks.children.length;
+				
 				var link = document.createElement("a");
 				link.textContent = "Week " + String (numOfWeeks+1);
 				link.setAttribute('href', "${pageContext.request.contextPath}/admin/week?id=${param.id}&num=" +String(numOfWeeks+1));
