@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 public class Defaults {
 	public static final String dbDriver = "com.mysql.jdbc.Driver";
@@ -15,6 +16,9 @@ public class Defaults {
 	public static final String INITIAL_PASSWORD = "305666274058833912233446123550405823599";
 	public static final String DATA_DIRECTORY = "/iPodiaData";
 	public static final String CSV_REGEXP = "\\s*,\\s*";
+
+	public static final Pattern WEEK_PATTERN = Pattern.compile("(Week)(\\d+)(\\w+)", Pattern.CASE_INSENSITIVE);
+	public static final Pattern QUESTION_PATTERN = Pattern.compile("(Week\\d+Topic\\d+Question\\d+)(\\w+)?", Pattern.CASE_INSENSITIVE);
 
 	public static String generateClassesRegExp(String classId) {
 		String regexp = "";

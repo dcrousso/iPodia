@@ -1,7 +1,7 @@
 <%@ page import="java.util.HashMap" %>
 <%@ page import="iPodia.Defaults" %>
+<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
-<%@ include file="/WEB-INF/Database.jsp"%>
 <%
 if (!user.isAuthenticated() || !user.isRegistrar()) {
 	response.sendRedirect(request.getContextPath() + "/");
