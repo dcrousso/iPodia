@@ -7,15 +7,14 @@ import java.util.HashSet;
 import java.util.Optional;
 
 public class Defaults {
-	public static final String INITIAL_PASSWORD = "305666274058833912233446123550405823599";
-	public static final String DATA_DIRECTORY = "/iPodiaData";
-	public static final String CSV_REGEXP = "\\s*,\\s*";
-	
 	public static final String dbDriver = "com.mysql.jdbc.Driver";
 	public static final String dbURL = "jdbc:mysql://localhost:3306/ipodia";
 	public static final String dbUsername = "root";
 	public static final String dbPassword = "";
-	
+
+	public static final String INITIAL_PASSWORD = "305666274058833912233446123550405823599";
+	public static final String DATA_DIRECTORY = "/iPodiaData";
+	public static final String CSV_REGEXP = "\\s*,\\s*";
 
 	public static String generateClassesRegExp(String classId) {
 		String regexp = "";

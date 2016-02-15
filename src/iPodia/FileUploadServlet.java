@@ -61,95 +61,68 @@ public class FileUploadServlet extends HttpServlet {
 			for (FileItem item : upload.parseRequest(request)) {
 				if (!item.isFormField()) {
 					uploadedFiles.add(item);
-				} else {
-					if (item.getFieldName().equals("id")) {
-						classId = item.getString();
-					} else if (item.getFieldName().equals("num")) {
-						week = item.getString();
-					} else {
-						//if the item's filed name does not have the word Answer in it, you know that means it is a new question
-						String name = item.getFieldName();
-						String value = item.getString();
-						
-						Matcher m = p.matcher(name);
-						if (m.find()) {
-					
-							//prefix refers to Week?Topic?Question?
-							String prefix = m.group(1);
-							if (prefix != null) {	
-					
-								//m.group(2) represents answerA, answerB, ... CorrectAnswer in the name. if it is null, then it is just the question
-								if (m.group(2) == null) {	
-									QuizQuestion quizQuestion = questionMap.get(prefix);
-									if (quizQuestion == null) {
-										
-										//the first item should just be the question, so create the quiz question object
-										quizQuestion = new QuizQuestion();
-										quizQuestion.setId(prefix);
-										quizQuestion.setQuestion(value);
-										questionMap.put(prefix, quizQuestion);
-									} else {
-										
-										//in case one of the answers created the quiz question object first, need to set the object's question here
-										quizQuestion.setQuestion(value);
-									}
-								} else {
-									
-									//this refers to the answers related to the specific question. The quiz question should have already been created
-									//when the answers are being processed, but just double check
-									QuizQuestion quizQuestion = questionMap.get(prefix);
-									if (quizQuestion == null) {
-										quizQuestion = new QuizQuestion();
-										quizQuestion.setId(prefix);
-										questionMap.put(prefix, quizQuestion);
-									} else {
-										String suffix = m.group(2);
-										if (suffix.equals("AnswerA")) {
-											quizQuestion.setAnswerA(value);
-										} else if (suffix.equals("AnswerB")) {
-											quizQuestion.setAnswerB(value);
-										} else if (suffix.equals("AnswerC")) {
-											quizQuestion.setAnswerC(value);
-										} else if (suffix.equals("AnswerD")) {
-											quizQuestion.setAnswerD(value);
-										} else if (suffix.equals("AnswerE")) {
-											quizQuestion.setAnswerE(value);
-										} else if (suffix.contains("CorrectAnswer")) {
-											
-											//gets whether the correct answer is A, B, C, D, or E
-											String correctAnswer = suffix.substring(suffix.length()-1);
-											quizQuestion.setCorrectAnswer(correctAnswer);
-										}
-									}
-								}
-							}
-						}// end if(m.find())
-					}	
+					continue;
 				}
-			} //end for loop
-		
-			for (HashMap.Entry<String, QuizQuestion> entry : questionMap.entrySet()) {
-				QuizQuestion quizQuestion = entry.getValue();
-				if (quizQuestion.isValid()  && classId != null) {
-					ProcessForm.processElements(quizQuestion, classId);
+
+				// item is not a file
+				String name = item.getFieldName();
+				String value = item.getString();
+
+				if (name.equals("id"))
+					classId = value;
+				else if (name.equals("num"))
+					week = value;
+				else {
+					// if the item's filed name does not have the word Answer in it, you know that means it is a new question
+					Matcher m = p.matcher(name);
+					if (!m.find())
+						continue;
+
+					//prefix refers to Week?Topic?Question?
+					String prefix = m.group(1);
+					if (Defaults.isEmpty(prefix))
+						continue;
+
+					QuizQuestion quizQuestion = questionMap.get(prefix);
+					if (quizQuestion == null) {
+						quizQuestion = new QuizQuestion();
+						quizQuestion.setId(prefix);
+						questionMap.put(prefix, quizQuestion);
+					}
+
+					// m.group(2) represents answerA, answerB, ... CorrectAnswer in the name.
+					// If it is null, then it is just the question.
+					String suffix = m.group(2);
+					if (Defaults.isEmpty(suffix))
+						quizQuestion.setQuestion(value);
+					else {
+						// Gets the answer key (A, B, C, D, E)
+						String answerKey = suffix.substring(suffix.length() - 1);
+						if (suffix.startsWith("CorrectAnswer"))
+							quizQuestion.setCorrectAnswer(answerKey);
+						else if (suffix.startsWith("Answer"))
+							quizQuestion.setAnswer(answerKey, value);
+					}
 				}
-				
-			}
+			} // end for
 		} catch (FileUploadException e) {
 			throw new ServletException(e);
 		}
 
-		if (classId == null || week == null) {
+		if (Defaults.isEmpty(classId) || Defaults.isEmpty(week)) {
 			response.sendRedirect(request.getContextPath() + "/");
 			return;
 		}
+
+		for (QuizQuestion question : questionMap.values())
+			ProcessForm.processElements(question, classId);
 
 		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId);
 		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId + File.separator + week);
 
 		for (FileItem item : uploadedFiles) {
 			String fileName = item.getName();
-			if (fileName == null || fileName.trim().length() == 0)
+			if (Defaults.isEmpty(fileName))
 				continue;
 
 			String filePath = Defaults.DATA_DIRECTORY + File.separator

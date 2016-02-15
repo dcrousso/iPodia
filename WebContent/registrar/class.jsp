@@ -41,7 +41,7 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 	toEnroll.addAll(Defaults.arrayToHashSet(teachersToEnroll));
 	toEnroll.addAll(Defaults.arrayToHashSet(studentsToEnroll));
 	for (String userToEnroll : toEnroll) {
-		if (userToEnroll == null || userToEnroll.trim().length() == 0 || enrolled.contains(userToEnroll))
+		if (Defaults.isEmpty(userToEnroll) || enrolled.contains(userToEnroll))
 			continue;
 
 		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
