@@ -20,24 +20,29 @@ a:hover {
 	color: #277bb6;
 }
 
-nav {
+header {
+	padding: 20px;
+}
+
+header > nav {
 	display: -webkit-flex;
 	display:    -moz-flex;
 	display:     -ms-flexbox;
 	display:         flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	text-align: center;
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
 }
 
-nav > a {
-	margin: 20px 20px 0;
-}
 
 main {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
+	padding: 0 20px;
 }
 
 main h4 {
