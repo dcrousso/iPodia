@@ -6,19 +6,21 @@ main {
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
 }
 
-main > h1 {
+main > h1,
+main > h2 {
 	margin: 0.8em 0 0;
 	text-align: center;
 }
 
-main > h4 {
+main h4 {
 	margin: 0.7em 0 0;
 	text-align: center;
 	font-size: 70%;
 	color: red;
 }
 
-main > h1 + form {
+main > h1 + form,
+main > h2 + form {
 	margin-top: 1.35em;
 }
 
