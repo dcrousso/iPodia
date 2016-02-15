@@ -89,12 +89,11 @@ if (Defaults.isEmpty(className)) {
 			
 			function makeNewWeek(event) {
 				
-			
-				numOfWeeks++;
 				var listOfWeeks = this.previousElementSibling;
+				var numOfWeeks = listOfWeeks.children.length;
 				var link = document.createElement("a");
-				link.textContent = "Week " + String (numOfWeeks);
-				link.setAttribute('href', "${pageContext.request.contextPath}/admin/week?id=${param.id}&num=" +String(numOfWeeks));
+				link.textContent = "Week " + String (numOfWeeks+1);
+				link.setAttribute('href', "${pageContext.request.contextPath}/admin/week?id=${param.id}&num=" +String(numOfWeeks+1));
 				
 				
 				var week = document.createElement("li");
