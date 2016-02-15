@@ -3,12 +3,9 @@
 <%@ page import="java.sql.ResultSet" %>
 <%@ page import="java.sql.SQLException" %>
 <%@ page import="java.sql.Connection" %>
+<%@ page import="iPodia.Defaults" %>
 <%
-final String dbDriver = "com.mysql.jdbc.Driver";
-final String dbURL = "jdbc:mysql://localhost:3306/ipodia";
-final String dbUsername = "root";
-final String dbPassword = "";
 
-Class.forName(dbDriver);
-final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
+Class.forName(Defaults.dbDriver);
+final Connection dbConnection = DriverManager.getConnection(Defaults.dbURL, Defaults.dbUsername, Defaults.dbPassword);
 %>
