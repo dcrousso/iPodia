@@ -146,6 +146,15 @@
 		<url-pattern>/registrar/class</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>registrar-user-extension</servlet-name>
+		<jsp-file>/registrar/user.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>registrar-user-extension</servlet-name>
+		<url-pattern>/registrar/user</url-pattern>
+	</servlet-mapping>
+
 	<session-config>
 		<session-timeout>60</session-timeout>
 	</session-config>

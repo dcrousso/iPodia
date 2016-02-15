@@ -15,7 +15,11 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 </jsp:include>
 		<main>
 			<h1>Admin</h1>
+<% if (user.getClasses().size() == 0) { %>
+			<p>No Enrolled Classes</p>
+<% } else { %>
 			<h4>Please select a class:</h4>
+<% } %>
 			<ul>
 <% for (HashMap.Entry<Integer, String> entry : user.getClasses().entrySet()) { %>
 				<li><a href="${pageContext.request.contextPath}/admin/class?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>

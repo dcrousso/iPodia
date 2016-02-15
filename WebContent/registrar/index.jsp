@@ -59,14 +59,15 @@ if (!Defaults.isEmpty(newClass)) {
 </jsp:include>
 		<main>
 			<h1>Welcome ${user.getName()}</h1>
-			<h4>Please select a class:</h4>
+			<h3><a href="${pageContext.request.contextPath}/registrar/user" title="Create User">Create User</a></h3>
+			<h4>Existing Classes:</h4>
 			<ul>
 <% for (HashMap.Entry<Integer, String> entry : user.getClasses().entrySet()) { %>
 				<li><a href="${pageContext.request.contextPath}/registrar/class?id=<%= entry.getKey() %>"><%= entry.getValue() %></a></li>
 <% } %>
 			</ul>
 			<form method="post">
-				<label for="newClass">Create a new class:</label>
+				<label for="newClass">Create Class:</label>
 				<input type="text" name="newClass" id="newClass">
 				<button>Submit</button>
 			</form>

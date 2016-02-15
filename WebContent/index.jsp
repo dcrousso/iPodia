@@ -1,6 +1,6 @@
 <%@ page import="java.util.HashSet" %>
-<%@ page import="iPodia.Defaults"%>
-<%@ page import="iPodia.MD5Encryption"%>
+<%@ page import="iPodia.Defaults" %>
+<%@ page import="iPodia.MD5Encryption" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
 <%
@@ -52,7 +52,7 @@ if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 			<form method="post">
 				<section>
 					<label for="email">Email</label>
-					<input type="text" name="email" id="email">
+					<input type="text" name="email" id="email"><!-- make type="email" -->
 				</section>
 				<section>
 					<label for="password">Password</label>
