@@ -10,13 +10,13 @@ if (!user.isAuthenticated() || !user.isRegistrar()) {
 }
 
 String classId = request.getParameter("id");
-if (classId == null || classId.trim().length() == 0) {
+if (Defaults.isEmpty(classId)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
 
 String className = user.getClassName(classId);
-if (className == null || className.trim().length() == 0) {
+if (Defaults.isEmpty(className)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
@@ -36,7 +36,6 @@ ps.close();
 
 String[] teachersToEnroll = request.getParameterValues("teacher");
 String[] studentsToEnroll = request.getParameterValues("student");
-
 if (teachersToEnroll != null || studentsToEnroll != null) {
 	HashSet<String> toEnroll = new HashSet<String>();
 	toEnroll.addAll(Defaults.arrayToHashSet(teachersToEnroll));
@@ -57,6 +56,16 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 			addClass.setString(1, classes + (classes.length() > 0 ? ", " : "") + classId);
 			addClass.setString(2, userToEnroll);
 			addClass.execute();
+
+			PreparedStatement users = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+			users.setString(1, userToEnroll);
+			ResultSet isStudent = users.executeQuery();
+			while (isStudent.next()) {
+				User student = new User(isStudent);
+				if (student.isStudent())
+					dbConnection.prepareStatement("ALTER TABLE class_" + classId + " ADD COLUMN " + Defaults.createSafeString(userToEnroll) + " varchar(255)").execute();
+			}
+			users.close();
 		}
 	}
 	ps.close();
@@ -64,7 +73,7 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 	for (User userToEnroll : enrolled) {
 		if (toEnroll.contains(userToEnroll.getEmail()))
 			continue;
-	
+
 		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
 		ps.setString(1, userToEnroll.getEmail());
 		results = ps.executeQuery();
@@ -73,10 +82,13 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 			removeClass.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
 			removeClass.setString(2, userToEnroll.getEmail());
 			removeClass.execute();
+
+			if (userToEnroll.isStudent())
+				dbConnection.prepareStatement("ALTER TABLE class_" + classId + " DROP COLUMN " + userToEnroll.getSafeEmail()).execute();
 		}
 	}
 	ps.close();
-	
+
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }

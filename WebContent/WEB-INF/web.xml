@@ -27,8 +27,8 @@
 	</welcome-file-list> 
 
 	<error-page>
-	    <error-code>404</error-code>
-	    <location>/404.html</location>
+		<error-code>404</error-code>
+		<location>/404.html</location>
 	</error-page>
 
 	<jsp-config>
@@ -63,6 +63,15 @@
 	<servlet-mapping>
 		<servlet-name>data-extension</servlet-name>
 		<url-pattern>/data</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>reset-extension</servlet-name>
+		<jsp-file>/reset.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>reset-extension</servlet-name>
+		<url-pattern>/reset</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -135,6 +144,15 @@
 	<servlet-mapping>
 		<servlet-name>registrar-class-extension</servlet-name>
 		<url-pattern>/registrar/class</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>registrar-user-extension</servlet-name>
+		<jsp-file>/registrar/user.jsp</jsp-file>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>registrar-user-extension</servlet-name>
+		<url-pattern>/registrar/user</url-pattern>
 	</servlet-mapping>
 
 	<session-config>

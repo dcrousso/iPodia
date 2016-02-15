@@ -20,29 +20,37 @@ a:hover {
 	color: #277bb6;
 }
 
-nav {
+header {
+	padding: 20px;
+}
+
+header > nav {
 	display: -webkit-flex;
 	display:    -moz-flex;
 	display:     -ms-flexbox;
 	display:         flex;
-	justify-content: space-around;
+	justify-content: space-between;
 	align-items: center;
 	text-align: center;
-}
-
-nav > a {
-	margin: 20px 20px 0;
-}
-
-main {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
 }
 
-main h4,
-main ul {
+
+main {
+	width: 100%;
+	max-width: 800px;
+	margin: 0 auto;
+	padding: 0 20px;
+}
+
+main h4 {
 	margin: 0;
+}
+
+main ul {
+	margin: 0 0 10px;
 }
 
 main > form {
@@ -88,6 +96,10 @@ main > form textarea:focus {
 	    -ms-animation: anim-shadow 300ms forwards;
 	     -o-animation: anim-shadow 300ms forwards;
 	        animation: anim-shadow 300ms forwards;
+}
+
+main > form select {
+	font-size: 100%;
 }
 
 @-webkit-keyframes anim-shadow {

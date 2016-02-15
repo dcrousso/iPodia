@@ -1,3 +1,4 @@
+<%@ page import="iPodia.Defaults" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isAdmin()) {
@@ -6,13 +7,19 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 }
 
 String classId = request.getParameter("id");
-if (classId == null || classId.trim().length() == 0) {
+if (Defaults.isEmpty(classId)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
 
 String className = user.getClassName(classId);
-if (className == null || className.trim().length() == 0) {
+if (Defaults.isEmpty(className)) {
+	response.sendRedirect(request.getContextPath() + "/");
+	return;
+}
+
+String week = request.getParameter("num");
+if (Defaults.isEmpty(week)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
@@ -75,7 +82,7 @@ if (className == null || className.trim().length() == 0) {
 
 				function addQuestion(event) {
 					var topic = this.parentNode;
-					var questionNumber = topic.id + "Question" + topic.children.length;
+					var questionName = "Week${param.num}" + topic.id + "Question" + topic.children.length;
 
 					var container = document.createElement("div");
 					container.classList.add("quiz-item");
@@ -83,14 +90,14 @@ if (className == null || className.trim().length() == 0) {
 					var question = container.appendChild(document.createElement("textarea"));
 					question.classList.add("question");
 					question.placeholder = "Question";
-					question.name = questionNumber;
+					question.name = questionName;
 
 					var answerOptions = ["A", "B", "C", "D", "E"];
 					for (var i = 0; i < answerOptions.length; ++i) {
 						var answer = container.appendChild(document.createElement("input"));
 						answer.classList.add("answer");
 						answer.placeholder = "Answer " + answerOptions[i];
-						answer.name = questionNumber + "Answer" + answerOptions[i];
+						answer.name = questionName + "Answer" + answerOptions[i];
 					}
 
 					var correctAnswerContainer = container.appendChild(document.createElement("div"));
@@ -101,10 +108,10 @@ if (className == null || className.trim().length() == 0) {
 
 						var radioButton = correctAnswerContainer.appendChild(document.createElement("input"));
 						radioButton.type = "radio";
-						radioButton.name = questionNumber + "CorrectAnswer";
+						radioButton.name = questionName + "CorrectAnswer" + answerOptions[i];
 					}
 
-					topic.insertBefore(container, topic.children[topic.children.length - 1]);
+					topic.insertBefore(container, topic.lastElementChild);
 				}
 				Array.prototype.forEach.call(document.querySelectorAll("button[name=\"addQuestion\"]"), function(item) {
 					item.addEventListener("click", addQuestion);

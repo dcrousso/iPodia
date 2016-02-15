@@ -7,6 +7,7 @@ import java.util.HashSet;
 import java.util.Optional;
 
 public class Defaults {
+	public static final String INITIAL_PASSWORD = "305666274058833912233446123550405823599";
 	public static final String DATA_DIRECTORY = "/iPodiaData";
 	public static final String CSV_REGEXP = "\\s*,\\s*";
 	
@@ -26,6 +27,14 @@ public class Defaults {
 		regexp += "(?:^\\s*|" + CSV_REGEXP + ")" + classId + "\\s*$";
 		regexp += ")";
 		return regexp;
+	}
+
+	public static boolean isEmpty(String s) {
+		return s == null || s.length() == 0 || s.trim().length() == 0;
+	}
+
+	public static String createSafeString(String s) {
+		return s.replaceAll("\\W", "_");
 	}
 
 	public static HashSet<String> arrayToHashSet(String[] s) {
