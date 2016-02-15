@@ -1,10 +1,10 @@
 <%@ page import="java.util.HashMap" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
-	if (!user.isAuthenticated() || !user.isAdmin()) {
-		response.sendRedirect(request.getContextPath() + "/");
-		return;
-	}
+if (!user.isAuthenticated() || !user.isAdmin()) {
+	response.sendRedirect(request.getContextPath() + "/");
+	return;
+}
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="admin" />

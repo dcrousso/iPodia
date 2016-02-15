@@ -10,32 +10,30 @@ if (!user.isAuthenticated()) {
 }
 
 boolean invalidPassword = false;
-if (request != null) {
-	String oldPassword = request.getParameter("oldPassword");
-	String newPassword = request.getParameter("newPassword");
-	if (oldPassword != null && newPassword != null && newPassword.equals(request.getParameter("confirmPassword"))) {
-		String encryptedPassword = MD5Encryption.encrypt(oldPassword);
-		PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
-		ps.setString(1, user.getEmail());
-		ResultSet results = ps.executeQuery();
-		while (results.next()) {
-			if (!encryptedPassword.equals(results.getString("password")))
-				continue;
+String oldPassword = request.getParameter("oldPassword");
+String newPassword = request.getParameter("newPassword");
+if (!Defaults.isEmpty(oldPassword) && !Defaults.isEmpty(newPassword) && newPassword.equals(request.getParameter("confirmPassword"))) {
+	String encryptedPassword = MD5Encryption.encrypt(oldPassword);
+	PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+	ps.setString(1, user.getEmail());
+	ResultSet results = ps.executeQuery();
+	while (results.next()) {
+		if (!encryptedPassword.equals(results.getString("password")))
+			continue;
 
-			PreparedStatement updatePassword = dbConnection.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
-			updatePassword.setString(1, MD5Encryption.encrypt(newPassword));
-			updatePassword.setString(2, user.getEmail());
-			updatePassword.execute();
+		PreparedStatement updatePassword = dbConnection.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
+		updatePassword.setString(1, MD5Encryption.encrypt(newPassword));
+		updatePassword.setString(2, user.getEmail());
+		updatePassword.execute();
 
-			ps.close();
-			response.sendRedirect(request.getContextPath() + user.getHome());
-			return;
-		}
 		ps.close();
-
-		// Missing/Not-Matching Password
-		invalidPassword = true;
+		response.sendRedirect(request.getContextPath() + user.getHome());
+		return;
 	}
+	ps.close();
+
+	// Missing/Not-Matching Password
+	invalidPassword = true;
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">

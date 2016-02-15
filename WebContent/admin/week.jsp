@@ -1,3 +1,4 @@
+<%@ page import="iPodia.Defaults" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isAdmin()) {
@@ -6,13 +7,19 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 }
 
 String classId = request.getParameter("id");
-if (classId == null || classId.trim().length() == 0) {
+if (Defaults.isEmpty(classId)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
 
 String className = user.getClassName(classId);
-if (className == null || className.trim().length() == 0) {
+if (Defaults.isEmpty(className)) {
+	response.sendRedirect(request.getContextPath() + "/");
+	return;
+}
+
+String week = request.getParameter("num");
+if (Defaults.isEmpty(week)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
@@ -104,7 +111,7 @@ if (className == null || className.trim().length() == 0) {
 						radioButton.name = questionNumber + "CorrectAnswer";
 					}
 
-					topic.insertBefore(container, topic.children[topic.children.length - 1]);
+					topic.insertBefore(container, topic.lastElementChild);
 				}
 				Array.prototype.forEach.call(document.querySelectorAll("button[name=\"addQuestion\"]"), function(item) {
 					item.addEventListener("click", addQuestion);

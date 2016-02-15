@@ -10,23 +10,23 @@ if (!user.isAuthenticated()) {
 }
 
 String classId = request.getParameter("class");
-String weekNumber = request.getParameter("week");
-String fileName = request.getParameter("file");
-if (classId == null || !user.hasClass(classId) || weekNumber == null || fileName == null) {
+String week = request.getParameter("week");
+String file = request.getParameter("file");
+if (Defaults.isEmpty(classId) || !user.hasClass(classId) || Defaults.isEmpty(week) || Defaults.isEmpty(file)) {
 	response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	return;
 }
 
-File file = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + weekNumber + "/" + fileName);
-if (!file.exists() || !file.isFile()) {
+File f = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + week + "/" + file);
+if (!f.exists() || !f.isFile()) {
 	response.sendError(HttpServletResponse.SC_NOT_FOUND);
 	return;
 }
 
 FileInputStream fileStream = new FileInputStream(file);
 
-response.setHeader("Content-Disposition", "inline; filename=" + fileName);
-response.setContentType(Files.probeContentType(file.toPath()));
+response.setHeader("Content-Disposition", "inline; filename=" + file);
+response.setContentType(Files.probeContentType(f.toPath()));
 response.setContentLength((int) file.length());
 
 int byteRead = 0;

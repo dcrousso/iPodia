@@ -10,13 +10,13 @@ if (!user.isAuthenticated() || !user.isRegistrar()) {
 }
 
 String classId = request.getParameter("id");
-if (classId == null || classId.trim().length() == 0) {
+if (Defaults.isEmpty(classId)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
 
 String className = user.getClassName(classId);
-if (className == null || className.trim().length() == 0) {
+if (Defaults.isEmpty(className)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
@@ -36,7 +36,6 @@ ps.close();
 
 String[] teachersToEnroll = request.getParameterValues("teacher");
 String[] studentsToEnroll = request.getParameterValues("student");
-
 if (teachersToEnroll != null || studentsToEnroll != null) {
 	HashSet<String> toEnroll = new HashSet<String>();
 	toEnroll.addAll(Defaults.arrayToHashSet(teachersToEnroll));
@@ -74,7 +73,7 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 	for (User userToEnroll : enrolled) {
 		if (toEnroll.contains(userToEnroll.getEmail()))
 			continue;
-	
+
 		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
 		ps.setString(1, userToEnroll.getEmail());
 		results = ps.executeQuery();
@@ -89,7 +88,7 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 		}
 	}
 	ps.close();
-	
+
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }

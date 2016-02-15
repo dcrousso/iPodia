@@ -1,3 +1,4 @@
+<%@ page import="iPodia.Defaults" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isAdmin()) {
@@ -6,13 +7,13 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 }
 
 String classId = request.getParameter("id");
-if (classId == null || classId.trim().length() == 0) {
+if (Defaults.isEmpty(classId)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
 
 String className = user.getClassName(classId);
-if (className == null || className.trim().length() == 0) {
+if (Defaults.isEmpty(className)) {
 	response.sendRedirect(request.getContextPath() + "/");
 	return;
 }
