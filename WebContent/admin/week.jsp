@@ -148,7 +148,8 @@ while (rs.next()) {
 
 				var radioButton = correctAnswerContainer.appendChild(document.createElement("input"));
 				radioButton.type = "radio";
-				radioButton.name = questionName + "CorrectAnswer" + answerOptions[i];
+				radioButton.name = questionName + "CorrectAnswer";
+				radioButton.value = answerOptions[i];
 				var correctAnswerText = "<%=correctAnswerFromDB%>";
 				if ( correctAnswerText === answerOptions[i]) 
 					radioButton.checked = true;
@@ -211,7 +212,8 @@ while (rs.next()) {
 
 				var radioButton = correctAnswerContainer.appendChild(document.createElement("input"));
 				radioButton.type = "radio";
-				radioButton.name = questionName + "CorrectAnswer" + answerOptions[i];
+				radioButton.name = questionName + "CorrectAnswer";
+				radioButton.value = answerOptions[i];
 			}
 
 			topic.insertBefore(container, topic.lastElementChild);

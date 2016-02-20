@@ -95,7 +95,7 @@ public class FileUploadServlet extends HttpServlet {
 						// Gets the answer key (A, B, C, D, E)
 						String answerKey = suffix.substring(suffix.length() - 1);
 						if (suffix.startsWith("CorrectAnswer"))
-							quizQuestion.setCorrectAnswer(answerKey);
+							quizQuestion.setCorrectAnswer(value);
 						else if (suffix.startsWith("Answer"))
 							quizQuestion.setAnswer(answerKey, value);
 					}
