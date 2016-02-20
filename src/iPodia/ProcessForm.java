@@ -15,7 +15,7 @@ public class ProcessForm {
 			Class.forName(Defaults.dbDriver);
 			final Connection dbConnection = DriverManager.getConnection(Defaults.dbURL, Defaults.dbUsername, Defaults.dbPassword); 
 
-			PreparedStatement ps = dbConnection.prepareStatement("INSERT INTO class_" + classId + " (id, question, answerA, answerB, answerC, answerD, answerE, correctAnswer, topic) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			PreparedStatement ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + " (id, question, answerA, answerB, answerC, answerD, answerE, correctAnswer, topic) VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, quizQuestion.getId());
 			ps.setString(2, quizQuestion.getQuestion());
 			ps.setString(3, quizQuestion.getAnswer("A"));
