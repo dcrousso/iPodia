@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -54,9 +53,6 @@ public class FileUploadServlet extends HttpServlet {
 		String week = null;
 		HashSet<FileItem> uploadedFiles = new HashSet<FileItem>();
 		HashMap<String, QuizQuestion> questionMap = new HashMap<String, QuizQuestion>();
-		String pattern = "(Week\\d+Topic\\d+Question\\d+)(\\w+)?";
-		Pattern p = Pattern.compile(pattern, Pattern.CASE_INSENSITIVE);
-
 		try {
 			for (FileItem item : upload.parseRequest(request)) {
 				if (!item.isFormField()) {
@@ -74,7 +70,7 @@ public class FileUploadServlet extends HttpServlet {
 					week = value;
 				else {
 					// if the item's filed name does not have the word Answer in it, you know that means it is a new question
-					Matcher m = p.matcher(name);
+					Matcher m = Defaults.QUESTION_PATTERN.matcher(name);
 					if (!m.find())
 						continue;
 

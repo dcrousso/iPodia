@@ -1,10 +1,10 @@
 package iPodia;
 
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 //import java.sql.Timestamp;
-import java.sql.Connection;
 
 public class ProcessForm {
 	public static void processElements (QuizQuestion quizQuestion, String classId) {

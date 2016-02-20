@@ -53,12 +53,12 @@ main ul {
 	margin: 0 0 10px;
 }
 
-main > form {
+main form {
 	position: relative;
 }
 
-main > form input,
-main > form textarea {
+main input,
+main textarea {
 	position: relative;
 	width: 100%;
 	padding: 3px;
@@ -74,21 +74,21 @@ main > form textarea {
 	        transition: border-color 300ms, box-shadow 300ms;
 }
 
-main > form input[type="file"] {
+main input[type="file"] {
 	font-size: small;
 }
 
-main > form input[type="radio"] {
+main input[type="radio"] {
 	width: initial;
 }
 
-main > form textarea {
+main textarea {
 	height: 75px;
 	font-size: initial;
 }
 
-main > form input:focus,
-main > form textarea:focus {
+main input:focus,
+main textarea:focus {
 	z-index: 10;
 	border-color: steelblue;
 	-webkit-animation: anim-shadow 300ms forwards;
@@ -98,7 +98,7 @@ main > form textarea:focus {
 	        animation: anim-shadow 300ms forwards;
 }
 
-main > form select {
+main select {
 	font-size: 100%;
 }
 
@@ -122,7 +122,7 @@ main > form select {
 	to { box-shadow: 0 0 25px 12.5px transparent; }
 }
 
-main > form button {
+main button {
 	display: block;
 	height: 30px;
 	margin: 10px auto 0;
@@ -138,7 +138,7 @@ main > form button {
 	cursor: pointer;
 }
 
-main > form button:active {
+main button:active {
 	border-style: inset;
 	box-shadow: 0 1px 0 #006799 inset;
 }

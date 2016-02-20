@@ -1,8 +1,8 @@
 <%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.MD5Encryption" %>
-<%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
+<%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (user.isAuthenticated()) {
 	response.sendRedirect(request.getContextPath() + user.getHome());

@@ -1,8 +1,8 @@
 <%@ page import="java.util.Arrays" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults" %>
-<%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
+<%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isRegistrar()) {
 	response.sendRedirect(request.getContextPath() + "/");
@@ -101,7 +101,7 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
-			<h1>Welcome to <%= className %></h1>
+			<h1><%= className %></h1>
 			<form method="post">
 				<section id="teachers">
 <% for (User teacher : enrolled) { if (teacher.isAdmin()) { %>
