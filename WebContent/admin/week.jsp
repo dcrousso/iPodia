@@ -109,8 +109,6 @@ while (rs.next()) {
 		if (topic != null) {
 			
 			var questionName = "Week${param.num}" + topic.id + "Question" + topic.children.length;
-			console.log(topic.children.length);
-
 			var container = document.createElement("div");
 			container.classList.add("quiz-item");
 
@@ -185,9 +183,7 @@ while (rs.next()) {
 		function addQuestion(event) {
 			
 			var topic = this.parentNode;
-			console.log(topic.children.length);
 			var questionName = "Week${param.num}" + topic.id + "Question" + topic.children.length;
-
 			var container = document.createElement("div");
 			container.classList.add("quiz-item");
 
