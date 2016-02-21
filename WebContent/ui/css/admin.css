@@ -15,6 +15,11 @@ main > form > section + button::before {
 	border-top: 1px solid lightgrey;
 }
 
+main > form > section > ul {
+	margin-bottom: 0;
+	font-size: 0.8em;
+}
+
 main > form .quiz-item > .correct {
 	display: -webkit-flex;
 	display:    -moz-flex;

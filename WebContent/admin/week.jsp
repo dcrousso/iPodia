@@ -1,6 +1,5 @@
+<%@ page import="java.io.File" %>
 <%@ page import="java.util.HashSet" %>
-<%@ page import="java.util.regex.Matcher" %>
-<%@ page import="java.util.regex.Pattern" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.QuizQuestion" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
@@ -51,6 +50,14 @@ while (results.next())
 
 				<h4>Upload Files:</h4>
 				<section id="Files">
+<% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + week); %>
+<% if (folder.exists() && folder.isDirectory()) { %>
+				<ul>
+<% for (File f : folder.listFiles()) { %>
+					<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
+<% } %>
+				</ul>
+<% } %>
 					<input type="file" name="upload">
 				</section>
 
