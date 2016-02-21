@@ -1,0 +1,54 @@
+main > section {
+	padding: 10px 15px;
+	background-color: white;
+	box-shadow: 0 0 2px lightgrey;
+}
+
+main > section + section {
+	margin-top: 15px;
+}
+
+main > section > h3 {
+	margin: 0;
+}
+
+main > section > form {
+	display: none;
+}
+
+main > section.open > form {
+	display: block;
+}
+
+main > section > form > .question {
+	margin-top: 5px;
+	padding-top: 10px;
+	border-top: 1px solid lightgrey;
+}
+
+main > section > form > .question > p {
+	margin: 0;
+}
+
+main > section > form > .question > .answer {
+	margin: 2px 0;
+	font-size: 0.8em;
+}
+
+main > section > form > .question > .answer > p {
+	display: inline-block;
+	margin: 0;
+}
+
+main > section > form > .question + button {
+	margin-top: 20px;
+}
+
+main > section > form > .question + button::before {
+	position: absolute;
+	bottom: 40px;
+	left: 0;
+	width: 100%;
+	content: "";
+	border-top: 1px solid lightgrey;
+}

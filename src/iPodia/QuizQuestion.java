@@ -3,6 +3,7 @@ package iPodia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class QuizQuestion {
 	private String m_id;
@@ -38,6 +39,13 @@ public class QuizQuestion {
 
 	public String getId() {
 		return m_id;
+	}
+
+	public String getWeek() {
+		Matcher m = Defaults.WEEK_PATTERN.matcher(m_id);
+		if (!m.find())
+			return m_id;
+		return m.group(2);
 	}
 
 	public String getQuestion() {
@@ -91,24 +99,24 @@ public class QuizQuestion {
 
 	public String generateHTML() {
 		return "<div class=\"quiz-item\">"
-			+ "<textarea class=\"question\" placeholder=\"Question\" name=\"" + getId() + "\">" + getQuestion() + "</textarea>"
-			+ "<input class=\"answer\" placeholder=\"Answer A\" name=\"" + getId() + "AnswerA\" value=\"" + getAnswer("A") + "\">"
-			+ "<input class=\"answer\" placeholder=\"Answer B\" name=\"" + getId() + "AnswerB\" value=\"" + getAnswer("B") + "\">"
-			+ "<input class=\"answer\" placeholder=\"Answer C\" name=\"" + getId() + "AnswerC\" value=\"" + getAnswer("C") + "\">"
-			+ "<input class=\"answer\" placeholder=\"Answer D\" name=\"" + getId() + "AnswerD\" value=\"" + getAnswer("D") + "\">"
-			+ "<input class=\"answer\" placeholder=\"Answer E\" name=\"" + getId() + "AnswerE\" value=\"" + getAnswer("E") + "\">"
-			+ "<div class=\"correct\">"
-				+ "<label>A:</label>"
-				+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"A\"" + (getCorrectAnswer().equals("A") ? " checked" : "") + ">"
-				+ "<label>B:</label>"
-				+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"B\"" + (getCorrectAnswer().equals("B") ? " checked" : "") + ">"
-				+ "<label>C:</label>"
-				+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"C\"" + (getCorrectAnswer().equals("C") ? " checked" : "") + ">"
-				+ "<label>D:</label>"
-				+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"D\"" + (getCorrectAnswer().equals("D") ? " checked" : "") + ">"
-				+ "<label>E:</label>"
-				+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"E\"" + (getCorrectAnswer().equals("E") ? " checked" : "") + ">"
-			+ "</div>"
-		+ "</div>";
+		       	+ "<textarea class=\"question\" placeholder=\"Question\" name=\"" + getId() + "\">" + getQuestion() + "</textarea>"
+		       	+ "<input class=\"answer\" placeholder=\"Answer A\" name=\"" + getId() + "AnswerA\" value=\"" + getAnswer("A") + "\">"
+		       	+ "<input class=\"answer\" placeholder=\"Answer B\" name=\"" + getId() + "AnswerB\" value=\"" + getAnswer("B") + "\">"
+		       	+ "<input class=\"answer\" placeholder=\"Answer C\" name=\"" + getId() + "AnswerC\" value=\"" + getAnswer("C") + "\">"
+		       	+ "<input class=\"answer\" placeholder=\"Answer D\" name=\"" + getId() + "AnswerD\" value=\"" + getAnswer("D") + "\">"
+		       	+ "<input class=\"answer\" placeholder=\"Answer E\" name=\"" + getId() + "AnswerE\" value=\"" + getAnswer("E") + "\">"
+		       	+ "<div class=\"correct\">"
+		       	+ "<label>A:</label>"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"A\"" + (getCorrectAnswer().equals("A") ? " checked" : "") + ">"
+		       		+ "<label>B:</label>"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"B\"" + (getCorrectAnswer().equals("B") ? " checked" : "") + ">"
+		       		+ "<label>C:</label>"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"C\"" + (getCorrectAnswer().equals("C") ? " checked" : "") + ">"
+		       		+ "<label>D:</label>"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"D\"" + (getCorrectAnswer().equals("D") ? " checked" : "") + ">"
+		       		+ "<label>E:</label>"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"E\"" + (getCorrectAnswer().equals("E") ? " checked" : "") + ">"
+		       	+ "</div>"
+		       + "</div>";
 	}
 }

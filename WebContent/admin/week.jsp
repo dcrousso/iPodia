@@ -45,7 +45,7 @@ while (results.next())
 </jsp:include>
 		<main>
 			<h1><%= className %>, Week ${param.num}</h1>
-			<form method="post" action="uploadFile" enctype="multipart/form-data">
+			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
 
@@ -58,7 +58,7 @@ while (results.next())
 				<section id="Topic1">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic1")) { %>
 					<%= item.generateHTML() %>
-<% existing.remove(item); } } %>
+<% } } %>
 					<button type="button" name="addQuestion" value="add">Add question for Topic 1</button>
 				</section>
 
@@ -66,7 +66,7 @@ while (results.next())
 				<section id="Topic2">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic2")) { %>
 					<%= item.generateHTML() %>
-<% existing.remove(item); } } %>
+<% } } %>
 					<button type="button" name="addQuestion" value="add">Add question for Topic 2</button>
 				</section>
 
@@ -74,7 +74,7 @@ while (results.next())
 				<section id="Topic3">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic3")) { %>
 					<%= item.generateHTML() %>
-<% existing.remove(item); } } %>
+<% } } %>
 					<button type="button" name="addQuestion" value="add">Add question for Topic 3</button>
 				</section>
 
@@ -82,7 +82,7 @@ while (results.next())
 				<section id="Topic4">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic4")) { %>
 					<%= item.generateHTML() %>
-<% existing.remove(item); } } %>
+<% } } %>
 					<button type="button" name="addQuestion" value="add">Add question for Topic 4</button>
 				</section>
 

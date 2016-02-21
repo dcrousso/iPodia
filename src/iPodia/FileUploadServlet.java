@@ -111,7 +111,7 @@ public class FileUploadServlet extends HttpServlet {
 		}
 
 		for (QuizQuestion question : questionMap.values())
-			ProcessForm.processElements(question, classId);
+			ProcessForm.processQuizUpload(question, classId);
 
 		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId);
 		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId + File.separator + week);

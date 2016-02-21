@@ -11,6 +11,23 @@ body {
 	box-sizing: border-box;
 }
 
+header,
+main h1,
+main h3,
+main label,
+main button {
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	 -khtml-user-select: none;
+	   -moz-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+}
+
+main label[for] {
+	cursor: pointer;
+}
+
 a {
 	color: #3498db;
 	text-decoration: none;
@@ -36,7 +53,6 @@ header > nav {
 	max-width: 800px;
 	margin: 0 auto;
 }
-
 
 main {
 	width: 100%;
@@ -80,6 +96,8 @@ main input[type="file"] {
 
 main input[type="radio"] {
 	width: initial;
+	vertical-align: 1px;
+	border-radius: 50%;
 }
 
 main textarea {

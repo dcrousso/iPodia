@@ -107,7 +107,7 @@
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>FileUploadServlet</servlet-name>
-		<url-pattern>/admin/uploadFile</url-pattern>
+		<url-pattern>/admin/uploadWeekData</url-pattern>
 	</servlet-mapping>
 
 	<servlet>
@@ -126,6 +126,15 @@
 	<servlet-mapping>
 		<servlet-name>student-class-extension</servlet-name>
 		<url-pattern>/student/class</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>SubmitAnswersServlet</servlet-name>
+		<servlet-class>iPodia.SubmitAnswersServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>SubmitAnswersServlet</servlet-name>
+		<url-pattern>/student/submitAnswers</url-pattern>
 	</servlet-mapping>
 
 	<servlet>

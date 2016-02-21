@@ -2,6 +2,9 @@ package iPodia;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Optional;
@@ -56,5 +59,14 @@ public class Defaults {
 			file.createNewFile();
 
 		return file;
+	}
+
+	public static boolean columnExists(ResultSet rs, String columnName) throws SQLException {
+		ResultSetMetaData rsmd = rs.getMetaData();
+		for (int x = 1; x <= rsmd.getColumnCount(); x++) {
+			if (columnName.equals(rsmd.getColumnName(x)))
+				return true;
+		}
+		return false;
 	}
 }
