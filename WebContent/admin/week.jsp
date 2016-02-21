@@ -43,7 +43,7 @@ while (results.next())
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
-			<h1><%= className %>, Week ${param.num}</h1>
+			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
 			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
