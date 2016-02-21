@@ -111,8 +111,12 @@ public class User {
 		return m_classes;
 	}
 
-	public boolean hasClass(String className) {
-		return m_classes.containsValue(className);
+	public boolean hasClass(int classId) {
+		return m_classes.containsKey(classId);
+	}
+
+	public boolean hasClass(String classId) {
+		return hasClass(Integer.parseInt(classId));
 	}
 
 	public void addClass(int classId, String className) {

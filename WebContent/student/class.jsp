@@ -1,6 +1,6 @@
+<%@ page import="java.io.File" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.regex.Matcher" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.QuizQuestion" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
@@ -23,8 +23,8 @@ if (Defaults.isEmpty(className)) {
 	return;
 }
 
-HashMap<String, String> existing = new HashMap<String, String>();
 ArrayList<QuizQuestion> questions = new ArrayList<QuizQuestion>();
+HashMap<String, String> existing = new HashMap<String, String>();
 ResultSet results = dbConnection.prepareStatement("Select * From class_" + classId).executeQuery();
 while (results.next()) {
 	QuizQuestion question = new QuizQuestion(results);
@@ -33,14 +33,13 @@ while (results.next()) {
 
 	questions.add(question);
 
-	if (!Defaults.columnExists(results, user.getSafeEmail()))
-		continue;
+	if (Defaults.columnExists(results, user.getSafeEmail())) {
+		String userAnswer = results.getString(user.getSafeEmail());
+		if (Defaults.isEmpty(userAnswer))
+			userAnswer = "";
 
-	String userAnswer = results.getString(user.getSafeEmail());
-	if (Defaults.isEmpty(userAnswer))
-		userAnswer = "";
-
-	existing.put(question.getId(), userAnswer);
+		existing.put(question.getId(), userAnswer);
+	}
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
@@ -56,6 +55,14 @@ while (results.next()) {
 <% if (i == 0 || !question.getWeek().equals(questions.get(i - 1).getWeek())) { %>
 			<section id="week<%= question.getWeek() %>">
 				<h3>Week <%= question.getWeek() %></h3>
+<% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + question.getWeek()); %>
+<% if (folder.exists() && folder.isDirectory()) { %>
+				<ul>
+<% for (File f : folder.listFiles()) { %>
+					<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=<%= question.getWeek() %>&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
+<% } %>
+				</ul>
+<% } %>
 				<form method="post" action="submitAnswers" >
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getEmail()}" hidden>

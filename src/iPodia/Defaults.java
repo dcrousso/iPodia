@@ -2,6 +2,9 @@ package iPodia;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -68,5 +71,27 @@ public class Defaults {
 				return true;
 		}
 		return false;
+	}
+
+	public static String urlEncode(String url) {
+		if (isEmpty(url))
+			return url;
+
+		try {
+			return URLEncoder.encode(url, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		return url;
+	}
+
+	public static String urlDecode(String url) {
+		if (isEmpty(url))
+			return url;
+
+		try {
+			return URLDecoder.decode(url, "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+		}
+		return url;
 	}
 }
