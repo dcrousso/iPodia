@@ -63,7 +63,7 @@ while (results.next()) {
 		<main>
 			<h1><%= className %></h1>
 <% for (int i = questions.size() - 1; i >= 0; --i) { QuizQuestion question = questions.get(i); %>
-<% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId())) { %>
+<% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
 			<section id="week<%= question.getWeekNumber() %>">
 				<h3>
 					Week <%= question.getWeekNumber() %>
@@ -107,7 +107,7 @@ while (results.next()) {
 							<p><%= question.getAnswer("E") %></p>
 						</div>
 					</div>
-<% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
+<% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId())) { %>
 					<button>Submit</button>
 				</form>
 			</section>

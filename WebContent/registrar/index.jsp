@@ -36,7 +36,6 @@ if (!Defaults.isEmpty(newClass)) {
 				+ "answerD varchar(255),"
 				+ "answerE varchar(255),"
 				+ "correctAnswer varchar(255),"
-				+ "dueDate timestamp,"
 				+ "topic varchar(255),"
 				+ "PRIMARY KEY (id)"
 			+ ");"

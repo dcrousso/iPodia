@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-//import java.sql.Timestamp;
 
 public class ProcessForm {
 	public static void processQuizUpload(QuizQuestion quizQuestion, String classId) {
@@ -25,7 +24,6 @@ public class ProcessForm {
 			ps.setString(6, quizQuestion.getAnswer("D"));
 			ps.setString(7, quizQuestion.getAnswer("E"));
 			ps.setString(8, quizQuestion.getCorrectAnswer());
-			//ps.setTimestamp(9, new Timestamp(0)); // TODO: Implement relaseDate functionality
 			ps.setString(9, quizQuestion.getTopic());
 			ps.executeUpdate();
 
