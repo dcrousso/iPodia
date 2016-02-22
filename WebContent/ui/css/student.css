@@ -16,11 +16,10 @@ main > section > h3 {
 
 main > section > h3 > .chevron {
 	position: absolute;
-	top: 20%;
+	top: 10%;
 	right: 0;
-	width: 25px;
+	width: 24px;
 	height: 50%;
-	overflow: hidden;
 }
 
 main > section.open > h3 > .chevron {

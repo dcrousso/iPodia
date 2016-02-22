@@ -67,7 +67,7 @@ while (results.next()) {
 			<section id="week<%= question.getWeekNumber() %>">
 				<h3>
 					Week <%= question.getWeekNumber() %>
-					<div class="chevron down"></div>
+					<a title="Toggle Questions" class="chevron down"></a>
 				</h3>
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + question.getWeekNumber()); %>
 <% if (folder.exists() && folder.isDirectory()) { %>
