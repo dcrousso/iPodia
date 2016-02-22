@@ -65,7 +65,10 @@ while (results.next()) {
 <% for (int i = questions.size() - 1; i >= 0; --i) { QuizQuestion question = questions.get(i); %>
 <% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId())) { %>
 			<section id="week<%= question.getWeekNumber() %>">
-				<h3>Week <%= question.getWeekNumber() %></h3>
+				<h3>
+					Week <%= question.getWeekNumber() %>
+					<div class="chevron down"></div>
+				</h3>
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + question.getWeekNumber()); %>
 <% if (folder.exists() && folder.isDirectory()) { %>
 				<ul>
