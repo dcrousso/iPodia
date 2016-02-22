@@ -41,11 +41,18 @@ public class QuizQuestion {
 		return m_id;
 	}
 
-	public String getWeek() {
+	public String getWeekNumber() {
 		Matcher m = Defaults.WEEK_PATTERN.matcher(m_id);
 		if (!m.find())
 			return m_id;
 		return m.group(2);
+	}
+
+	public String getWeekId() {
+		Matcher m = Defaults.WEEK_PATTERN.matcher(m_id);
+		if (!m.find())
+			return m_id;
+		return m.group(1) + m.group(2);
 	}
 
 	public String getQuestion() {

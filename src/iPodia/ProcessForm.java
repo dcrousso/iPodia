@@ -30,7 +30,7 @@ public class ProcessForm {
 			ps.executeUpdate();
 
 			ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + "_matching (id) VALUES (?)");
-			ps.setString(1, "Week" + quizQuestion.getWeek());
+			ps.setString(1, quizQuestion.getWeekId());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
