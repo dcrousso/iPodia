@@ -26,7 +26,7 @@ if (!Defaults.isEmpty(newClass)) {
 
 		int newClassId = classes.getInt("id");
 		user.addClass(newClassId, newClass);
-		ps = dbConnection.prepareStatement("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId
+		dbConnection.prepareStatement("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId
 			+ " ("
 				+ "id varchar(255),"
 				+ "question varchar(255),"
@@ -40,8 +40,14 @@ if (!Defaults.isEmpty(newClass)) {
 				+ "topic varchar(255),"
 				+ "PRIMARY KEY (id)"
 			+ ");"
-		);
-		ps.execute();
+		).execute();
+
+		dbConnection.prepareStatement("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId + "_matching"
+			+ " ("
+				+ "id varchar(255),"
+				+ "PRIMARY KEY (id)"
+			+ ");"
+		).execute();
 
 		response.sendRedirect(request.getContextPath() + "/registrar/class?id=" + newClassId);
 		return;

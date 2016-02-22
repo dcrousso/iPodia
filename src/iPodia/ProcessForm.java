@@ -14,8 +14,9 @@ public class ProcessForm {
 		try {
 			Class.forName(Defaults.dbDriver);
 			final Connection dbConnection = DriverManager.getConnection(Defaults.dbURL, Defaults.dbUsername, Defaults.dbPassword); 
+			PreparedStatement ps;
 
-			PreparedStatement ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + " (id, question, answerA, answerB, answerC, answerD, answerE, correctAnswer, topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+			ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + " (id, question, answerA, answerB, answerC, answerD, answerE, correctAnswer, topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 			ps.setString(1, quizQuestion.getId());
 			ps.setString(2, quizQuestion.getQuestion());
 			ps.setString(3, quizQuestion.getAnswer("A"));
@@ -26,6 +27,10 @@ public class ProcessForm {
 			ps.setString(8, quizQuestion.getCorrectAnswer());
 			//ps.setTimestamp(9, new Timestamp(0)); // TODO: Implement relaseDate functionality
 			ps.setString(9, quizQuestion.getTopic());
+			ps.executeUpdate();
+
+			ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + "_matching (id) VALUES (?)");
+			ps.setString(1, "Week" + quizQuestion.getWeek());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();

@@ -62,29 +62,33 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 			ResultSet isStudent = users.executeQuery();
 			while (isStudent.next()) {
 				User student = new User(isStudent);
-				if (student.isStudent())
-					dbConnection.prepareStatement("ALTER TABLE class_" + classId + " ADD COLUMN " + Defaults.createSafeString(userToEnroll) + " varchar(255)").execute();
+				if (student.isStudent()) {
+					dbConnection.prepareStatement("ALTER TABLE class_" + classId + " ADD COLUMN " + student.getSafeEmail() + " varchar(255)").execute();
+					dbConnection.prepareStatement("ALTER TABLE class_" + classId + "_matching ADD COLUMN " + student.getSafeEmail() + " varchar(255)").execute();
+				}
 			}
 			users.close();
 		}
 	}
 	ps.close();
 
-	for (User userToEnroll : enrolled) {
-		if (toEnroll.contains(userToEnroll.getEmail()))
+	for (User userToRemove : enrolled) {
+		if (toEnroll.contains(userToRemove.getEmail()))
 			continue;
 
 		ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
-		ps.setString(1, userToEnroll.getEmail());
+		ps.setString(1, userToRemove.getEmail());
 		results = ps.executeQuery();
 		while (results.next()) {
 			PreparedStatement removeClass = dbConnection.prepareStatement("UPDATE users SET classes = ? WHERE email = ?");
 			removeClass.setString(1, results.getString("classes").replaceAll(Defaults.generateClassesRegExp(classId), ""));
-			removeClass.setString(2, userToEnroll.getEmail());
+			removeClass.setString(2, userToRemove.getEmail());
 			removeClass.execute();
 
-			if (userToEnroll.isStudent())
-				dbConnection.prepareStatement("ALTER TABLE class_" + classId + " DROP COLUMN " + userToEnroll.getSafeEmail()).execute();
+			if (userToRemove.isStudent()) {
+				dbConnection.prepareStatement("ALTER TABLE class_" + classId + " DROP COLUMN " + userToRemove.getSafeEmail()).execute();
+				dbConnection.prepareStatement("ALTER TABLE class_" + classId + "_matching DROP COLUMN " + userToRemove.getSafeEmail()).execute();
+			}
 		}
 	}
 	ps.close();
