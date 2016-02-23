@@ -34,23 +34,26 @@ while (results.next()) {
 
 	questions.add(question);
 
-	if (!Defaults.columnExists(results, user.getSafeEmail()))
+	if (!Defaults.columnExists(results, user.getSafeEmail() + Defaults.beforeMatching) || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.afterMatching))
 		continue;
 
-	String userAnswer = results.getString(user.getSafeEmail());
-	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
-
-	if (groups.containsKey(question.getWeekId()))
-		continue;
-
-	PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + "_matching where id = ?");
-	ps.setString(1, question.getWeekId());
-	ResultSet matches = ps.executeQuery();
-	while (matches.next() && Defaults.columnExists(matches, user.getSafeEmail())) {
-		String groupId = matches.getString(user.getSafeEmail());
-		if (!Defaults.isEmpty(groupId))
-			groups.put(question.getWeekId(), groupId);
+	String userAnswer = null;
+	if (!groups.containsKey(question.getWeekId())) {
+		PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + "_matching where id = ?");
+		ps.setString(1, question.getWeekId());
+		ResultSet matches = ps.executeQuery();
+		while (matches.next() && Defaults.columnExists(matches, user.getSafeEmail())) {
+			String groupId = matches.getString(user.getSafeEmail());
+			if (!Defaults.isEmpty(groupId))
+				groups.put(question.getWeekId(), groupId);
+		}
+		userAnswer = results.getString(user.getSafeEmail() + Defaults.afterMatching);
 	}
+
+	if (Defaults.isEmpty(userAnswer))
+		userAnswer = results.getString(user.getSafeEmail() + Defaults.beforeMatching);
+
+	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
@@ -82,7 +85,7 @@ while (results.next()) {
 <% } %>
 				<form method="post" action="submitAnswers" >
 					<input type="text" name="id" value="${param.id}" hidden>
-					<input type="text" name="user" value="${user.getEmail()}" hidden>
+					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>
 <% } %>
 					<div class="question">
 						<p><%= question.getQuestion() %></p>

@@ -63,7 +63,8 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 			while (isStudent.next()) {
 				User student = new User(isStudent);
 				if (student.isStudent()) {
-					dbConnection.prepareStatement("ALTER TABLE class_" + classId + " ADD COLUMN " + student.getSafeEmail() + " varchar(255)").execute();
+					dbConnection.prepareStatement("ALTER TABLE class_" + classId + " ADD COLUMN " + student.getSafeEmail() + Defaults.beforeMatching + " varchar(255)").execute();
+					dbConnection.prepareStatement("ALTER TABLE class_" + classId + " ADD COLUMN " + student.getSafeEmail() + Defaults.afterMatching + " varchar(255)").execute();
 					dbConnection.prepareStatement("ALTER TABLE class_" + classId + "_matching ADD COLUMN " + student.getSafeEmail() + " varchar(255)").execute();
 				}
 			}
@@ -86,7 +87,8 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 			removeClass.execute();
 
 			if (userToRemove.isStudent()) {
-				dbConnection.prepareStatement("ALTER TABLE class_" + classId + " DROP COLUMN " + userToRemove.getSafeEmail()).execute();
+				dbConnection.prepareStatement("ALTER TABLE class_" + classId + " DROP COLUMN " + userToRemove.getSafeEmail() + Defaults.beforeMatching).execute();
+				dbConnection.prepareStatement("ALTER TABLE class_" + classId + " DROP COLUMN " + userToRemove.getSafeEmail() + Defaults.afterMatching).execute();
 				dbConnection.prepareStatement("ALTER TABLE class_" + classId + "_matching DROP COLUMN " + userToRemove.getSafeEmail()).execute();
 			}
 		}
