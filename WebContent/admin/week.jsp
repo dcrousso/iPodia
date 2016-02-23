@@ -112,7 +112,15 @@ while (results.next())
 
 				function addQuestion(event) {
 					var topic = this.parentNode;
-					var questionName = "Week${param.num}" + topic.id + "Question" + topic.children.length;
+					var questionName = "Week${param.num}" + topic.id + "Question";
+					var lastQuestion = topic.lastElementChild.previousElementSibling;
+					if (!lastQuestion)
+						questionName += "1";
+					else {
+						var match = lastQuestion.firstElementChild.name.match(/\d+$/);
+						questionName += match ? parseInt(match[0]) + 1 : "1";
+					}
+
 					var container = document.createElement("div");
 					container.classList.add("quiz-item");
 

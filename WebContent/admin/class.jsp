@@ -42,7 +42,7 @@ while (rs.next()) {
 		<main>
 			<h1><%= className %></h1>
 			<ul>
-<% for (int i = 1; i <= numWeeks; ++i) { %>
+<% for (int i = numWeeks; i > 0; --i) { %>
 				<li><a href="${pageContext.request.contextPath}/admin/week?id=${param.id}&num=<%= Integer.toString(i) %>">Week <%= i %></a></li>
 <% } %>
 			</ul>
