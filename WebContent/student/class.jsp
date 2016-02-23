@@ -82,7 +82,7 @@ Collections.sort(questions);
 					<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=<%= question.getWeekNumber() %>&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
 <% } %>
 				</ul>
-<% if (groups.containsKey(question.getWeekId())) { String chatId = Defaults.chatURL + Defaults.createSafeString(className) + "/" + question.getWeekId() + "/" + groups.get(question.getWeekId()); %>
+<% if (groups.containsKey(question.getWeekId())) { String chatId = Defaults.chatURL + Defaults.urlEncode(className) + "/" + question.getWeekId() + "/" + groups.get(question.getWeekId()); %>
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
 <% } %>
 <% } %>
