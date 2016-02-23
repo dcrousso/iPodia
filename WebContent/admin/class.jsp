@@ -46,21 +46,6 @@ while (rs.next()) {
 				<li><a href="${pageContext.request.contextPath}/admin/week?id=${param.id}&num=<%= Integer.toString(i) %>">Week <%= i %></a></li>
 <% } %>
 			</ul>
-			<button>Add week</button>
+			<a href="${pageContext.request.contextPath}/admin/week?id=${param.id}&num=<%= numWeeks + 1 %>" title="Create Week <%= numWeeks + 1 %>"><button>Add week</button></a>
 		</main>
-		<script>
-			(function() {
-				function makeNewWeek(event) {
-					var listOfWeeks = this.previousElementSibling;
-					var numWeeks = listOfWeeks.children.length + 1;
-					var week = listOfWeeks.appendChild(document.createElement("li"));
-					var link = week.appendChild(document.createElement("a"));
-					link.href = "${pageContext.request.contextPath}/admin/week?id=${param.id}&num=" + numWeeks;
-					link.textContent = "Week " + numWeeks;
-				}
-				Array.prototype.forEach.call(document.querySelectorAll("button"), function(item) {
-					item.addEventListener("click", makeNewWeek);
-				});
-			})();
-		</script>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>
