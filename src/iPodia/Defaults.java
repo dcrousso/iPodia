@@ -24,7 +24,7 @@ public class Defaults {
 	public static final String chatURL = "https://appear.in/iPodia/";
 
 	public static final String INITIAL_PASSWORD = "305666274058833912233446123550405823599";
-	public static final String DATA_DIRECTORY = "/iPodiaData";
+	public static final String DATA_DIRECTORY = "/iPodiaData/";
 	public static final String CSV_REGEXP = "\\s*,\\s*";
 
 	public static final Pattern WEEK_PATTERN = Pattern.compile("(Week)(\\d+)(\\w+)", Pattern.CASE_INSENSITIVE);

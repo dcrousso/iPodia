@@ -113,15 +113,15 @@ public class FileUploadServlet extends HttpServlet {
 		for (QuizQuestion question : questionMap.values())
 			ProcessForm.processQuizUpload(question, classId);
 
-		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId);
-		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + File.separator + classId + File.separator + week);
+		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + classId);
+		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + classId + File.separator + week);
 
 		for (FileItem item : uploadedFiles) {
 			String fileName = item.getName();
 			if (Defaults.isEmpty(fileName))
 				continue;
 
-			String filePath = Defaults.DATA_DIRECTORY + File.separator
+			String filePath = Defaults.DATA_DIRECTORY
 			+ classId + File.separator
 			+ week +  File.separator
 			+ fileName;
