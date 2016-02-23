@@ -1,6 +1,9 @@
 <%@ page import="java.io.File" %>
+<%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.HashSet" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="iPodia.Defaults" %>
+<%@ page import="iPodia.ProcessForm" %>
 <%@ page import="iPodia.QuizQuestion" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
@@ -28,6 +31,14 @@ if (Defaults.isEmpty(week)) {
 	return;
 }
 
+HashMap<String, QuizQuestion> inClass = new HashMap<String, QuizQuestion>();
+if (request.getMethod().equals("POST")) {
+	for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
+		QuizQuestion.processRequestItem(inClass, entry.getKey(), entry.getValue()[0]); // Only should be one value per entry
+	for (QuizQuestion question : inClass.values())
+		ProcessForm.processQuizUpload(question, classId);
+}
+
 HashSet<QuizQuestion> existing = new HashSet<QuizQuestion>();
 PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + " WHERE id LIKE ?");
 ps.setString(1, "Week" + week + "%");
@@ -44,6 +55,28 @@ while (results.next())
 </jsp:include>
 		<main>
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
+			<div class="options">
+				<button class="match">Match Students</button>
+<% if (inClass.isEmpty()) { %>
+				<button class="in-class">Add In-Class Question</button>
+<% } %>
+			</div>
+
+			<form class="in-class-questions" method="post"<% if (inClass.isEmpty()) { %> hidden<% } %>>
+				<input type="text" name="id" value="${param.id}" hidden>
+				<input type="text" name="num" value="${param.num}" hidden>
+
+				<h4>In-Class:</h4>
+				<section id="InClass">
+<% for (QuizQuestion item : inClass.values()) { %>
+					<%= item.generateAdminHTML() %>
+<% } %>
+					<button type="button" class="add-question">Add In-Class Question</button>
+				</section>
+
+				<button>Submit</button>
+			</form>
+
 			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
@@ -64,33 +97,33 @@ while (results.next())
 				<h4>Topic 1:</h4>
 				<section id="Topic1">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic1")) { %>
-					<%= item.generateHTML() %>
+					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" name="addQuestion" value="add">Add question for Topic 1</button>
+					<button type="button" class="add-question">Add Question for Topic 1</button>
 				</section>
 
 				<h4>Topic 2:</h4>
 				<section id="Topic2">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic2")) { %>
-					<%= item.generateHTML() %>
+					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" name="addQuestion" value="add">Add question for Topic 2</button>
+					<button type="button" class="add-question">Add Question for Topic 2</button>
 				</section>
 
 				<h4>Topic 3:</h4>
 				<section id="Topic3">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic3")) { %>
-					<%= item.generateHTML() %>
+					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" name="addQuestion" value="add">Add question for Topic 3</button>
+					<button type="button" class="add-question">Add Question for Topic 3</button>
 				</section>
 
 				<h4>Topic 4:</h4>
 				<section id="Topic4">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic4")) { %>
-					<%= item.generateHTML() %>
+					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" name="addQuestion" value="add">Add question for Topic 4</button>
+					<button type="button" class="add-question">Add Question for Topic 4</button>
 				</section>
 
 				<button>Submit</button>
@@ -151,9 +184,15 @@ while (results.next())
 
 					topic.insertBefore(container, topic.lastElementChild);
 				}
-				Array.prototype.forEach.call(document.querySelectorAll("button[name=\"addQuestion\"]"), function(item) {
+				Array.prototype.forEach.call(document.querySelectorAll("button.add-question"), function(item) {
 					item.addEventListener("click", addQuestion);
 				});
+<% if (inClass.isEmpty()) { %>
+				document.querySelector("button.in-class").addEventListener("click", function() {
+					document.querySelector(".in-class-questions").hidden = false;
+					this.remove();
+				});
+<% } %>
 			})();
 		</script>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>

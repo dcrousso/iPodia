@@ -69,7 +69,29 @@ Collections.sort(questions);
 		<main>
 			<h1><%= className %></h1>
 <% for (int i = 0; i < questions.size(); ++i) { QuizQuestion question = questions.get(i); %>
-<% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId())) { %>
+<%-- ===== IN CLASS QUESTIONS ==== --%>
+<% if (question.isInClass()) { %>
+<% if (i == 0) { %>
+			<section id="in-class" class="open">
+				<h3>
+					In-Class Questions
+					<a title="Toggle Questions" class="chevron down"></a>
+				</h3>
+				<form class="container" method="post" action="submitAnswers">
+					<input type="text" name="id" value="${param.id}" hidden>
+					<input type="text" name="user" value="${user.getSafeEmail()}<%= Defaults.beforeMatching %>" hidden>
+<% } %>
+					<%= question.generateStudentHTML(existing.get(question.getId())) %>
+<% if (i == questions.size() - 1 || !questions.get(i + 1).isInClass()) { %>
+					<button>Submit</button>
+				</form>
+			</section>
+<% } %>
+<% continue; %>
+<% } %>
+
+<%-- ===== REGULAR QUESTIONS ==== --%>
+<% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId()) || questions.get(i - 1).isInClass()) { %>
 			<section id="week<%= question.getWeekNumber() %>">
 				<h3>
 					Week <%= question.getWeekNumber() %>
@@ -94,29 +116,7 @@ Collections.sort(questions);
 				<div class="container">
 <% } %>
 <% } %>
-					<div class="question">
-						<p><%= question.getQuestion() %></p>
-						<div class="answer">
-							<input type="radio" name="<%= question.getId() %>" value="A"<% if (existing.get(question.getId()).equals("A")) { %> checked<% } %>>
-							<p><%= question.getAnswer("A") %></p>
-						</div>
-						<div class="answer">
-							<input type="radio" name="<%= question.getId() %>" value="B"<% if (existing.get(question.getId()).equals("B")) { %> checked<% } %>>
-							<p><%= question.getAnswer("B") %></p>
-						</div>
-						<div class="answer">
-							<input type="radio" name="<%= question.getId() %>" value="C"<% if (existing.get(question.getId()).equals("C")) { %> checked<% } %>>
-							<p><%= question.getAnswer("C") %></p>
-						</div>
-						<div class="answer">
-							<input type="radio" name="<%= question.getId() %>" value="D"<% if (existing.get(question.getId()).equals("D")) { %> checked<% } %>>
-							<p><%= question.getAnswer("D") %></p>
-						</div>
-						<div class="answer">
-							<input type="radio" name="<%= question.getId() %>" value="E"<% if (existing.get(question.getId()).equals("E")) { %> checked<% } %>>
-							<p><%= question.getAnswer("E") %></p>
-						</div>
-					</div>
+					<%= question.generateStudentHTML(existing.get(question.getId())) %>
 <% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
 <% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
 					<button>Submit</button>

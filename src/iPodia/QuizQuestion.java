@@ -37,8 +37,48 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		setTopic(rs.getString("topic"));
 	}
 
+	public static void processRequestItem(HashMap<String, QuizQuestion> existing, String key, String value) {
+		if (existing == null || Defaults.isEmpty(key) || Defaults.isEmpty(value))
+			return;
+
+		// if the item's filed name does not have the word Answer in it, you know that means it is a new question
+		Matcher m = Defaults.QUESTION_PATTERN.matcher(key);
+		if (!m.find())
+			return;
+
+		// prefix refers to Week?Topic?Question?
+		String prefix = m.group(1);
+		if (Defaults.isEmpty(prefix))
+			return;
+
+		QuizQuestion quizQuestion = existing.get(prefix);
+		if (quizQuestion == null) {
+			quizQuestion = new QuizQuestion();
+			quizQuestion.setId(prefix);
+			existing.put(prefix, quizQuestion);
+		}
+
+		// m.group(2) represents answerA, answerB, ... CorrectAnswer in the name.
+		// If it is null, then it is just the question.
+		String suffix = m.group(2);
+		if (Defaults.isEmpty(suffix))
+			quizQuestion.setQuestion(value);
+		else {
+			// Gets the answer key (A, B, C, D, E)
+			String answerKey = suffix.substring(suffix.length() - 1);
+			if (suffix.startsWith("CorrectAnswer"))
+				quizQuestion.setCorrectAnswer(value);
+			else if (suffix.startsWith("Answer"))
+				quizQuestion.setAnswer(answerKey, value);
+		}
+	}
+
 	public String getId() {
 		return m_id;
+	}
+
+	public boolean isInClass() {
+		return m_id.contains("InClass");
 	}
 
 	public String getWeekNumber() {
@@ -104,7 +144,7 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		    && !Defaults.isEmpty(m_topic);
 	}
 
-	public String generateHTML() {
+	public String generateAdminHTML() {
 		return "<div class=\"quiz-item\">"
 		       	+ "<textarea class=\"question\" placeholder=\"Question\" name=\"" + getId() + "\">" + getQuestion() + "</textarea>"
 		       	+ "<input class=\"answer\" placeholder=\"Answer A\" name=\"" + getId() + "AnswerA\" value=\"" + getAnswer("A") + "\">"
@@ -113,7 +153,7 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		       	+ "<input class=\"answer\" placeholder=\"Answer D\" name=\"" + getId() + "AnswerD\" value=\"" + getAnswer("D") + "\">"
 		       	+ "<input class=\"answer\" placeholder=\"Answer E\" name=\"" + getId() + "AnswerE\" value=\"" + getAnswer("E") + "\">"
 		       	+ "<div class=\"correct\">"
-		       	+ "<label>A:</label>"
+		       		+ "<label>A:</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"A\"" + (getCorrectAnswer().equals("A") ? " checked" : "") + ">"
 		       		+ "<label>B:</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"B\"" + (getCorrectAnswer().equals("B") ? " checked" : "") + ">"
@@ -123,6 +163,32 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"D\"" + (getCorrectAnswer().equals("D") ? " checked" : "") + ">"
 		       		+ "<label>E:</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"E\"" + (getCorrectAnswer().equals("E") ? " checked" : "") + ">"
+		       	+ "</div>"
+		       + "</div>";
+	}
+
+	public String generateStudentHTML(String selected) {
+		return "<div class=\"question\">"
+		       	+ "<p>" + getQuestion() + "</p>"
+		       	+ "<div class=\"answer\">"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"A\"" + (selected.equals("A") ? " checked" : "") + ">"
+		       		+ "<p>" + getAnswer("A") + "</p>"
+		       	+ "</div>"
+		       	+ "<div class=\"answer\">"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"B\"" + (selected.equals("B") ? " checked" : "") + ">"
+		       		+ "<p>" + getAnswer("B") + "</p>"
+		       	+ "</div>"
+		       	+ "<div class=\"answer\">"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"C\"" + (selected.equals("C") ? " checked" : "") + ">"
+		       		+ "<p>" + getAnswer("C") + "</p>"
+		       	+ "</div>"
+		       	+ "<div class=\"answer\">"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"D\"" + (selected.equals("D") ? " checked" : "") + ">"
+		       		+ "<p>" + getAnswer("D") + "</p>"
+		       	+ "</div>"
+		       	+ "<div class=\"answer\">"
+		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"E\"" + (selected.equals("E") ? " checked" : "") + ">"
+		       		+ "<p>" + getAnswer("E") + "</p>"
 		       	+ "</div>"
 		       + "</div>";
 	}

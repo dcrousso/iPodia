@@ -28,7 +28,7 @@ public class Defaults {
 	public static final String CSV_REGEXP = "\\s*,\\s*";
 
 	public static final Pattern WEEK_PATTERN = Pattern.compile("(Week)(\\d+)(\\w+)", Pattern.CASE_INSENSITIVE);
-	public static final Pattern QUESTION_PATTERN = Pattern.compile("(Week\\d+Topic\\d+Question\\d+)(\\w+)?", Pattern.CASE_INSENSITIVE);
+	public static final Pattern QUESTION_PATTERN = Pattern.compile("(Week\\d+(?:Topic|InClass)\\d*Question\\d+)(\\w+)?", Pattern.CASE_INSENSITIVE);
 
 	public static String generateClassesRegExp(String classId) {
 		String regexp = "";

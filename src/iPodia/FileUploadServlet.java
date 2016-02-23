@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.regex.Matcher;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -68,39 +67,9 @@ public class FileUploadServlet extends HttpServlet {
 					classId = value;
 				else if (name.equals("num"))
 					week = value;
-				else {
-					// if the item's filed name does not have the word Answer in it, you know that means it is a new question
-					Matcher m = Defaults.QUESTION_PATTERN.matcher(name);
-					if (!m.find())
-						continue;
-
-					//prefix refers to Week?Topic?Question?
-					String prefix = m.group(1);
-					if (Defaults.isEmpty(prefix))
-						continue;
-
-					QuizQuestion quizQuestion = questionMap.get(prefix);
-					if (quizQuestion == null) {
-						quizQuestion = new QuizQuestion();
-						quizQuestion.setId(prefix);
-						questionMap.put(prefix, quizQuestion);
-					}
-
-					// m.group(2) represents answerA, answerB, ... CorrectAnswer in the name.
-					// If it is null, then it is just the question.
-					String suffix = m.group(2);
-					if (Defaults.isEmpty(suffix))
-						quizQuestion.setQuestion(value);
-					else {
-						// Gets the answer key (A, B, C, D, E)
-						String answerKey = suffix.substring(suffix.length() - 1);
-						if (suffix.startsWith("CorrectAnswer"))
-							quizQuestion.setCorrectAnswer(value);
-						else if (suffix.startsWith("Answer"))
-							quizQuestion.setAnswer(answerKey, value);
-					}
-				}
-			} // end for
+				else
+					QuizQuestion.processRequestItem(questionMap, name, value);
+			}
 		} catch (FileUploadException e) {
 			throw new ServletException(e);
 		}

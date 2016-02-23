@@ -1,3 +1,22 @@
+main > .options {
+	position: absolute;
+	top: 0;
+	right: 20px;
+}
+
+main > .options > * {
+	float: right;
+	clear: right;
+}
+
+main > form.in-class-questions {
+	margin: 20px;
+	padding: 10px;
+	background-color: white;
+	border: 1px solid lightgrey;
+	box-shadow: 0 0 2px lightgrey;
+}
+
 main > form > section {
 	margin: 5px 10px 20px;
 }

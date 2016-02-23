@@ -6,8 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class ProcessForm {
-	public static void processQuizUpload(QuizQuestion quizQuestion, String classId) {
-		if (!quizQuestion.isValid())
+	public static void processQuizUpload(QuizQuestion question, String classId) {
+		if (question == null || !question.isValid())
 			return;
 
 		try {
@@ -16,19 +16,19 @@ public class ProcessForm {
 			PreparedStatement ps;
 
 			ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + " (id, question, answerA, answerB, answerC, answerD, answerE, correctAnswer, topic) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-			ps.setString(1, quizQuestion.getId());
-			ps.setString(2, quizQuestion.getQuestion());
-			ps.setString(3, quizQuestion.getAnswer("A"));
-			ps.setString(4, quizQuestion.getAnswer("B"));
-			ps.setString(5, quizQuestion.getAnswer("C"));
-			ps.setString(6, quizQuestion.getAnswer("D"));
-			ps.setString(7, quizQuestion.getAnswer("E"));
-			ps.setString(8, quizQuestion.getCorrectAnswer());
-			ps.setString(9, quizQuestion.getTopic());
+			ps.setString(1, question.getId());
+			ps.setString(2, question.getQuestion());
+			ps.setString(3, question.getAnswer("A"));
+			ps.setString(4, question.getAnswer("B"));
+			ps.setString(5, question.getAnswer("C"));
+			ps.setString(6, question.getAnswer("D"));
+			ps.setString(7, question.getAnswer("E"));
+			ps.setString(8, question.getCorrectAnswer());
+			ps.setString(9, question.getTopic());
 			ps.executeUpdate();
 
 			ps = dbConnection.prepareStatement("REPLACE INTO class_" + classId + "_matching (id) VALUES (?)");
-			ps.setString(1, quizQuestion.getWeekId());
+			ps.setString(1, question.getWeekId());
 			ps.executeUpdate();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
