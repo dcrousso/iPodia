@@ -16,13 +16,14 @@ main > section > h3 {
 
 main > section > h3 > .chevron {
 	position: absolute;
-	top: 10%;
+	top: 25%;
 	right: 0;
 	width: 24px;
 	height: 50%;
 }
 
 main > section.open > h3 > .chevron {
+	top: 20%;
 	-webkit-transform: rotateX(0deg);
 	   -moz-transform: rotateX(0deg);
 	    -ms-transform: rotateX(0deg);
@@ -35,39 +36,44 @@ main > section > ul {
 	font-size: 0.8em;
 }
 
-main > section > form {
+main > section > .container {
 	display: none;
 }
 
-main > section.open > form {
+main > section.open > .container {
 	display: block;
 }
 
-main > section > form > .question {
+main > section > .container > .question {
 	margin-top: 5px;
 	padding-top: 10px;
 	border-top: 1px solid lightgrey;
 }
 
-main > section > form > .question > p {
+main > section > .container > .question > p {
 	margin: 0;
 }
 
-main > section > form > .question > .answer {
+main > section > .container > .question > .answer {
 	margin: 2px 0;
 	font-size: 0.8em;
 }
 
-main > section > form > .question > .answer > p {
+main > section > .container > .question > .answer > p {
 	display: inline-block;
 	margin: 0;
 }
 
-main > section > form > .question + button {
+main > section > div.container > .question > .answer > input {
+	opacity: 0.7;
+	pointer-events: none;
+}
+
+main > section > .container > .question + button {
 	margin-top: 20px;
 }
 
-main > section > form > .question + button::before {
+main > section > .container > .question + button::before {
 	position: absolute;
 	bottom: 40px;
 	left: 0;

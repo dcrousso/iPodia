@@ -37,7 +37,6 @@ while (results.next()) {
 	if (!Defaults.columnExists(results, user.getSafeEmail() + Defaults.beforeMatching) || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.afterMatching))
 		continue;
 
-	String userAnswer = null;
 	if (!groups.containsKey(question.getWeekId())) {
 		PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + "_matching where id = ?");
 		ps.setString(1, question.getWeekId());
@@ -47,10 +46,12 @@ while (results.next()) {
 			if (!Defaults.isEmpty(groupId))
 				groups.put(question.getWeekId(), groupId);
 		}
-		userAnswer = results.getString(user.getSafeEmail() + Defaults.afterMatching);
 	}
 
-	if (Defaults.isEmpty(userAnswer))
+	String userAnswer = null;
+	if (groups.containsKey(question.getWeekId()))
+		userAnswer = results.getString(user.getSafeEmail() + Defaults.afterMatching);
+	else
 		userAnswer = results.getString(user.getSafeEmail() + Defaults.beforeMatching);
 
 	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
@@ -83,9 +84,13 @@ while (results.next()) {
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
 <% } %>
 <% } %>
-				<form method="post" action="submitAnswers" >
+<% } %>
+<% if (i == 0) { %>
+				<form class="container" method="post" action="submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>
+<% } else { %>
+				<div class="container">
 <% } %>
 					<div class="question">
 						<p><%= question.getQuestion() %></p>
@@ -110,9 +115,13 @@ while (results.next()) {
 							<p><%= question.getAnswer("E") %></p>
 						</div>
 					</div>
-<% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
+<% if (i == 0) { %>
 					<button>Submit</button>
 				</form>
+<% } else { %>
+			</div>
+<% } %>
+<% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
 			</section>
 <% } %>
 <% } %>
