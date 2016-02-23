@@ -9,8 +9,10 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.regex.Pattern;
 
 public class Defaults {
@@ -52,6 +54,14 @@ public class Defaults {
 
 	public static HashSet<String> arrayToHashSet(String[] s) {
 		return new HashSet<String>(Arrays.asList(Optional.ofNullable(s).orElse(new String[0])));
+	}
+
+	public static <T> boolean contains(Collection<T> collection, Predicate<T> callback) {
+		for (T item : collection) {
+			if (callback.test(item))
+				return true;
+		}
+		return false;
 	}
 
 	public static void createFolderIfNotExists(String path) {

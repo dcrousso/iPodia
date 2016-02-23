@@ -39,6 +39,10 @@ main > form > section > ul {
 	font-size: 0.8em;
 }
 
+main > form .quiz-item {
+	margin-bottom: 40px;
+}
+
 main > form .quiz-item > .correct {
 	display: -webkit-flex;
 	display:    -moz-flex;

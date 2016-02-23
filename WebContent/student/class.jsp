@@ -81,13 +81,15 @@ Collections.sort(questions);
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= Defaults.beforeMatching %>" hidden>
 <% } %>
+<% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
 					<%= question.generateStudentHTML(existing.get(question.getId())) %>
 <% if (i == questions.size() - 1 || !questions.get(i + 1).isInClass()) { %>
 					<button>Submit</button>
 				</form>
 			</section>
 <% } %>
-<% continue; %>
+<% } %>
+<% continue; // Ensures that in-class questions from previous weeks are skipped %>
 <% } %>
 
 <%-- ===== REGULAR QUESTIONS ==== --%>
@@ -108,7 +110,7 @@ Collections.sort(questions);
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
 <% } %>
 <% } %>
-<% if (i == 0) { %>
+<% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
 				<form class="container" method="post" action="submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>

@@ -1,6 +1,7 @@
 <%@ page import="java.io.File" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Collections" %>
 <%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.HashSet" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.ProcessForm" %>
@@ -31,20 +32,23 @@ if (Defaults.isEmpty(week)) {
 	return;
 }
 
-HashMap<String, QuizQuestion> inClass = new HashMap<String, QuizQuestion>();
 if (request.getMethod().equals("POST")) {
+	HashMap<String, QuizQuestion> inClass = new HashMap<String, QuizQuestion>();
 	for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
 		QuizQuestion.processRequestItem(inClass, entry.getKey(), entry.getValue()[0]); // Only should be one value per entry
 	for (QuizQuestion question : inClass.values())
 		ProcessForm.processQuizUpload(question, classId);
 }
 
-HashSet<QuizQuestion> existing = new HashSet<QuizQuestion>();
+ArrayList<QuizQuestion> existing = new ArrayList<QuizQuestion>();
 PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + " WHERE id LIKE ?");
 ps.setString(1, "Week" + week + "%");
 ResultSet results = ps.executeQuery();
 while (results.next())
 	existing.add(new QuizQuestion(results));
+
+Collections.sort(existing);
+boolean hasInClass = Defaults.contains(existing, question -> question.isInClass());
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="admin"/>
@@ -57,20 +61,20 @@ while (results.next())
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
 			<div class="options">
 				<button class="match">Match Students</button>
-<% if (inClass.isEmpty()) { %>
+<% if (!hasInClass) { %>
 				<button class="in-class">Add In-Class Question</button>
 <% } %>
 			</div>
 
-			<form class="in-class-questions" method="post"<% if (inClass.isEmpty()) { %> hidden<% } %>>
+			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
 
 				<h4>In-Class:</h4>
 				<section id="InClass">
-<% for (QuizQuestion item : inClass.values()) { %>
+<% for (QuizQuestion item : existing) { if (item.isInClass()) { %>
 					<%= item.generateAdminHTML() %>
-<% } %>
+<% } } %>
 					<button type="button" class="add-question">Add In-Class Question</button>
 				</section>
 
@@ -187,7 +191,7 @@ while (results.next())
 				Array.prototype.forEach.call(document.querySelectorAll("button.add-question"), function(item) {
 					item.addEventListener("click", addQuestion);
 				});
-<% if (inClass.isEmpty()) { %>
+<% if (!hasInClass) { %>
 				document.querySelector("button.in-class").addEventListener("click", function() {
 					document.querySelector(".in-class-questions").hidden = false;
 					this.remove();
