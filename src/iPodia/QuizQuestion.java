@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 
-public class QuizQuestion {
+public class QuizQuestion implements Comparable<QuizQuestion> {
 	private String m_id;
 	private String m_question;
 	private HashMap<String, String> m_answers;
@@ -125,5 +125,12 @@ public class QuizQuestion {
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"E\"" + (getCorrectAnswer().equals("E") ? " checked" : "") + ">"
 		       	+ "</div>"
 		       + "</div>";
+	}
+
+	@Override
+	public int compareTo(QuizQuestion other) {
+		// Ensures that questions in sooner weeks (meaning higher week numbers)
+		// are first in the list, but questions in that week are ordered normally
+		return m_id.compareTo(other.getId()) * (getWeekId().equals(other.getWeekId()) ? 1 : -1);
 	}
 }

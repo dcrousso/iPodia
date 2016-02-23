@@ -1,5 +1,6 @@
 <%@ page import="java.io.File" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.Collections" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.QuizQuestion" %>
@@ -56,6 +57,7 @@ while (results.next()) {
 
 	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
 }
+Collections.sort(questions);
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="student"/>
@@ -84,13 +86,13 @@ while (results.next()) {
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
 <% } %>
 <% } %>
-<% } %>
 <% if (i == 0) { %>
 				<form class="container" method="post" action="submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>
 <% } else { %>
 				<div class="container">
+<% } %>
 <% } %>
 					<div class="question">
 						<p><%= question.getQuestion() %></p>
@@ -115,13 +117,13 @@ while (results.next()) {
 							<p><%= question.getAnswer("E") %></p>
 						</div>
 					</div>
-<% if (i == 0) { %>
+<% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
+<% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
 					<button>Submit</button>
 				</form>
 <% } else { %>
-			</div>
+				</div>
 <% } %>
-<% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
 			</section>
 <% } %>
 <% } %>
