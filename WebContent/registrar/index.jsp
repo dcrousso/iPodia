@@ -71,7 +71,7 @@ if (!Defaults.isEmpty(newClass)) {
 			</ul>
 			<form method="post">
 				<label for="newClass">Create Class:</label>
-				<input type="text" name="newClass" id="newClass">
+				<input type="text" name="newClass" id="newClass" required>
 				<button>Submit</button>
 			</form>
 		</main>

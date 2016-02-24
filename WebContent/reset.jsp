@@ -51,12 +51,12 @@ if (!Defaults.isEmpty(oldPassword) && !Defaults.isEmpty(newPassword) && newPassw
 			<form method="post">
 				<section>
 					<label for="oldPassword">Old Password</label>
-					<input type="text" name="oldPassword" id="oldPassword">
+					<input type="text" name="oldPassword" id="oldPassword" required>
 				</section>
 				<section>
 					<label for="newPassword">New Password</label>
-					<input type="password" name="newPassword" id="newPassword">
-					<input type="password" name="confirmPassword" id="confirmPassword">
+					<input type="password" name="newPassword" id="newPassword" required>
+					<input type="password" name="confirmPassword" id="confirmPassword" required>
 				</section>
 				<button>Submit</button>
 			</form>

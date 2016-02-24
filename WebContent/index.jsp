@@ -52,11 +52,11 @@ if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 			<form method="post">
 				<section>
 					<label for="email">Email</label>
-					<input type="text" name="email" id="email"><!-- make type="email" -->
+					<input type="text" name="email" id="email" required><!-- make type="email" -->
 				</section>
 				<section>
 					<label for="password">Password</label>
-					<input type="password" name="password" id="password">
+					<input type="password" name="password" id="password" required>
 				</section>
 				<button>Submit</button>
 			</form>

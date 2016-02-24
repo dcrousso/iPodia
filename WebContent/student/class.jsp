@@ -30,12 +30,7 @@ HashMap<String, String> groups = new HashMap<String, String>();
 ResultSet results = dbConnection.prepareStatement("Select * From class_" + classId).executeQuery();
 while (results.next()) {
 	QuizQuestion question = new QuizQuestion(results);
-	if (!question.isValid())
-		continue;
-
-	questions.add(question);
-
-	if (!Defaults.columnExists(results, user.getSafeEmail() + Defaults.beforeMatching) || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.afterMatching))
+	if (!question.isValid() || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.beforeMatching) || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.afterMatching))
 		continue;
 
 	if (!groups.containsKey(question.getWeekId())) {
@@ -55,6 +50,7 @@ while (results.next()) {
 	else
 		userAnswer = results.getString(user.getSafeEmail() + Defaults.beforeMatching);
 
+	questions.add(question);
 	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
 }
 Collections.sort(questions);

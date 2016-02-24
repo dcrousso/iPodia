@@ -165,6 +165,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 					question.classList.add("question");
 					question.placeholder = "Question";
 					question.name = questionName;
+					question.required = true;
 
 					var answerOptions = ["A", "B", "C", "D", "E"];
 					for (var i = 0; i < answerOptions.length; ++i) {
@@ -172,6 +173,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 						answer.classList.add("answer");
 						answer.placeholder = "Answer " + answerOptions[i];
 						answer.name = questionName + "Answer" + answerOptions[i];
+						answer.required = true;
 					}
 
 					var correctAnswerContainer = container.appendChild(document.createElement("div"));
@@ -184,6 +186,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 						radioButton.type = "radio";
 						radioButton.name = questionName + "CorrectAnswer";
 						radioButton.value = answerOptions[i];
+						radioButton.required = true;
 					}
 
 					topic.insertBefore(container, topic.lastElementChild);
