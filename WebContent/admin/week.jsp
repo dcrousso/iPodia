@@ -1,4 +1,3 @@
-<%@page import="iPodia.InClassMatching"%>
 <%@ page import="java.io.File" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
@@ -69,7 +68,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
-
 				<h4>In-Class:</h4>
 				<section id="InClass">
 <% for (QuizQuestion item : existing) { if (item.isInClass()) { %>
@@ -77,14 +75,11 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } } %>
 					<button type="button" class="add-question">Add In-Class Question</button>
 				</section>
-
 				<button>Submit</button>
 			</form>
-
 			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
-
 				<h4>Upload Files:</h4>
 				<section id="Files">
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + week); %>
@@ -97,7 +92,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } %>
 					<input type="file" name="upload">
 				</section>
-
 				<h4>Topic 1:</h4>
 				<section id="Topic1">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic1")) { %>
@@ -105,7 +99,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 1</button>
 				</section>
-
 				<h4>Topic 2:</h4>
 				<section id="Topic2">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic2")) { %>
@@ -113,7 +106,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 2</button>
 				</section>
-
 				<h4>Topic 3:</h4>
 				<section id="Topic3">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic3")) { %>
@@ -121,7 +113,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 3</button>
 				</section>
-
 				<h4>Topic 4:</h4>
 				<section id="Topic4">
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic4")) { %>
@@ -129,22 +120,10 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 4</button>
 				</section>
-
 				<button>Submit</button>
 			</form>
 		</main>
 		<script>
-		function matchStudents(event) {
-		
-			<% InClassMatching.match(classId, week); %>
-		}
-		Array.prototype.forEach.call(document.querySelectorAll("button.match"), function(item) {
-			item.addEventListener("click", matchStudents);
-		});
-		</script>
-		
-		<script>
-
 			(function() {
 				function addFileUpload(event) {
 					var input = document.createElement("input");
@@ -205,6 +184,19 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 				Array.prototype.forEach.call(document.querySelectorAll("button.add-question"), function(item) {
 					item.addEventListener("click", addQuestion);
 				});
+
+				document.querySelector("button.match").addEventListener("click", function() {
+					var xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = function() {
+						if (xhr.readyState != 4 || xhr.status != 200)
+							return;
+
+						alert("Students have been matched");
+					};
+					xhr.open("POST", "${pageContext.request.contextPath}/admin/matching?type=<%= Defaults.inClassMatching %>&id=${param.id}&num=${param.num}", true);
+					xhr.send();
+				});
+
 <% if (!hasInClass) { %>
 				document.querySelector("button.in-class").addEventListener("click", function() {
 					document.querySelector(".in-class-questions").hidden = false;

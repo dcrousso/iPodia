@@ -111,6 +111,15 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>MatchingServlet</servlet-name>
+		<servlet-class>iPodia.MatchingServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MatchingServlet</servlet-name>
+		<url-pattern>/admin/matching</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>student-extension</servlet-name>
 		<jsp-file>/student/index.jsp</jsp-file>
 	</servlet>

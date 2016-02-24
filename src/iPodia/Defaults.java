@@ -21,6 +21,9 @@ public class Defaults {
 	public static final String dbUsername = "root";
 	public static final String dbPassword = "";
 
+	public static final String inClassMatching = "inClassMatching";
+	public static final String beforeClassMatching = "beforeClassMatching";
+
 	public static final String beforeMatching = "__before";
 	public static final String afterMatching = "__after";
 	public static final String chatURL = "https://appear.in/iPodia/";
