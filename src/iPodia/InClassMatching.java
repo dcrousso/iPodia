@@ -20,26 +20,26 @@ public class InClassMatching {
 		if (unmatchedStudents == null)
 			return;
 
-		HashSet<HashSet<HashMap.Entry<String, Integer>>> groups = new HashSet<HashSet<HashMap.Entry<String, Integer>>>();
+		HashSet<HashSet<String>> groups = new HashSet<HashSet<String>>();
 		while (!unmatchedStudents.isEmpty()) {
-			HashSet<HashMap.Entry<String, Integer>> group = new HashSet<HashMap.Entry<String, Integer>>();
+			HashSet<String> group = new HashSet<String>();
 			groups.add(group);
 
-			group.add(unmatchedStudents.removeFirst());
-			group.add(unmatchedStudents.removeLast());
-			if (unmatchedStudents.size() < 4) // 5 or less students left, so make a group of everyone
-				group.addAll(unmatchedStudents);
-			else if (unmatchedStudents.size() == 4) // 6 students left, so split into 3 and 3
-				group.add(unmatchedStudents.removeFirst());
-			else { // 7+ students left, so take out 4 and make a group
-				group.add(unmatchedStudents.removeFirst());
-				group.add(unmatchedStudents.removeLast());
-			}
+			group.add(unmatchedStudents.removeFirst().getKey());
+			group.add(unmatchedStudents.removeLast().getKey());
+			if (unmatchedStudents.size() < 4) { // 5 or less students left, so make a group of everyone
+				while (!unmatchedStudents.isEmpty())
+					group.add(unmatchedStudents.removeFirst().getKey());
+			} else if (unmatchedStudents.size() > 4) { // 7+ students left, so take out 4 and make a group
+				group.add(unmatchedStudents.removeFirst().getKey());
+				group.add(unmatchedStudents.removeLast().getKey());
+			} else // 6 students left, so split into 3 and 3
+				group.add(unmatchedStudents.removeFirst().getKey());
 		}
 
-		for (HashSet<HashMap.Entry<String, Integer>> group : groups) {
-			for (HashMap.Entry<String, Integer> entry : group)
-				System.out.println("Email: " + entry.getKey() + " -- Score: " + entry.getValue() );
+		for (HashSet<String> group : groups) {
+			for (String entry : group)
+				System.out.println("Email: " + entry);
 			System.out.println();
 		}
 	}
