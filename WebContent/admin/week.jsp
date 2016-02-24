@@ -1,3 +1,4 @@
+<%@page import="iPodia.InClassMatching"%>
 <%@ page import="java.io.File" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
@@ -65,7 +66,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 				<button class="in-class">Add In-Class Question</button>
 <% } %>
 			</div>
-
 			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
@@ -134,6 +134,17 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 			</form>
 		</main>
 		<script>
+		function matchStudents(event) {
+		
+			<% InClassMatching.match(classId, week); %>
+		}
+		Array.prototype.forEach.call(document.querySelectorAll("button.match"), function(item) {
+			item.addEventListener("click", matchStudents);
+		});
+		</script>
+		
+		<script>
+
 			(function() {
 				function addFileUpload(event) {
 					var input = document.createElement("input");
