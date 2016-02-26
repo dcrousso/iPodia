@@ -1,6 +1,6 @@
 body {
 	min-width: 100vw;
-	min-height: 100vh;
+	min-height: 95vh;
 	margin: 0;
 	font-size: 1.5em;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -81,6 +81,14 @@ header nav {
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 0 20px;
+}
+
+header a {
+	margin: 0 10px;
+}
+
+header .links {
+	text-align: right;
 }
 
 main {
