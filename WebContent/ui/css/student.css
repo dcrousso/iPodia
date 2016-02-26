@@ -8,17 +8,12 @@ main > section > h4 > .chevron {
 	position: absolute;
 	top: 25%;
 	right: 0;
-	width: 24px;
+	width: 26px;
 	height: 50%;
 }
 
 main > section.open > h4 > .chevron {
 	top: 20%;
-	-webkit-transform: rotateX(0deg);
-	   -moz-transform: rotateX(0deg);
-	    -ms-transform: rotateX(0deg);
-	     -o-transform: rotateX(0deg);
-	        transform: rotateX(0deg);
 }
 
 main > section > form {

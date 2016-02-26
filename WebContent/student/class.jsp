@@ -71,7 +71,7 @@ Collections.sort(questions);
 			<section id="in-class" class="open">
 				<h4>
 					In-Class Questions
-					<a title="Toggle Questions" class="chevron down"></a>
+					<div title="Toggle Questions" class="chevron up"></div>
 				</h4>
 				<form class="container" method="post" action="submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
@@ -93,7 +93,7 @@ Collections.sort(questions);
 			<section id="week<%= question.getWeekNumber() %>">
 				<h4>
 					Week <%= question.getWeekNumber() %>
-					<a title="Toggle Questions" class="chevron down"></a>
+					<div title="Toggle Questions" class="chevron"></div>
 				</h4>
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + question.getWeekNumber()); %>
 <% if (folder.exists() && folder.isDirectory()) { %>
@@ -107,7 +107,7 @@ Collections.sort(questions);
 <% } %>
 <% } %>
 <% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
-				<form <%  %>method="post" action="submitAnswers">
+				<form method="post" action="submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>
 <% } else { %>
@@ -128,6 +128,7 @@ Collections.sort(questions);
 			Array.prototype.forEach.call(document.querySelectorAll("section > h4"), function(item) {
 				item.addEventListener("click", function(event) {
 					item.parentNode.classList.toggle("open");
+					item.lastElementChild.classList.toggle("up");
 				});
 			});
 		</script>

@@ -49,7 +49,23 @@ a:hover {
 }
 
 header {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 10;
 	padding: 20px;
+	background-color: hsla(0, 100%, 100%, 0);
+	-webkit-transition: background-color 400ms;
+	   -moz-transition: background-color 400ms;
+	    -ms-transition: background-color 400ms;
+	     -o-transition: background-color 400ms;
+	        transition: background-color 400ms;
+}
+
+header.scrolled {
+	background-color: hsla(0, 100%, 100%, 0.9);
+	-webkit-backdrop-filter: blur(5px);
 }
 
 header nav {
@@ -63,6 +79,7 @@ header nav {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
+	padding: 0 20px;
 }
 
 main {
@@ -70,7 +87,7 @@ main {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
-	padding: 0 20px 50px;
+	padding: 10vh 20px 50px;
 }
 
 main section {
@@ -79,6 +96,10 @@ main section {
 	padding: 20px;
 	background-color: white;
 	box-shadow: 0 0 2px white;
+}
+
+main h1 {
+	text-align: center;
 }
 
 main h4 {
@@ -217,10 +238,54 @@ main section .item + button::before {
 	border-top: 1px solid lightgrey;
 }
 
+.scroll-top {
+	position: fixed;
+	right: 25px;
+	bottom: 25px;
+	z-index: 5;
+	width: 50px;
+	height: 50px;
+	color: #eee;
+	cursor: pointer;
+	background-color: #111;
+	border: 1px solid #161616;
+	border-radius: 2px;
+	opacity: 0;
+	pointer-events: none;
+	-webkit-transition: all 400ms;
+	   -moz-transition: all 400ms;
+	    -ms-transition: all 400ms;
+	     -o-transition: all 400ms;
+	        transition: all 400ms;
+}
+
+.scroll-top:hover {
+	background-color: #eee;
+	color: #3498db;
+}
+
+.scroll-top.scrolled {
+	opacity: 0.75;
+	pointer-events: all;
+}
+
+.scroll-top > .chevron {
+	width: 20px;
+	height: 20px;
+	margin: 12px auto 0;
+	color: inherit;
+}
+
 .chevron {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	color: black;
+	-webkit-transform: rotateX(180deg);
+	   -moz-transform: rotateX(180deg);
+	    -ms-transform: rotateX(180deg);
+	     -o-transform: rotateX(180deg);
+	        transform: rotateX(180deg);
 	-webkit-transition: -webkit-transform 400ms, top 400ms;
 	   -moz-transition:    -moz-transform 400ms, top 400ms;
 	    -ms-transition:     -ms-transform 400ms, top 400ms;
@@ -228,12 +293,12 @@ main section .item + button::before {
 	        transition:         transform 400ms, top 400ms;
 }
 
-.chevron.down {
-	-webkit-transform: rotateX(180deg);
-	   -moz-transform: rotateX(180deg);
-	    -ms-transform: rotateX(180deg);
-	     -o-transform: rotateX(180deg);
-	        transform: rotateX(180deg);
+.chevron.up {
+	-webkit-transform: rotateX(0deg);
+	   -moz-transform: rotateX(0deg);
+	    -ms-transform: rotateX(0deg);
+	     -o-transform: rotateX(0deg);
+	        transform: rotateX(0deg);
 }
 
 .chevron::before,
@@ -243,7 +308,7 @@ main section .item + button::before {
 	width: 50%;
 	height: 10%;
 	content: "";
-	background-color: black;
+	background-color: currentColor;
 }
 
 .chevron:before {
