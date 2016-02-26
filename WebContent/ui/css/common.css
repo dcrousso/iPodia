@@ -17,7 +17,7 @@ body {
 
 header,
 main h1,
-main h3,
+main h4,
 main label,
 main button {
 	cursor: default;
@@ -52,7 +52,7 @@ header {
 	padding: 20px;
 }
 
-header > nav {
+header nav {
 	display: -webkit-flex;
 	display:    -moz-flex;
 	display:     -ms-flexbox;
@@ -73,16 +73,38 @@ main {
 	padding: 0 20px 50px;
 }
 
+main section {
+	position: relative;
+	margin: 5px 0 20px;
+	padding: 20px;
+	background-color: white;
+	box-shadow: 0 0 2px white;
+}
+
 main h4 {
 	margin: 0;
+}
+
+main section h4 {
+	margin-bottom: 15px;
 }
 
 main ul {
 	margin: 0 0 10px;
 }
 
+main section ul {
+	margin-bottom: 0;
+	font-size: 0.8em;
+}
+
 main form {
 	position: relative;
+}
+
+main section .item {
+	padding: 20px 10px 15px;
+	border-top: 1px solid lightgrey;
 }
 
 main input,
@@ -128,7 +150,12 @@ main textarea:focus {
 	        animation: anim-shadow 300ms forwards;
 }
 
+main p {
+	margin: 0;
+}
+
 main select {
+	display: block;
 	font-size: 100%;
 }
 
@@ -170,6 +197,24 @@ main button {
 main button:active {
 	border-style: inset;
 	box-shadow: 0 1px 0 #006799 inset;
+}
+
+main form > button {
+	width: 70%;
+	margin: 0 auto;
+}
+
+main section .item + button {
+	margin-top: 20px;
+}
+
+main section .item + button::before {
+	position: absolute;
+	right: 20px;
+	bottom: 65px;
+	left: 20px;
+	content: "";
+	border-top: 1px solid lightgrey;
 }
 
 .chevron {

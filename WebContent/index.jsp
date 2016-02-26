@@ -50,14 +50,10 @@ if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 			<h4>Email/Password Invalid</h4>
 <% } %>
 			<form method="post">
-				<section>
-					<label for="email">Email</label>
-					<input type="text" name="email" id="email" required><!-- make type="email" -->
-				</section>
-				<section>
-					<label for="password">Password</label>
-					<input type="password" name="password" id="password" required>
-				</section>
+				<label for="email">Email</label>
+				<input type="text" name="email" id="email" required><!-- make type="email" -->
+				<label for="password">Password</label>
+				<input type="password" name="password" id="password" required>
 				<button>Submit</button>
 			</form>
 		</main>

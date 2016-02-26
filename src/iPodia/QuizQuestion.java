@@ -145,7 +145,7 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 	}
 
 	public String generateAdminHTML() {
-		return "<div class=\"quiz-item\">"
+		return "<div class=\"item\">"
 		       	+ "<textarea class=\"question\" placeholder=\"Question\" name=\"" + getId() + "\" required>" + getQuestion() + "</textarea>"
 		       	+ "<input class=\"answer\" placeholder=\"Answer A\" name=\"" + getId() + "AnswerA\" value=\"" + getAnswer("A") + "\" required>"
 		       	+ "<input class=\"answer\" placeholder=\"Answer B\" name=\"" + getId() + "AnswerB\" value=\"" + getAnswer("B") + "\" required>"
@@ -168,7 +168,7 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 	}
 
 	public String generateStudentHTML(String selected) {
-		return "<div class=\"question\">"
+		return "<div class=\"item\">"
 		       	+ "<p>" + getQuestion() + "</p>"
 		       	+ "<div class=\"answer\">"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"A\"" + (selected.equals("A") ? " checked" : "") + " required>"

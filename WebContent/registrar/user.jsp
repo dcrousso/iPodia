@@ -35,29 +35,25 @@ if (!Defaults.isEmpty(type) && !Defaults.isEmpty(email) && !Defaults.isEmpty(fir
 </jsp:include>
 		<main>
 			<h1>Create User</h1>
-			<form method="post">
-				<section>
-					<select name="type" id="type">
-						<option selected>Student</option>
-						<option>Admin</option>
-						<option>Registrar</option>
-					</select>
-				</section>
-				<section>
-					<label for="email">Email</label>
-					<input type="email" name="email" required>
-				</section>
-				<section>
-					<label for="firstName">First Name</label>
-					<input type="text" name="firstName" required>
-					<label for="lastName">Last Name</label>
-					<input type="text" name="lastName" required>
-				</section>
-				<section>
-					<label for="university">University</label>
-					<input type="text" name="university" required>
-				</section>
-				<button>Submit</button>
-			</form>
+			<section>
+				<form method="post">
+					<div class="item">
+						<select name="type" id="type">
+							<option selected>Student</option>
+							<option>Admin</option>
+							<option>Registrar</option>
+						</select>
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" required>
+						<label for="firstName">First Name</label>
+						<input type="text" id="firstName" name="firstName" required>
+						<label for="lastName">Last Name</label>
+						<input type="text" id="lastName" name="lastName" required>
+						<label for="university">University</label>
+						<input type="text" id="university" name="university" required>
+					</div>
+					<button>Submit</button>
+				</form>
+			</section>
 		</main>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>

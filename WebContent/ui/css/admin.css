@@ -18,29 +18,7 @@ main > .options > button {
 	max-width: 175px;
 }
 
-main > form > section {
-	position: relative;
-	margin: 5px 0 20px;
-	padding: 20px;
-	background-color: white;
-	box-shadow: 0 0 2px grey inset;
-}
-
-main > form > section > h4 {
-	margin-bottom: 15px;
-}
-
-main > form > section > ul {
-	margin-bottom: 0;
-	font-size: 0.8em;
-}
-
-main > form > section > .quiz-item {
-	padding: 20px 10px 15px;
-	border-top: 1px solid lightgrey;
-}
-
-main > form > section > .quiz-item > .correct {
+main > form > section > .item > .correct {
 	display: -webkit-flex;
 	display:    -moz-flex;
 	display:     -ms-flexbox;
@@ -51,29 +29,11 @@ main > form > section > .quiz-item > .correct {
 	margin-top: 5px;
 }
 
-main > form > section > .quiz-item > .correct > label {
+main > form > section > .item > .correct > label {
 	margin-left: 5%;
 	font-size: large;
 }
 
-main > form > section > .quiz-item > .correct > label:first-child {
+main > form > section > .item > .correct > label:first-child {
 	margin-left: 0;
-}
-
-main > form > section > .quiz-item + button {
-	margin-top: 20px;
-}
-
-main > form > section > .quiz-item + button::before {
-	position: absolute;
-	right: 20px;
-	bottom: 65px;
-	left: 20px;
-	content: "";
-	border-top: 1px solid lightgrey;
-}
-
-main > form > button {
-	width: 70%;
-	margin: 0 auto;
 }

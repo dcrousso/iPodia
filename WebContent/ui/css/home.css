@@ -3,7 +3,7 @@ main {
 	margin-top: 20vh;
 	padding: 10px 20px 30px;
 	background-color: white;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.13);
+	box-shadow: 0 0 2px white;
 }
 
 main > h1,
@@ -25,11 +25,11 @@ main > h2 + form {
 	margin-top: 1.35em;
 }
 
-main > form > section {
+main > form > input {
 	margin-bottom: 15px;
 }
 
-main > form > section > label {
+main > form > label {
 	margin-left: 1px;
 	font-size: 70%;
 	color: #777;

@@ -58,7 +58,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
-			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
+			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a> - Week ${param.num}</h1>
 			<div class="options">
 				<button class="match">Match Students</button>
 				<button class="in-class">Add In-Class Question</button>
