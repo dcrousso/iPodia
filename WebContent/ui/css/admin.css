@@ -1,37 +1,24 @@
+main > h1 {
+	margin-bottom: 0;
+}
+
 main > .options {
-	position: absolute;
-	top: 0;
-	right: 20px;
-}
-
-main > .options > * {
-	float: right;
-	clear: right;
-}
-
-main > form.in-class-questions {
-	margin: 20px;
-	padding: 10px;
-	background-color: white;
-	border: 1px solid lightgrey;
-	box-shadow: 0 0 2px lightgrey;
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	margin-bottom: 20px;
 }
 
 main > form > section {
-	margin: 5px 10px 20px;
+	position: relative;
+	margin: 5px 0 20px;
+	padding: 20px;
+	background-color: white;
+	box-shadow: 0 0 2px grey inset;
 }
 
-main > form > section + button {
-	margin-top: 40px;
-}
-
-main > form > section + button::before {
-	position: absolute;
-	bottom: 45px;
-	left: 0;
-	width: 100%;
-	content: "";
-	border-top: 1px solid lightgrey;
+main > form > section > h4 {
+	margin-bottom: 15px;
 }
 
 main > form > section > ul {
@@ -39,24 +26,39 @@ main > form > section > ul {
 	font-size: 0.8em;
 }
 
-main > form .quiz-item {
-	margin-bottom: 40px;
+main > form > section > .quiz-item {
+	padding: 20px 10px 15px;
+	border-top: 1px solid lightgrey;
 }
 
-main > form .quiz-item > .correct {
+main > form > section > .quiz-item > .correct {
 	display: -webkit-flex;
 	display:    -moz-flex;
 	display:     -ms-flexbox;
 	display:         flex;
 	justify-content: center;
 	align-items: center;
+	margin-top: 5px;
 }
 
-main > form .quiz-item > .correct > label {
+main > form > section > .quiz-item > .correct > label {
 	margin-left: 20px;
 	font-size: large;
 }
 
-main > form .quiz-item > .correct > label:first-child {
+main > form > section > .quiz-item > .correct > label:first-child {
 	margin-left: 0;
+}
+
+main > form > section > .quiz-item + button {
+	margin-top: 20px;
+}
+
+main > form > section > .quiz-item + button::before {
+	position: absolute;
+	right: 20px;
+	bottom: 65px;
+	left: 20px;
+	content: "";
+	border-top: 1px solid lightgrey;
 }

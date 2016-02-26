@@ -61,60 +61,57 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
 			<div class="options">
 				<button class="match">Match Students</button>
-<% if (!hasInClass) { %>
 				<button class="in-class">Add In-Class Question</button>
-<% } %>
 			</div>
 			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
-				<h4>In-Class:</h4>
 				<section id="InClass">
+					<h4>In-Class</h4>
 <% for (QuizQuestion item : existing) { if (item.isInClass()) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" class="add-question">Add In-Class Question</button>
+					<button>Submit</button>
 				</section>
-				<button>Submit</button>
 			</form>
 			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
-				<h4>Upload Files:</h4>
 				<section id="Files">
+					<h4>Upload Files</h4>
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + week); %>
 <% if (folder.exists() && folder.isDirectory()) { %>
-				<ul>
+					<ul>
 <% for (File f : folder.listFiles()) { %>
-					<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
+						<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
 <% } %>
-				</ul>
+					</ul>
 <% } %>
 					<input type="file" name="upload">
 				</section>
-				<h4>Topic 1:</h4>
 				<section id="Topic1">
+					<h4>Topic 1</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic1")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 1</button>
 				</section>
-				<h4>Topic 2:</h4>
 				<section id="Topic2">
+					<h4>Topic 2</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic2")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 2</button>
 				</section>
-				<h4>Topic 3:</h4>
 				<section id="Topic3">
+					<h4>Topic 3</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic3")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 3</button>
 				</section>
-				<h4>Topic 4:</h4>
 				<section id="Topic4">
+					<h4>Topic 4</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic4")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
@@ -126,12 +123,17 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 		<script>
 			(function() {
 				function addFileUpload(event) {
+					if (this.nextElementSibling) {
+						if (!this.value)
+							this.remove();
+						return;
+					}
+
 					var input = document.createElement("input");
 					input.type = "file";
 					input.name = "upload";
 					input.addEventListener("change", addFileUpload);
-					this.removeEventListener("change", addFileUpload);
-					this.parentElement.insertBefore(input, this.nextElementSibling);
+					this.parentElement.appendChild(input);
 				}
 				Array.prototype.forEach.call(document.querySelectorAll("input[type=\"file\"]"), function(item) {
 					item.addEventListener("change", addFileUpload);
@@ -139,9 +141,17 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 
 				function addQuestion(event) {
 					var topic = this.parentNode;
+					var inputs = topic.querySelectorAll("input, textarea");
+					for (var i = 0; i < inputs.length; ++i) {
+						if (!inputs[i].value || !inputs[i].value.length || !inputs[i].value.trim().length) {
+							inputs[i].focus();
+							return;
+						}
+					}
+
 					var questionName = "Week${param.num}" + topic.id + "Question";
 					var lastQuestion = topic.lastElementChild.previousElementSibling;
-					if (!lastQuestion)
+					if (!lastQuestion || !lastQuestion.firstElementChild || !lastQuestion.firstElementChild.name)
 						questionName += "1";
 					else {
 						var match = lastQuestion.firstElementChild.name.match(/\d+$/);
@@ -197,12 +207,11 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 					xhr.send();
 				});
 
-<% if (!hasInClass) { %>
+				var inClassQuestions = document.querySelector(".in-class-questions");
 				document.querySelector("button.in-class").addEventListener("click", function() {
-					document.querySelector(".in-class-questions").hidden = false;
-					this.remove();
+					inClassQuestions.hidden = false;
+					addQuestion.call(inClassQuestions.lastElementChild.lastElementChild);
 				});
-<% } %>
 			})();
 		</script>
 <jsp:include page="/WEB-INF/templates/footer.jsp"/>
