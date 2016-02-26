@@ -45,17 +45,17 @@ if (!Defaults.isEmpty(type) && !Defaults.isEmpty(email) && !Defaults.isEmpty(fir
 				</section>
 				<section>
 					<label for="email">Email</label>
-					<input type="email" name="email" id="email" required>
+					<input type="email" name="email" required>
 				</section>
 				<section>
 					<label for="firstName">First Name</label>
-					<input type="text" name="firstName" id="firstName" required>
+					<input type="text" name="firstName" required>
 					<label for="lastName">Last Name</label>
-					<input type="text" name="lastName" id="lastName" required>
+					<input type="text" name="lastName" required>
 				</section>
 				<section>
 					<label for="university">University</label>
-					<input type="text" name="university" id="university" required>
+					<input type="text" name="university" required>
 				</section>
 				<button>Submit</button>
 			</form>

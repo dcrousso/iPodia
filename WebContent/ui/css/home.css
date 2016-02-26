@@ -10,6 +10,7 @@ main > h1,
 main > h2 {
 	margin: 0.8em 0 0;
 	text-align: center;
+	color: #444;
 }
 
 main h4 {

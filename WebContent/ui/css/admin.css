@@ -3,10 +3,19 @@ main > h1 {
 }
 
 main > .options {
-	display: flex;
+	display: -webkit-flex;
+	display:    -moz-flex;
+	display:     -ms-flexbox;
+	display:         flex;
 	align-items: center;
 	justify-content: space-around;
+	flex-wrap: wrap;
 	margin-bottom: 20px;
+}
+
+main > .options > button {
+	width: 100%;
+	max-width: 175px;
 }
 
 main > form > section {
@@ -38,11 +47,12 @@ main > form > section > .quiz-item > .correct {
 	display:         flex;
 	justify-content: center;
 	align-items: center;
+	width: 100%;
 	margin-top: 5px;
 }
 
 main > form > section > .quiz-item > .correct > label {
-	margin-left: 20px;
+	margin-left: 5%;
 	font-size: large;
 }
 
@@ -61,4 +71,9 @@ main > form > section > .quiz-item + button::before {
 	left: 20px;
 	content: "";
 	border-top: 1px solid lightgrey;
+}
+
+main > form > button {
+	width: 70%;
+	margin: 0 auto;
 }

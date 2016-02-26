@@ -1,8 +1,12 @@
 body {
+	min-width: 100vw;
+	min-height: 100vh;
+	margin: 0;
 	font-size: 1.5em;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	color: #444;
-	background-color: #f1f1f1;
+	background-color: hsl(200, 35%, 25%);
+	background-image: radial-gradient(hsl(200, 40%, 45%), hsl(200, 35%, 25%));
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -27,6 +31,12 @@ main button {
 
 main label[for] {
 	cursor: pointer;
+}
+
+main h1,
+main h2,
+main button {
+	color: #f1f1f1;
 }
 
 a {
@@ -149,7 +159,6 @@ main button {
 	padding: 0 12px 2px;
 	font-size: 14px;
 	line-height: 28px;
-	color: #fff;
 	background-color: #0085ba;
 	border: 1px  solid #0073aa;
 	border-radius: 3px;
