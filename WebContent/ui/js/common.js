@@ -60,7 +60,7 @@
 	function checkHeight() {
 		var scrolled = (getScrollTop() > 0);
 		scrollTop.classList.toggle("scrolled", scrolled);
-		header.classList.toggle("scrolled", scrolled);
+		header && header.classList.toggle("scrolled", scrolled);
 	}
 	checkHeight();
 	window.addEventListener("scroll", checkHeight);

@@ -1,6 +1,7 @@
 main {
+	position: relative;
 	max-width: 320px;
-	margin-top: 20vh;
+	top: 20vh;
 	padding: 10px 20px 30px;
 	background-color: white;
 	box-shadow: 0 0 2px white;

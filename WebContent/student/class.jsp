@@ -124,12 +124,6 @@ Collections.sort(questions);
 <% } %>
 <% } %>
 		</main>
-		<script>
-			Array.prototype.forEach.call(document.querySelectorAll("section > h4"), function(item) {
-				item.addEventListener("click", function(event) {
-					item.parentNode.classList.toggle("open");
-					item.lastElementChild.classList.toggle("up");
-				});
-			});
-		</script>
-<jsp:include page="/WEB-INF/templates/footer.jsp"/>
+<jsp:include page="/WEB-INF/templates/footer.jsp">
+	<jsp:param name="pagetype" value="student"/>
+</jsp:include>

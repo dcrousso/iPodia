@@ -84,10 +84,11 @@ header nav {
 
 main {
 	position: relative;
+	top: 10vh;
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
-	padding: 10vh 20px 50px;
+	padding: 0 20px 50px;
 }
 
 main section {
