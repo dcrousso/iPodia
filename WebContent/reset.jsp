@@ -50,13 +50,13 @@ if (!Defaults.isEmpty(oldPassword) && !Defaults.isEmpty(newPassword) && newPassw
 <% } %>
 			<form method="post">
 				<section>
-					<label for="oldPassword">Old Password</label>
-					<input type="password" name="oldPassword" id="oldPassword" required>
+					<label for="old">Old Password</label>
+					<input type="password" name="oldPassword" id="old" autofocus required>
 				</section>
 				<section>
-					<label for="newPassword">New Password</label>
-					<input type="password" name="newPassword" id="newPassword" required>
-					<input type="password" name="confirmPassword" id="confirmPassword" required>
+					<label for="new">New Password</label>
+					<input type="password" name="newPassword" id="new" required>
+					<input type="password" name="confirmPassword" id="confirm" required>
 				</section>
 				<button>Submit</button>
 			</form>

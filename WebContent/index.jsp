@@ -51,7 +51,7 @@ if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 <% } %>
 			<form method="post">
 				<label for="email">Email</label>
-				<input type="text" name="email" id="email" required><!-- make type="email" -->
+				<input type="text" name="email" id="email" autofocus required><!-- make type="email" -->
 				<label for="password">Password</label>
 				<input type="password" name="password" id="password" required>
 				<button>Submit</button>
