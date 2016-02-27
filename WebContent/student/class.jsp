@@ -73,7 +73,7 @@ Collections.sort(questions);
 					In-Class Questions
 					<div title="Toggle Questions" class="chevron up"></div>
 				</h4>
-				<form class="container" method="post" action="submitAnswers">
+				<form class="container" method="post" action="${pageContext.request.contextPath}/student/submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= Defaults.beforeMatching %>" hidden>
 <% } %>
@@ -107,7 +107,7 @@ Collections.sort(questions);
 <% } %>
 <% } %>
 <% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
-				<form method="post" action="submitAnswers">
+				<form method="post" action="${pageContext.request.contextPath}/student/submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>
 <% } else { %>

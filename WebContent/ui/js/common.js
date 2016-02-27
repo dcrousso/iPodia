@@ -1,3 +1,8 @@
+var parameters = {};
+window.location.search.substr(1).split("&").forEach(function(item) {
+	parameters[item.split("=")[0]] = item.split("=")[1];
+});
+
 (function() {
 	"use strict";
 

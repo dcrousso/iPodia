@@ -74,7 +74,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 					<button>Submit</button>
 				</section>
 			</form>
-			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
+			<form method="post" action="${pageContext.request.contextPath}/admin/uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
 				<section id="Files">

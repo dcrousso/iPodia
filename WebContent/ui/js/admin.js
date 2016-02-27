@@ -28,7 +28,7 @@
 			}
 		}
 
-		var questionName = "Week${param.num}" + topic.id + "Question";
+		var questionName = "Week" + parameters.num + topic.id + "Question";
 		var lastQuestion = topic.lastElementChild.previousElementSibling;
 		if (!lastQuestion || !lastQuestion.firstElementChild || !lastQuestion.firstElementChild.name)
 			questionName += "1";
@@ -38,7 +38,7 @@
 		}
 
 		var container = document.createElement("div");
-		container.classList.add("quiz-item");
+		container.classList.add("item");
 
 		var question = container.appendChild(document.createElement("textarea"));
 		question.classList.add("question");
@@ -59,7 +59,7 @@
 		correctAnswerContainer.classList.add("correct");
 		for (var i = 0; i < answerOptions.length; ++i) {
 			var label = correctAnswerContainer.appendChild(document.createElement("label"));
-			label.textContent = answerOptions[i] + ":";
+			label.textContent = answerOptions[i];
 
 			var radioButton = correctAnswerContainer.appendChild(document.createElement("input"));
 			radioButton.type = "radio";
@@ -82,7 +82,7 @@
 
 			alert("Students have been matched");
 		};
-		xhr.open("POST", "${pageContext.request.contextPath}/admin/matching?type=<%= Defaults.inClassMatching %>&id=${param.id}&num=${param.num}", true);
+		xhr.open("POST", "/admin/matching?type=inClassMatching&id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
 	});
 
