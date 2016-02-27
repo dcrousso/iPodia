@@ -18,8 +18,8 @@ import java.util.regex.Pattern;
 public class Defaults {
 	public static final String dbDriver = "com.mysql.jdbc.Driver";
 	public static final String dbURL = "jdbc:mysql://localhost:3306/ipodia";
-	public static final String dbUsername = "root";
-	public static final String dbPassword = "";
+	public static final String dbUsername = "iPodia";
+	public static final String dbPassword = "iPodia";
 
 	public static final String inClassMatching = "inClassMatching";
 	public static final String beforeClassMatching = "beforeClassMatching";
