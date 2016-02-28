@@ -15,7 +15,7 @@ if (!user.isAuthenticated() || !user.isStudent()) {
 </jsp:include>
 		<main>
 			<h1>Welcome ${user.getName()}</h1>
-<% if (user.getClasses().size() == 0) { %>
+<% if (user.getClasses().isEmpty()) { %>
 			<p>No Enrolled Classes</p>
 <% } else { %>
 			<h4>Please select a class:</h4>

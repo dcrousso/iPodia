@@ -75,6 +75,7 @@
 	});
 
 	document.querySelector("button.match").addEventListener("click", function() {
+		var type = this.classList.contains("in-class") ? "inClassMatching" : "beforeClassMatching";
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState != 4 || xhr.status != 200)
@@ -82,7 +83,7 @@
 
 			alert("Students have been matched");
 		};
-		xhr.open("POST", "/admin/matching?type=inClassMatching&id=" + parameters.id + "&num=" + parameters.num, true);
+		xhr.open("POST", "/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
 	});
 

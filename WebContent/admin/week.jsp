@@ -60,9 +60,8 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 		<main>
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a> - Week ${param.num}</h1>
 			<div class="options">
-				<button class="match">Match Students</button>
-				<button class="quizMatch">quiz matching</button>
-<% if (!hasInClass) { %>
+				<%-- If there are in-class questions, we have already passed the point where matches could be made for that week's groupings --%>
+				<button class="match<% if (hasInClass) { %> in-class<% } %>" title="<% if (hasInClass) { %>In Class Matching<% } else { %>Before Class Matching<% } %>">Match Students</button>
 				<button class="in-class">Add In-Class Question</button>
 			</div>
 			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
@@ -122,100 +121,6 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 				<button>Submit</button>
 			</form>
 		</main>
-		<script>
-			(function() {
-				function addFileUpload(event) {
-					var input = document.createElement("input");
-					input.type = "file";
-					input.name = "upload";
-					input.addEventListener("change", addFileUpload);
-					this.removeEventListener("change", addFileUpload);
-					this.parentElement.insertBefore(input, this.nextElementSibling);
-				}
-				Array.prototype.forEach.call(document.querySelectorAll("input[type=\"file\"]"), function(item) {
-					item.addEventListener("change", addFileUpload);
-				});
-
-				function addQuestion(event) {
-					var topic = this.parentNode;
-					var questionName = "Week${param.num}" + topic.id + "Question";
-					var lastQuestion = topic.lastElementChild.previousElementSibling;
-					if (!lastQuestion)
-						questionName += "1";
-					else {
-						var match = lastQuestion.firstElementChild.name.match(/\d+$/);
-						questionName += match ? parseInt(match[0]) + 1 : "1";
-					}
-
-					var container = document.createElement("div");
-					container.classList.add("quiz-item");
-
-					var question = container.appendChild(document.createElement("textarea"));
-					question.classList.add("question");
-					question.placeholder = "Question";
-					question.name = questionName;
-					question.required = true;
-
-					var answerOptions = ["A", "B", "C", "D", "E"];
-					for (var i = 0; i < answerOptions.length; ++i) {
-						var answer = container.appendChild(document.createElement("input"));
-						answer.classList.add("answer");
-						answer.placeholder = "Answer " + answerOptions[i];
-						answer.name = questionName + "Answer" + answerOptions[i];
-						answer.required = true;
-					}
-
-					var correctAnswerContainer = container.appendChild(document.createElement("div"));
-					correctAnswerContainer.classList.add("correct");
-					for (var i = 0; i < answerOptions.length; ++i) {
-						var label = correctAnswerContainer.appendChild(document.createElement("label"));
-						label.textContent = answerOptions[i] + ":";
-
-						var radioButton = correctAnswerContainer.appendChild(document.createElement("input"));
-						radioButton.type = "radio";
-						radioButton.name = questionName + "CorrectAnswer";
-						radioButton.value = answerOptions[i];
-						radioButton.required = true;
-					}
-
-					topic.insertBefore(container, topic.lastElementChild);
-				}
-				Array.prototype.forEach.call(document.querySelectorAll("button.add-question"), function(item) {
-					item.addEventListener("click", addQuestion);
-				});
-
-				document.querySelector("button.match").addEventListener("click", function() {
-					var xhr = new XMLHttpRequest();
-					xhr.onreadystatechange = function() {
-						if (xhr.readyState != 4 || xhr.status != 200)
-							return;
-
-						alert("Students have been matched");
-					};
-					xhr.open("POST", "${pageContext.request.contextPath}/admin/matching?type=<%= Defaults.inClassMatching %>&id=${param.id}&num=${param.num}", true);
-					xhr.send();
-				});
-				
-				document.querySelector("button.quizMatch").addEventListener("click", function() {
-					var xhr = new XMLHttpRequest();
-					xhr.onreadystatechange = function() {
-						if (xhr.readyState != 4 || xhr.status != 200)
-							return;
-
-						alert("Quiz matching");
-					};
-					xhr.open("POST", "${pageContext.request.contextPath}/admin/matching?type=<%= Defaults.beforeClassMatching %>&id=${param.id}&num=${param.num}", true);
-					xhr.send();
-				});
-
-<% if (!hasInClass) { %>
-				document.querySelector("button.in-class").addEventListener("click", function() {
-					document.querySelector(".in-class-questions").hidden = false;
-					this.remove();
-				});
-<% } %>
-			})();
-		</script>
 <jsp:include page="/WEB-INF/templates/footer.jsp">
 	<jsp:param name="pagetype" value="admin"/>
 </jsp:include>
