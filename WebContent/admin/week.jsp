@@ -61,6 +61,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
 			<div class="options">
 				<button class="match">Match Students</button>
+				<button class="quizMatch">quiz matching</button>
 <% if (!hasInClass) { %>
 				<button class="in-class">Add In-Class Question</button>
 <% } %>
@@ -194,6 +195,18 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 						alert("Students have been matched");
 					};
 					xhr.open("POST", "${pageContext.request.contextPath}/admin/matching?type=<%= Defaults.inClassMatching %>&id=${param.id}&num=${param.num}", true);
+					xhr.send();
+				});
+				
+				document.querySelector("button.quizMatch").addEventListener("click", function() {
+					var xhr = new XMLHttpRequest();
+					xhr.onreadystatechange = function() {
+						if (xhr.readyState != 4 || xhr.status != 200)
+							return;
+
+						alert("Quiz matching");
+					};
+					xhr.open("POST", "${pageContext.request.contextPath}/admin/matching?type=<%= Defaults.beforeClassMatching %>&id=${param.id}&num=${param.num}", true);
 					xhr.send();
 				});
 

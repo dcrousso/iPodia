@@ -36,7 +36,7 @@ public class MatchingServlet extends HttpServlet {
 		if (type.equals(Defaults.inClassMatching))
 			InClassMatching.match(classId, week);
 		else if (type.equals(Defaults.beforeClassMatching)) {
-			// To Implement
+			QuizMatching.match(classId, week);
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
