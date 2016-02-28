@@ -69,6 +69,14 @@
 		}
 
 		topic.insertBefore(container, topic.lastElementChild);
+
+		var top = getScrollTop() + container.getBoundingClientRect().top;
+		if (top + container.offsetHeight < getScrollTop() || top + question.offsetHeight > getScrollTop() + window.innerHeight) {
+			animateScroll(top, 750, function() {
+				question.focus();
+			});
+		} else
+			question.focus();
 	}
 	Array.prototype.forEach.call(document.querySelectorAll("button.add-question"), function(item) {
 		item.addEventListener("click", addQuestion);
@@ -88,7 +96,7 @@
 	});
 
 	var inClassQuestions = document.querySelector(".in-class-questions");
-	document.querySelector("button.in-class").addEventListener("click", function() {
+	document.querySelector("button.add-in-class-question").addEventListener("click", function() {
 		inClassQuestions.hidden = false;
 		addQuestion.call(inClassQuestions.lastElementChild.lastElementChild);
 	});

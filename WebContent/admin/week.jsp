@@ -62,7 +62,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 			<div class="options">
 				<%-- If there are in-class questions, we have already passed the point where matches could be made for that week's groupings --%>
 				<button class="match<% if (hasInClass) { %> in-class<% } %>" title="<% if (hasInClass) { %>In Class Matching<% } else { %>Before Class Matching<% } %>">Match Students</button>
-				<button class="in-class">Add In-Class Question</button>
+				<button class="add-in-class-question">Add In-Class Question</button>
 			</div>
 			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
 				<input type="text" name="id" value="${param.id}" hidden>
