@@ -58,64 +58,62 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 	<jsp:param name="username" value="${user.getName()}"/>
 </jsp:include>
 		<main>
-			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a>, Week ${param.num}</h1>
+			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a> - Week ${param.num}</h1>
 			<div class="options">
 				<button class="match">Match Students</button>
 				<button class="quizMatch">quiz matching</button>
 <% if (!hasInClass) { %>
 				<button class="in-class">Add In-Class Question</button>
-<% } %>
 			</div>
 			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
-				<h4>In-Class:</h4>
 				<section id="InClass">
+					<h4>In-Class</h4>
 <% for (QuizQuestion item : existing) { if (item.isInClass()) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" class="add-question">Add In-Class Question</button>
+					<button>Submit</button>
 				</section>
-				<button>Submit</button>
 			</form>
-			<form method="post" action="uploadWeekData" enctype="multipart/form-data">
+			<form method="post" action="${pageContext.request.contextPath}/admin/uploadWeekData" enctype="multipart/form-data">
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
-				<h4>Upload Files:</h4>
 				<section id="Files">
+					<h4>Upload Files</h4>
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + week); %>
 <% if (folder.exists() && folder.isDirectory()) { %>
-				<ul>
+					<ul>
 <% for (File f : folder.listFiles()) { %>
-					<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
+						<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
 <% } %>
-				</ul>
+					</ul>
 <% } %>
 					<input type="file" name="upload">
 				</section>
-				<h4>Topic 1:</h4>
 				<section id="Topic1">
+					<h4>Topic 1</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic1")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 1</button>
 				</section>
-				<h4>Topic 2:</h4>
 				<section id="Topic2">
+					<h4>Topic 2</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic2")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 2</button>
 				</section>
-				<h4>Topic 3:</h4>
 				<section id="Topic3">
+					<h4>Topic 3</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic3")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
 					<button type="button" class="add-question">Add Question for Topic 3</button>
 				</section>
-				<h4>Topic 4:</h4>
 				<section id="Topic4">
+					<h4>Topic 4</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic4")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
@@ -218,4 +216,7 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 <% } %>
 			})();
 		</script>
-<jsp:include page="/WEB-INF/templates/footer.jsp"/>
+<jsp:include page="/WEB-INF/templates/footer.jsp">
+	<jsp:param name="pagetype" value="admin"/>
+</jsp:include>
+

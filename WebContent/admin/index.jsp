@@ -14,7 +14,7 @@ if (!user.isAuthenticated() || !user.isAdmin()) {
 	<jsp:param name="username" value="${user.getName()}" />
 </jsp:include>
 		<main>
-			<h1>Admin</h1>
+			<h1>Welcome ${user.getName()}</h1>
 <% if (user.getClasses().size() == 0) { %>
 			<p>No Enrolled Classes</p>
 <% } else { %>

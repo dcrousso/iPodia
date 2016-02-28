@@ -1,16 +1,13 @@
-main > form > section {
-	margin: 20px;
+main > section > form > .item:first-child {
+	padding-top: 10px;
+	border-top: none;
 }
 
-main > form > section + button {
-	margin-top: 40px;
+main > section > form > .item > select,
+main > section > form > .item > input {
+	margin-bottom: 15px;
 }
 
-main > form > section + button::before {
-	position: absolute;
-	bottom: 45px;
-	left: 0;
-	width: 100%;
-	content: "";
-	border-top: 1px solid lightgrey;
+main > section > form > .item + button::before {
+	bottom: 50px;
 }

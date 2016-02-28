@@ -145,7 +145,7 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 	}
 
 	public String generateAdminHTML() {
-		return "<div class=\"quiz-item\">"
+		return "<div class=\"item\">"
 		       	+ "<textarea class=\"question\" placeholder=\"Question\" name=\"" + getId() + "\" required>" + getQuestion() + "</textarea>"
 		       	+ "<input class=\"answer\" placeholder=\"Answer A\" name=\"" + getId() + "AnswerA\" value=\"" + getAnswer("A") + "\" required>"
 		       	+ "<input class=\"answer\" placeholder=\"Answer B\" name=\"" + getId() + "AnswerB\" value=\"" + getAnswer("B") + "\" required>"
@@ -153,22 +153,22 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		       	+ "<input class=\"answer\" placeholder=\"Answer D\" name=\"" + getId() + "AnswerD\" value=\"" + getAnswer("D") + "\" required>"
 		       	+ "<input class=\"answer\" placeholder=\"Answer E\" name=\"" + getId() + "AnswerE\" value=\"" + getAnswer("E") + "\" required>"
 		       	+ "<div class=\"correct\">"
-		       		+ "<label>A:</label>"
+		       		+ "<label>A</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"A\"" + (getCorrectAnswer().equals("A") ? " checked" : "") + " required>"
-		       		+ "<label>B:</label>"
+		       		+ "<label>B</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"B\"" + (getCorrectAnswer().equals("B") ? " checked" : "") + " required>"
-		       		+ "<label>C:</label>"
+		       		+ "<label>C</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"C\"" + (getCorrectAnswer().equals("C") ? " checked" : "") + " required>"
-		       		+ "<label>D:</label>"
+		       		+ "<label>D</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"D\"" + (getCorrectAnswer().equals("D") ? " checked" : "") + " required>"
-		       		+ "<label>E:</label>"
+		       		+ "<label>E</label>"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "CorrectAnswer\" value=\"E\"" + (getCorrectAnswer().equals("E") ? " checked" : "") + " required>"
 		       	+ "</div>"
 		       + "</div>";
 	}
 
 	public String generateStudentHTML(String selected) {
-		return "<div class=\"question\">"
+		return "<div class=\"item\">"
 		       	+ "<p>" + getQuestion() + "</p>"
 		       	+ "<div class=\"answer\">"
 		       		+ "<input type=\"radio\" name=\"" + getId() + "\" value=\"A\"" + (selected.equals("A") ? " checked" : "") + " required>"

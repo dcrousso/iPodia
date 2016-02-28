@@ -69,11 +69,11 @@ Collections.sort(questions);
 <% if (question.isInClass()) { %>
 <% if (i == 0) { %>
 			<section id="in-class" class="open">
-				<h3>
+				<h4>
 					In-Class Questions
-					<a title="Toggle Questions" class="chevron down"></a>
-				</h3>
-				<form class="container" method="post" action="submitAnswers">
+					<div title="Toggle Questions" class="chevron up"></div>
+				</h4>
+				<form class="container" method="post" action="${pageContext.request.contextPath}/student/submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= Defaults.beforeMatching %>" hidden>
 <% } %>
@@ -91,10 +91,10 @@ Collections.sort(questions);
 <%-- ===== REGULAR QUESTIONS ==== --%>
 <% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId()) || questions.get(i - 1).isInClass()) { %>
 			<section id="week<%= question.getWeekNumber() %>">
-				<h3>
+				<h4>
 					Week <%= question.getWeekNumber() %>
-					<a title="Toggle Questions" class="chevron down"></a>
-				</h3>
+					<div title="Toggle Questions" class="chevron"></div>
+				</h4>
 <% File folder = new File(Defaults.DATA_DIRECTORY + "/" + classId + "/" + question.getWeekNumber()); %>
 <% if (folder.exists() && folder.isDirectory()) { %>
 				<ul>
@@ -107,30 +107,23 @@ Collections.sort(questions);
 <% } %>
 <% } %>
 <% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
-				<form class="container" method="post" action="submitAnswers">
+				<form method="post" action="${pageContext.request.contextPath}/student/submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= groups.containsKey(question.getWeekId()) ? Defaults.afterMatching : Defaults.beforeMatching %>" hidden>
 <% } else { %>
-				<div class="container">
+				<form class="past-week">
 <% } %>
 <% } %>
 					<%= question.generateStudentHTML(existing.get(question.getId())) %>
 <% if (i == questions.size() - 1 || !question.getWeekId().equals(questions.get(i + 1).getWeekId())) { %>
 <% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>
 					<button>Submit</button>
-				</form>
-<% } else { %>
-				</div>
 <% } %>
+				</form>
 			</section>
 <% } %>
 <% } %>
 		</main>
-		<script>
-			Array.prototype.forEach.call(document.querySelectorAll("section > h3"), function(item) {
-				item.addEventListener("click", function(event) {
-					item.parentNode.classList.toggle("open");
-				});
-			});
-		</script>
-<jsp:include page="/WEB-INF/templates/footer.jsp"/>
+<jsp:include page="/WEB-INF/templates/footer.jsp">
+	<jsp:param name="pagetype" value="student"/>
+</jsp:include>

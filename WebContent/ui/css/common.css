@@ -1,8 +1,12 @@
 body {
+	min-width: 100vw;
+	min-height: 95vh;
+	margin: 0;
 	font-size: 1.5em;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	color: #444;
-	background-color: #f1f1f1;
+	color: hsl(0, 0%, 25%);
+	background-color: hsl(200, 35%, 25%);
+	background-image: radial-gradient(hsl(200, 40%, 45%), hsl(200, 35%, 25%));
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
@@ -13,7 +17,7 @@ body {
 
 header,
 main h1,
-main h3,
+main h4,
 main label,
 main button {
 	cursor: default;
@@ -29,20 +33,43 @@ main label[for] {
 	cursor: pointer;
 }
 
+main h1,
+main h2,
+main h4,
+main button {
+	color: hsl(0, 0%, 95%);
+}
+
 a {
-	color: #3498db;
+	color: hsl(200, 70%, 50%);
 	text-decoration: none;
 }
 
 a:hover {
-	color: #277bb6;
+	color: hsl(205, 65%, 45%);
 }
 
 header {
+	position: fixed;
+	top: 0;
+	right: 0;
+	left: 0;
+	z-index: 10;
 	padding: 20px;
+	background-color: hsla(0, 0%, 100%, 0);
+	-webkit-transition: background-color 400ms;
+	   -moz-transition: background-color 400ms;
+	    -ms-transition: background-color 400ms;
+	     -o-transition: background-color 400ms;
+	        transition: background-color 400ms;
 }
 
-header > nav {
+header.scrolled {
+	background-color: hsla(0, 0%, 100%, 0.9);
+	-webkit-backdrop-filter: blur(5px);
+}
+
+header nav {
 	display: -webkit-flex;
 	display:    -moz-flex;
 	display:     -ms-flexbox;
@@ -53,26 +80,63 @@ header > nav {
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
+	padding: 0 20px;
+}
+
+header a {
+	margin: 0 10px;
+}
+
+header .links {
+	text-align: right;
 }
 
 main {
 	position: relative;
+	top: 10vh;
 	width: 100%;
 	max-width: 800px;
 	margin: 0 auto;
 	padding: 0 20px 50px;
 }
 
+main section {
+	position: relative;
+	margin: 5px 0 20px;
+	padding: 20px;
+	background-color: white;
+	box-shadow: 0 0 2px white;
+}
+
+main h1 {
+	text-align: center;
+}
+
 main h4 {
 	margin: 0;
+}
+
+main section h4 {
+	margin-bottom: 15px;
+	color: initial;
 }
 
 main ul {
 	margin: 0 0 10px;
 }
 
+main section ul {
+	margin-bottom: 0;
+	font-size: 0.8em;
+}
+
 main form {
 	position: relative;
+}
+
+main section .item {
+	padding: 20px 10px 15px;
+	border-top: 1px solid lightgrey;
 }
 
 main input,
@@ -81,8 +145,8 @@ main textarea {
 	width: 100%;
 	padding: 3px;
 	font-size: 100%;
-	background-color: #fbfbfb;
-	border: 1px solid #ddd;
+	background-color: hsl(0, 0%, 95%);
+	border: 1px solid hsl(0, 0%, 85%);
 	outline: none;
 	box-shadow: 0 0 0 0 steelblue;
 	-webkit-transition: border-color 300ms, box-shadow 300ms;
@@ -118,7 +182,12 @@ main textarea:focus {
 	        animation: anim-shadow 300ms forwards;
 }
 
+main p {
+	margin: 0;
+}
+
 main select {
+	display: block;
 	font-size: 100%;
 }
 
@@ -149,24 +218,85 @@ main button {
 	padding: 0 12px 2px;
 	font-size: 14px;
 	line-height: 28px;
-	color: #fff;
-	background-color: #0085ba;
-	border: 1px  solid #0073aa;
+	background-color: hsl(200, 100%, 36%);
+	border: 1px solid hsl(200, 100%, 33%);
 	border-radius: 3px;
-	box-shadow: 0 1px 0 #006799;
+	box-shadow: 0 1px hsl(200, 100%, 30%);
 	outline: none;
 	cursor: pointer;
 }
 
 main button:active {
 	border-style: inset;
-	box-shadow: 0 1px 0 #006799 inset;
+	box-shadow: 0 1px hsl(200, 100%, 30%) inset;
+}
+
+main form > button {
+	width: 70%;
+	margin: 0 auto;
+}
+
+main section .item + button {
+	margin-top: 20px;
+}
+
+main section .item + button::before {
+	position: absolute;
+	right: 20px;
+	bottom: 65px;
+	left: 20px;
+	content: "";
+	border-top: 1px solid lightgrey;
+}
+
+.scroll-top {
+	position: fixed;
+	right: 25px;
+	bottom: 25px;
+	z-index: 5;
+	width: 50px;
+	height: 50px;
+	color: hsl(0, 0%, 95%);
+	cursor: pointer;
+	background-color: hsl(0, 0%, 5%);
+	border: 1px solid hsl(0, 0%, 10%);
+	border-radius: 2px;
+	opacity: 0;
+	pointer-events: none;
+	-webkit-transition: all 400ms;
+	   -moz-transition: all 400ms;
+	    -ms-transition: all 400ms;
+	     -o-transition: all 400ms;
+	        transition: all 400ms;
+}
+
+.scroll-top:hover {
+	color: hsl(200, 70%, 50%);
+	background-color: hsl(0, 0%, 90%);
+}
+
+.scroll-top.scrolled {
+	opacity: 0.75;
+	pointer-events: all;
+}
+
+.scroll-top > .chevron {
+	width: 20px;
+	height: 20px;
+	margin: 12px auto 0;
+	color: inherit;
 }
 
 .chevron {
 	position: relative;
 	width: 100%;
 	height: 100%;
+	color: black;
+	-webkit-transform: rotateX(180deg);
+	   -moz-transform: rotateX(180deg);
+	    -ms-transform: rotateX(180deg);
+	     -o-transform: rotateX(180deg);
+	        transform: rotateX(180deg);
 	-webkit-transition: -webkit-transform 400ms, top 400ms;
 	   -moz-transition:    -moz-transform 400ms, top 400ms;
 	    -ms-transition:     -ms-transform 400ms, top 400ms;
@@ -174,12 +304,12 @@ main button:active {
 	        transition:         transform 400ms, top 400ms;
 }
 
-.chevron.down {
-	-webkit-transform: rotateX(180deg);
-	   -moz-transform: rotateX(180deg);
-	    -ms-transform: rotateX(180deg);
-	     -o-transform: rotateX(180deg);
-	        transform: rotateX(180deg);
+.chevron.up {
+	-webkit-transform: rotateX(0deg);
+	   -moz-transform: rotateX(0deg);
+	    -ms-transform: rotateX(0deg);
+	     -o-transform: rotateX(0deg);
+	        transform: rotateX(0deg);
 }
 
 .chevron::before,
@@ -189,7 +319,7 @@ main button:active {
 	width: 50%;
 	height: 10%;
 	content: "";
-	background-color: black;
+	background-color: currentColor;
 }
 
 .chevron:before {
