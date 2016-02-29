@@ -27,14 +27,14 @@ if (Defaults.isEmpty(className)) {
 ArrayList<QuizQuestion> questions = new ArrayList<QuizQuestion>();
 HashMap<String, String> existing = new HashMap<String, String>();
 HashMap<String, String> groups = new HashMap<String, String>();
-ResultSet results = dbConnection.prepareStatement("Select * From class_" + classId).executeQuery();
+ResultSet results = dbConnection.prepareStatement("SELECT * FROM class_" + classId).executeQuery();
 while (results.next()) {
 	QuizQuestion question = new QuizQuestion(results);
 	if (!question.isValid() || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.beforeMatching) || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.afterMatching))
 		continue;
 
 	if (!groups.containsKey(question.getWeekId())) {
-		PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + "_matching where id = ?");
+		PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + "_matching where id = ?");
 		ps.setString(1, question.getWeekId());
 		ResultSet matches = ps.executeQuery();
 		while (matches.next() && Defaults.columnExists(matches, user.getSafeEmail())) {

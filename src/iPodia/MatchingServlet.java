@@ -33,14 +33,15 @@ public class MatchingServlet extends HttpServlet {
 			return;
 		}
 
-		if (type.equals(Defaults.inClassMatching))
-			InClassMatching.match(classId, week);
-		else if (type.equals(Defaults.beforeClassMatching)) {
+		if (type.equals(Defaults.inClassMatching)) {
+			String result = InClassMatching.match(classId, week);
+			if (!Defaults.isEmpty(result))
+				response.getWriter().write(result);
+		} else if (type.equals(Defaults.beforeClassMatching)) {
 			QuizMatching.match(classId, week);
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
-		response.setStatus(HttpServletResponse.SC_OK);
 	}
 }

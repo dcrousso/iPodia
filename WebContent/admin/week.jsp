@@ -41,7 +41,7 @@ if (request.getMethod().equals("POST")) {
 }
 
 ArrayList<QuizQuestion> existing = new ArrayList<QuizQuestion>();
-PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + " WHERE id LIKE ?");
+PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
 ps.setString(1, "Week" + week + "%");
 ResultSet results = ps.executeQuery();
 while (results.next())

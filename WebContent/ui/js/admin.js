@@ -89,9 +89,17 @@
 			if (xhr.readyState != 4 || xhr.status != 200)
 				return;
 
-			alert("Students have been matched");
+			var matches = "";
+			var response = JSON.parse(xhr.responseText);
+			for (var i = 0; i < response.length; ++i) {
+				matches += "\n";
+				for (var key in response[i])
+					matches += "\n" + response[i][key] + "  -  " + key;
+			}
+
+			alert("Students have been matched" + matches);
 		};
-		xhr.open("POST", "/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
+		xhr.open("POST", "/iPodia/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
 	});
 

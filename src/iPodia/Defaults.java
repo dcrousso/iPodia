@@ -97,6 +97,26 @@ public class Defaults {
 		return false;
 	}
 
+	public static HashMap<String, User> getStudentsBySafeEmail() {
+		try {
+			Class.forName(dbDriver);
+			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
+
+			HashMap<String, User> students = new HashMap<String, User>();
+			ResultSet users = dbConnection.prepareStatement("SELECT * FROM users").executeQuery();
+			while (users.next()) {
+				User u = new User(users);
+				if (u.isStudent())
+					students.put(u.getSafeEmail(), u);
+			}
+
+			return students;
+		} catch (SQLException e) {
+		} catch (ClassNotFoundException e) {
+		}
+		return null;
+	}
+
 	public static LinkedList<HashMap.Entry<String, Integer>> buildSortedList(String classId, String questionId) {
 		if (isEmpty(classId) || isEmpty(questionId))
 			return null;
@@ -105,13 +125,13 @@ public class Defaults {
 			Class.forName(dbDriver);
 			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
 
-			PreparedStatement ps = dbConnection.prepareStatement("Select * From class_" + classId + " WHERE id LIKE ?");
+			PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
 			ps.setString(1, questionId + "%");
 			ResultSet results = ps.executeQuery();
 			ResultSetMetaData rsmd = results.getMetaData();
 
 			HashSet<String> listOfStudents = new HashSet<String>();
-			for (int i = 1; i <= rsmd.getColumnCount(); i ++) { // SQL columns start at index 1
+			for (int i = 1; i <= rsmd.getColumnCount(); ++i) { // SQL columns start at index 1
 				String name = rsmd.getColumnName(i);
 				if (name.equals("id")
 				 || name.equals("question")
@@ -121,6 +141,7 @@ public class Defaults {
 				 || name.equals("answerD")
 				 || name.equals("answerE")
 				 || name.equals("correctAnswer")
+				 || name.equals("dueDate")
 				 || name.equals("topic")
 				 || name.contains(afterMatching) // only match based on answer before matching
 				) {

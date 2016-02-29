@@ -22,7 +22,7 @@ if (Defaults.isEmpty(className)) {
 }
 
 int numWeeks = 0;
-ResultSet rs = dbConnection.prepareStatement("Select * From class_" + classId).executeQuery();
+ResultSet rs = dbConnection.prepareStatement("SELECt * FROM class_" + classId).executeQuery();
 while (rs.next()) {
 	String id = rs.getString("id");
 	Matcher m = Defaults.WEEK_PATTERN.matcher(id);
