@@ -99,28 +99,28 @@ boolean hasAllTopics = Defaults.contains(existing, question -> question.getTopic
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic1")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" class="add-question">Add Question for Topic 1</button>
+					<button type="button" class="add-question">Add Question</button>
 				</section>
 				<section id="Topic2">
 					<h4>Topic 2</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic2")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" class="add-question">Add Question for Topic 2</button>
+					<button type="button" class="add-question">Add Question</button>
 				</section>
 				<section id="Topic3">
 					<h4>Topic 3</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic3")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" class="add-question">Add Question for Topic 3</button>
+					<button type="button" class="add-question">Add Question</button>
 				</section>
 				<section id="Topic4">
 					<h4>Topic 4</h4>
 <% for (QuizQuestion item : existing) { if (item.getId().contains("Topic4")) { %>
 					<%= item.generateAdminHTML() %>
 <% } } %>
-					<button type="button" class="add-question">Add Question for Topic 4</button>
+					<button type="button" class="add-question">Add Question</button>
 				</section>
 				<button>Submit</button>
 			</form>

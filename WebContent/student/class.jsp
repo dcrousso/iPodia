@@ -90,7 +90,7 @@ Collections.sort(questions);
 
 <%-- ===== REGULAR QUESTIONS ==== --%>
 <% if (i == 0 || !question.getWeekId().equals(questions.get(i - 1).getWeekId()) || questions.get(i - 1).isInClass()) { %>
-			<section id="week<%= question.getWeekNumber() %>">
+			<section id="week<%= question.getWeekNumber() %>"<%= (i == 0 ? " class=\"open\"" : "") %>>
 				<h4>
 					Week <%= question.getWeekNumber() %>
 					<div title="Toggle Questions" class="chevron"></div>
