@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 public class QuizMatching {
-	public static void match(String classId, String week) {
+	public static LinkedList<HashSet<String>> match(String classId, String week) {
 		LinkedList<LinkedList<String>> allSortedLists = new LinkedList<LinkedList<String>>(); 
 		ArrayList<Double> listOfAverageScores = new ArrayList<Double>();
 		HashMap<String, ArrayList<Integer>> studentScoresForEachTopic = new HashMap<String, ArrayList<Integer>>();
@@ -78,6 +78,8 @@ public class QuizMatching {
 			}
 			System.out.println();
 		}
+
+		return optimalGrouping;
 	}
 
 	private static boolean performSwap(LinkedList<HashSet<String>> optimalGrouping, HashMap<String, ArrayList<Integer>> studentScoresForEachTopic, ArrayList<Double> listOfAverageScores) {

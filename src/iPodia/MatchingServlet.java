@@ -1,7 +1,13 @@
 package iPodia;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -33,15 +39,33 @@ public class MatchingServlet extends HttpServlet {
 			return;
 		}
 
-		if (type.equals(Defaults.inClassMatching)) {
-			String result = InClassMatching.match(classId, week);
-			if (!Defaults.isEmpty(result))
-				response.getWriter().write(result);
-		} else if (type.equals(Defaults.beforeClassMatching)) {
-			QuizMatching.match(classId, week);
-		} else {
+		HashMap<String, User> students = Defaults.getStudentsBySafeEmail();
+		if (students == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
+
+		LinkedList<HashSet<String>> groups = null;
+		if (type.equals(Defaults.inClassMatching))
+			groups = InClassMatching.match(classId, week);
+		else if (type.equals(Defaults.beforeClassMatching))
+			groups = QuizMatching.match(classId, week);
+		else {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		JsonArrayBuilder result = Json.createArrayBuilder();
+		for (HashSet<String> group : groups) {
+			JsonObjectBuilder info = Json.createObjectBuilder();
+			for (String entry : group) {
+				User u = students.get(entry.replace(Defaults.beforeMatching, ""));
+				if (u != null)
+					info.add(u.getEmail(), u.getName());
+			}
+			result.add(info);
+		}
+
+		response.getWriter().write(result.build().toString());
 	}
 }
