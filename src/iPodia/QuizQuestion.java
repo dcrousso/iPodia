@@ -95,6 +95,13 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		return m.group(1) + m.group(2);
 	}
 
+	public String getTopicId() {
+		Matcher m = Defaults.TOPIC_PATTERN.matcher(m_id);
+		if (!m.find())
+			return m_id;
+		return m.group(2);
+	}
+
 	public String getQuestion() {
 		return m_question;
 	}

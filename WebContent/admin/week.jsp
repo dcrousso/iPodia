@@ -49,6 +49,10 @@ while (results.next())
 
 Collections.sort(existing);
 boolean hasInClass = Defaults.contains(existing, question -> question.isInClass());
+boolean hasAllTopics = Defaults.contains(existing, question -> question.getTopicId().equals("Topic1"))
+                    && Defaults.contains(existing, question -> question.getTopicId().equals("Topic2"))
+                    && Defaults.contains(existing, question -> question.getTopicId().equals("Topic3"))
+                    && Defaults.contains(existing, question -> question.getTopicId().equals("Topic4"));
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="admin"/>
@@ -61,10 +65,10 @@ boolean hasInClass = Defaults.contains(existing, question -> question.isInClass(
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a> - Week ${param.num}</h1>
 			<div class="options">
 				<%-- If there are in-class questions, we have already passed the point where matches could be made for that week's groupings --%>
-				<button class="match<% if (hasInClass) { %> in-class<% } %>" title="<% if (hasInClass) { %>In Class Matching<% } else { %>Before Class Matching<% } %>">Match Students</button>
+				<button class="match<% if (hasInClass) { %> in-class<% } %>" title="<%= (!hasAllTopics ? "Must have a question for each topic" : (hasInClass ? "In Class Matching" : "Before Class Matching")) %>"<%= (!hasAllTopics ? " disabled" : "") %>>Match Students</button>
 				<button class="add-in-class-question">Add In-Class Question</button>
 			</div>
-			<form class="in-class-questions" method="post"<% if (!hasInClass) { %> hidden<% } %>>
+			<form class="in-class-questions" method="post"<%= (!hasInClass ? " hidden" : "") %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>
 				<section id="InClass">
