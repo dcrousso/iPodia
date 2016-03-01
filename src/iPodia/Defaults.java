@@ -192,6 +192,31 @@ public class Defaults {
 		return groups;
 	}
 
+	public static HashSet<QuizQuestion> getQuestionsForWeekTopic(String classId, String week) {
+		if (isEmpty(classId) || isEmpty(week))
+			return null;
+
+		try {
+			Class.forName(dbDriver);
+			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
+
+			HashSet<QuizQuestion> results = new HashSet<QuizQuestion>();
+			PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
+			ps.setString(1, "Week" + week + "Topic%");
+			ResultSet questions = ps.executeQuery();
+			while (questions.next()) {
+				QuizQuestion q = new QuizQuestion(questions);
+				if (q.isValid())
+					results.add(q);
+			}
+
+			return results;
+		} catch (SQLException e) {
+		} catch (ClassNotFoundException e) {
+		}
+		return null;
+	}
+
 	public static String urlEncode(String url) {
 		if (isEmpty(url))
 			return url;

@@ -139,16 +139,15 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 	}
 
 	public boolean isValid() {
-		return !Defaults.isEmpty(m_id)
-		    && !Defaults.isEmpty(m_question)
-		    && m_answers.size() == 5
-		    && !Defaults.isEmpty(m_answers.get("A"))
-		    && !Defaults.isEmpty(m_answers.get("B"))
-		    && !Defaults.isEmpty(m_answers.get("C"))
-		    && !Defaults.isEmpty(m_answers.get("D"))
-		    && !Defaults.isEmpty(m_answers.get("E"))
-		    && !Defaults.isEmpty(m_correctAnswer)
-		    && !Defaults.isEmpty(m_topic);
+		return !Defaults.isEmpty(getId())
+		    && !Defaults.isEmpty(getQuestion())
+		    && !Defaults.isEmpty(getAnswer("A"))
+		    && !Defaults.isEmpty(getAnswer("B"))
+		    && !Defaults.isEmpty(getAnswer("C"))
+		    && !Defaults.isEmpty(getAnswer("D"))
+		    && !Defaults.isEmpty(getAnswer("E"))
+		    && !Defaults.isEmpty(getCorrectAnswer())
+		    && !Defaults.isEmpty(getTopic());
 	}
 
 	public String generateAdminHTML() {
@@ -198,6 +197,18 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 		       		+ "<p>" + getAnswer("E") + "</p>"
 		       	+ "</div>"
 		       + "</div>";
+	}
+
+	public boolean equalTo(QuizQuestion other) {
+		return getId().equals(other.getId())
+		    && getQuestion().equals(other.getQuestion())
+		    && getAnswer("A").equals(other.getAnswer("A"))
+		    && getAnswer("B").equals(other.getAnswer("B"))
+		    && getAnswer("C").equals(other.getAnswer("C"))
+		    && getAnswer("D").equals(other.getAnswer("D"))
+		    && getAnswer("E").equals(other.getAnswer("E"))
+		    && getCorrectAnswer().equals(other.getCorrectAnswer())
+		    && getTopic().equals(other.getTopic());
 	}
 
 	@Override
