@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.regex.Matcher;
 
 public class ProcessForm {
 	public static void processQuizUpload(QuizQuestion question, String classId) {
@@ -44,6 +45,14 @@ public class ProcessForm {
 		try {
 			Class.forName(Defaults.dbDriver);
 			final Connection dbConnection = DriverManager.getConnection(Defaults.dbURL, Defaults.dbUsername, Defaults.dbPassword); 
+
+			Matcher m = Defaults.WEEK_PATTERN.matcher(question);
+			if (m.find()) {
+				PreparedStatement test = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
+				test.setString(1, "Week" + (Integer.parseInt(m.group(2)) + 1) + "%");
+				if (test.executeQuery().next())
+					return;
+			}
 
 			PreparedStatement ps = dbConnection.prepareStatement("UPDATE class_" + classId + " SET " + Defaults.createSafeString(user) + " = ? WHERE id = ?");
 			ps.setString(1, chosenAnswer);
