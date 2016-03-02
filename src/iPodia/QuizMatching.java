@@ -6,16 +6,6 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 public class QuizMatching {
-	
-	private static HashMap<String, ArrayList<Integer>> studentScoresForEachTopic_;
-	public static HashMap<String, ArrayList<Integer>> getStudentScoresForEachTopic() {
-		return studentScoresForEachTopic_;
-	}
-	
-	public static void setStudentScoresForeEachTopic (HashMap<String, ArrayList<Integer>> studentScoresForEachTopic) {
-		studentScoresForEachTopic_ = studentScoresForEachTopic;
-	}
-	
 	public static LinkedList<HashSet<String>> match(String classId, String week) {
 		LinkedList<LinkedList<String>> allSortedLists = new LinkedList<LinkedList<String>>(); 
 		ArrayList<Double> listOfAverageScores = new ArrayList<Double>();
@@ -23,7 +13,7 @@ public class QuizMatching {
 
 		String [] topicNums = {"1", "2", "3", "4"};	
 		for (int i = 0; i < 4; ++i) {
-			LinkedList<HashMap.Entry<String,Integer>> sortedListForTopic = Defaults.buildSortedList(classId, "Week" + week + "Topic" + topicNums[i]);
+			LinkedList<HashMap.Entry<String, Integer>> sortedListForTopic = Defaults.buildSortedList(classId, "Week" + week + "Topic" + topicNums[i]);
 			LinkedList<String> sortedListForTopicKeys = new LinkedList<String>();
 
 			for (HashMap.Entry<String, Integer> student : sortedListForTopic) {
@@ -36,8 +26,7 @@ public class QuizMatching {
 				studentScoreList.add(student.getValue());
 				studentScoresForEachTopic.put(email, studentScoreList);
 			}
-			
-			setStudentScoresForeEachTopic(studentScoresForEachTopic);
+
 			// once you have the studentScores for each topic, this can serve as a look up table, so now you just need their email
 			// as a key instead of a Map.Entry<String,Integer>
 			allSortedLists.add(sortedListForTopicKeys);

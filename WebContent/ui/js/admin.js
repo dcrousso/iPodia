@@ -105,7 +105,6 @@
 	
 	
 	document.querySelector("button.view-student-scores").addEventListener("click", function() {
-		var type = this.classList.contains("in-class") ? "inClassMatching" : "beforeClassMatching";
 		var xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function() {
 			if (xhr.readyState != 4 || xhr.status != 200)
@@ -113,19 +112,21 @@
 
 			var matches = "";
 			var response = JSON.parse(xhr.responseText);
-			console.log(response);
 			for (var i = 0; i < response.length; ++i) {
-				for (var key in response[i])
-					matches += "\n" + key + " - ";
+				for (var key in response[i]) {
+					matches += "\n" + key + " - " + response[i][key].name;
+					matches += "\n\t" + "Topic1 : " + response[i][key].topic1;
+					matches += "\n\t" + "Topic2 : " + response[i][key].topic2;
+					matches += "\n\t" + "Topic3 : " + response[i][key].topic3;
+					matches += "\n\t" + "Topic4 : " + response[i][key].topic4;
+				}
 			}
 
 			alert("Students Scores are: " + matches);
 		};
-		xhr.open("POST", "/iPodia/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
+		xhr.open("POST", "/iPodia/admin/analytics?id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
 	});
-	
-	
 
 	var inClassQuestions = document.querySelector(".in-class-questions");
 	document.querySelector("button.add-in-class-question").addEventListener("click", function() {

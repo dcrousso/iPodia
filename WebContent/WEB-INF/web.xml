@@ -120,6 +120,15 @@
 	</servlet-mapping>
 
 	<servlet>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<servlet-class>iPodia.AnalyticsServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>AnalyticsServlet</servlet-name>
+		<url-pattern>/admin/analytics</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
 		<servlet-name>student-extension</servlet-name>
 		<jsp-file>/student/index.jsp</jsp-file>
 	</servlet>
