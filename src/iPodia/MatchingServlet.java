@@ -46,10 +46,13 @@ public class MatchingServlet extends HttpServlet {
 		}
 
 		LinkedList<HashSet<String>> groups = null;
-		if (type.equals(Defaults.inClassMatching))
+		if (type.equals(Defaults.inClassMatching)) {
 			groups = InClassMatching.match(classId, week);
-		else if (type.equals(Defaults.beforeClassMatching))
+		}	
+		else if (type.equals(Defaults.beforeClassMatching)) {
 			groups = QuizMatching.match(classId, week);
+			Defaults.storeGroupsInDb(groups, classId, week);
+		}	
 		else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;

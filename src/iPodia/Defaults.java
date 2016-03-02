@@ -238,4 +238,33 @@ public class Defaults {
 		}
 		return url;
 	}
+	
+	public static void storeGroupsInDb (LinkedList<HashSet<String>> groups, String classId, String week) {	
+		try {
+			Class.forName(dbDriver);
+			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
+			
+			for (int i = 0; i < groups.size(); i++) {
+				HashSet<String> group = groups.get(i);
+				int groupNum = i + 1;
+				for (String email : group) {
+					
+					String safeEmail = email.replace(beforeMatching, "");
+					PreparedStatement ps = dbConnection.prepareStatement("UPDATE class_" + classId + "_matching SET " + safeEmail + " = ? WHERE id = ?");
+					ps.setString(1, Integer.toString(groupNum));
+					ps.setString(2, "Week" + week);
+	
+					ps.executeUpdate();
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		}
+		
+		
+		
+		
+	}
 }
