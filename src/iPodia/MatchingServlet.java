@@ -1,6 +1,7 @@
 package iPodia;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -46,12 +47,14 @@ public class MatchingServlet extends HttpServlet {
 		}
 
 		LinkedList<HashSet<String>> groups = null;
+		HashMap<String, ArrayList<Integer>> studentScoresForEachTopic = null;
 		if (type.equals(Defaults.inClassMatching)) {
 			groups = InClassMatching.match(classId, week);
 		}	
 		else if (type.equals(Defaults.beforeClassMatching)) {
 			groups = QuizMatching.match(classId, week);
 			Defaults.storeGroupsInDb(groups, classId, week);
+			studentScoresForEachTopic = QuizMatching.getStudentScoresForEachTopic();
 		}	
 		else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -62,9 +65,11 @@ public class MatchingServlet extends HttpServlet {
 		for (HashSet<String> group : groups) {
 			JsonObjectBuilder info = Json.createObjectBuilder();
 			for (String entry : group) {
+				
 				User u = students.get(entry.replace(Defaults.beforeMatching, ""));
 				if (u != null)
 					info.add(u.getEmail(), u.getName());
+				
 			}
 			result.add(info);
 		}

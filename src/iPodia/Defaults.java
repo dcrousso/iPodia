@@ -262,9 +262,5 @@ public class Defaults {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		
-		
-		
-		
 	}
 }
