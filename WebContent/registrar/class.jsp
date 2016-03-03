@@ -111,13 +111,13 @@ if (teachersToEnroll != null || studentsToEnroll != null) {
 			<form method="post">
 				<section id="teachers">
 <% for (User teacher : enrolled) { if (teacher.isAdmin()) { %>
-					<input type="text" name="teacher" value="<%= teacher.getEmail() %>">
+					<input type="email" name="teacher" value="<%= teacher.getEmail() %>">
 <% } } %>
 					<button type="button">Add Teacher</button>
 				</section>
 				<section id="students">
 <% for (User student : enrolled) { if (student.isStudent()) { %>
-					<input type="text" name="teacher" value="<%= student.getEmail() %>">
+					<input type="email" name="teacher" value="<%= student.getEmail() %>">
 <% } } %>
 					<button type="button">Add Student</button>
 				</section>
