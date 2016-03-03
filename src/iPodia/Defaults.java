@@ -151,8 +151,8 @@ public class Defaults {
 		return students;
 	}
 
-	public static HashMap<Integer, HashSet<String>> getStudentGroups(String classId, String week) {
-		if (isEmpty(classId) || isEmpty(week))
+	public static HashMap<Integer, HashSet<String>> getStudentGroups(String classId, String weekId) {
+		if (isEmpty(classId) || isEmpty(weekId))
 			return null;
 
 		try {
@@ -160,7 +160,7 @@ public class Defaults {
 			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
 
 			PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + "_matching WHERE id = ?");
-			ps.setString(1, "Week" + week);
+			ps.setString(1, weekId);
 			ResultSet results = ps.executeQuery();
 
 			HashSet<String> listOfStudents = getEmailsFromResultSet(results);

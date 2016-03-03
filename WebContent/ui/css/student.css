@@ -16,6 +16,17 @@ main > section.open > h4 > .chevron {
 	top: 20%;
 }
 
+main > section > p {
+	margin-left: 10px;
+	font-size: 75%;
+}
+
+
+main > section > p > a {
+	margin-left: 5px;
+	font-size: 90%;
+}
+
 main > section > form {
 	display: none;
 }

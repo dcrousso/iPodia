@@ -2,6 +2,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.QuizQuestion" %>
 <%@ include file="/WEB-INF/Database.jsp" %>
@@ -52,6 +53,20 @@ while (results.next()) {
 
 	questions.add(question);
 	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
+}
+HashMap<String, User> allStudents = Defaults.getStudentsBySafeEmailForClass(classId);
+HashMap<String, HashSet<User>> members = new HashMap<String, HashSet<User>>();
+for (HashMap.Entry<String, String> entry : groups.entrySet()) {
+	HashMap<Integer, HashSet<String>> matched = Defaults.getStudentGroups(classId, entry.getKey());
+	if (matched == null)
+		continue;
+
+	HashSet<User> emails = new HashSet<User>();
+	for (String email : matched.get(Integer.parseInt(entry.getValue())))
+		emails.add(allStudents.get(email));
+
+	if (!emails.isEmpty())
+		members.put(entry.getKey(), emails);
 }
 Collections.sort(questions);
 %>
@@ -104,6 +119,14 @@ Collections.sort(questions);
 				</ul>
 <% if (groups.containsKey(question.getWeekId())) { String chatId = Defaults.chatURL + Defaults.urlEncode(className) + "/" + question.getWeekId() + "/" + groups.get(question.getWeekId()); %>
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
+<% if (members.containsKey(question.getWeekId())) { %>
+				<p>
+					Teammates:
+<% int count = 0; for (User teammate : members.get(question.getWeekId())) { %>
+					<a href="mailto:<%= teammate.getEmail() %>?subject=<%= Defaults.urlEncode("iPodia " + className + " Week " + question.getWeekNumber()) %>" title="Email <%= teammate.getName() %>" target="_blank"><%= teammate.getName() %></a><%= (count < members.get(question.getWeekId()).size() - 1 ? ", " : "") %>
+<% ++count; } %>
+				</p>
+<% } %>
 <% } %>
 <% } %>
 <% if (question.getWeekId().equals(questions.get(0).getWeekId())) { %>

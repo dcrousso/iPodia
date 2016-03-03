@@ -38,7 +38,7 @@ public class AnalyticsServlet extends HttpServlet {
 			return;
 		}
 
-		HashMap<Integer, HashSet<String>> groups = Defaults.getStudentGroups(classId, week);
+		HashMap<Integer, HashSet<String>> groups = Defaults.getStudentGroups(classId, "Week" + week);
 		if (groups.isEmpty()) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
