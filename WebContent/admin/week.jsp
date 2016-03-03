@@ -69,6 +69,7 @@ boolean hasAllTopics = Defaults.contains(existing, question -> question.getTopic
 				<button class="add-in-class-question">Add In-Class Question</button>
 				<button class="view-student-scores">View Student Scores</button>
 			</div>
+			<section class="results" hidden></section>
 			<form class="in-class-questions" method="post"<%= (!hasInClass ? " hidden" : "") %>>
 				<input type="text" name="id" value="${param.id}" hidden>
 				<input type="text" name="num" value="${param.num}" hidden>

@@ -1,6 +1,8 @@
 (function() {
 	"use strict";
 
+	var resultSection = document.querySelector("section.results");
+
 	function addFileUpload(event) {
 		if (this.nextElementSibling) {
 			if (!this.value)
@@ -82,6 +84,33 @@
 		item.addEventListener("click", addQuestion);
 	});
 
+	function createResponseTable(json, headerItems, createRow) {
+		resultSection.textContent = "";
+
+		var title = resultSection.appendChild(document.createElement("h4"));
+		title.textContent = "Data";
+
+		var table = resultSection.appendChild(document.createElement("table"));
+
+		var headerRow = table.appendChild(document.createElement("tr"));
+
+		for (var i = 0; i < headerItems.length; ++i) {
+			var headerItem = headerRow.appendChild(document.createElement("th"));
+			headerItem.textContent = headerItems[i];
+		}
+
+		for (var i = 0; i < json.length; ++i)
+			createRow.call(table, json[i], i);
+
+		var button = resultSection.appendChild(document.createElement("button"));
+		button.textContent = "Dismiss";
+		button.addEventListener("click", function(event) {
+			resultSection.hidden = true;
+		});
+
+		resultSection.hidden = false;
+	}
+
 	document.querySelector("button.match").addEventListener("click", function() {
 		var type = this.classList.contains("in-class") ? "inClassMatching" : "beforeClassMatching";
 		var xhr = new XMLHttpRequest();
@@ -89,15 +118,27 @@
 			if (xhr.readyState != 4 || xhr.status != 200)
 				return;
 
-			var matches = "";
 			var response = JSON.parse(xhr.responseText);
-			for (var i = 0; i < response.length; ++i) {
-				matches += "\n";
-				for (var key in response[i])
-					matches += "\n" + response[i][key] + "  -  " + key;
+			if (!resultSection) {
+				console.log(response);
+				alert("Error!  Missing result section!\nOpen console to see data.");
+				return;
 			}
 
-			alert("Students have been matched" + matches);
+			createResponseTable(response, ["Group", "Email", "Name"], function(item, index) {
+				for (var key in item) {
+					var row = this.appendChild(document.createElement("tr"));
+
+					var groupNumber = row.appendChild(document.createElement("td"));
+					groupNumber.textContent = index;
+
+					var email = row.appendChild(document.createElement("td"));
+					email.textContent = key;
+
+					var name = row.appendChild(document.createElement("td"));
+					name.textContent = item[key];
+				}
+			});
 		};
 		xhr.open("POST", "/iPodia/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
@@ -110,19 +151,39 @@
 			if (xhr.readyState != 4 || xhr.status != 200)
 				return;
 
-			var matches = "";
 			var response = JSON.parse(xhr.responseText);
-			for (var i = 0; i < response.length; ++i) {
-				for (var key in response[i]) {
-					matches += "\n" + key + " - " + response[i][key].name;
-					matches += "\n\t" + "Topic1 : " + response[i][key].topic1;
-					matches += "\n\t" + "Topic2 : " + response[i][key].topic2;
-					matches += "\n\t" + "Topic3 : " + response[i][key].topic3;
-					matches += "\n\t" + "Topic4 : " + response[i][key].topic4;
-				}
+			if (!resultSection) {
+				console.log(response);
+				alert("Error!  Missing result section!\nOpen console to see data.");
+				return;
 			}
 
-			alert("Students Scores are: " + matches);
+			createResponseTable(response, ["Group", "Email", "Name", "Topic 1", "Topic 2", "Topic 3", "Topic 4"], function(item, index) {
+				for (var key in item) {
+					var row = this.appendChild(document.createElement("tr"));
+
+					var groupNumber = row.appendChild(document.createElement("td"));
+					groupNumber.textContent = index;
+
+					var email = row.appendChild(document.createElement("td"));
+					email.textContent = key;
+
+					var name = row.appendChild(document.createElement("td"));
+					name.textContent = item[key].name;
+
+					var topic1 = row.appendChild(document.createElement("td"));
+					topic1.textContent = item[key].topic1;
+
+					var topic2 = row.appendChild(document.createElement("td"));
+					topic2.textContent = item[key].topic2;
+
+					var topic3 = row.appendChild(document.createElement("td"));
+					topic3.textContent = item[key].topic3;
+
+					var topic4 = row.appendChild(document.createElement("td"));
+					topic4.textContent = item[key].topic4;
+				}
+			});
 		};
 		xhr.open("POST", "/iPodia/admin/analytics?id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();

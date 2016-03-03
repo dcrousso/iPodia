@@ -33,3 +33,13 @@ main > form > section > .item > .correct > label {
 main > form > section > .item > .correct > label:first-child {
 	margin-left: 0;
 }
+
+main > .results > table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+main > .results > table * {
+	text-align: center;
+	border: 1px solid black;
+}
