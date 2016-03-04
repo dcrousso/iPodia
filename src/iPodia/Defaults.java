@@ -73,7 +73,6 @@ public class Defaults {
 				}
 			}
 		}
-		closeDBConnection();
 	}
 
 	public static final String inClassMatching = "inClassMatching";
