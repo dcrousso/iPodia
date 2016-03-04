@@ -71,7 +71,6 @@ public class FileUploadServlet extends HttpServlet {
 					QuizQuestion.processRequestItem(questionMap, name, value);
 			}
 		} catch (FileUploadException e) {
-			throw new ServletException(e);
 		}
 
 		if (Defaults.isEmpty(classId) || Defaults.isEmpty(week)) {
@@ -101,7 +100,6 @@ public class FileUploadServlet extends HttpServlet {
 			try {
 				item.write(Defaults.createFileIfNotExists(filePath));
 			} catch (Exception e) {
-				throw new ServletException(e);
 			}
 		}
 

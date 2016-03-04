@@ -1,5 +1,5 @@
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="iPodia.Defaults" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isRegistrar()) {
@@ -13,7 +13,7 @@ String firstName = request.getParameter("firstName");
 String lastName = request.getParameter("lastName");
 String university = request.getParameter("university");
 if (!Defaults.isEmpty(type) && !Defaults.isEmpty(email) && !Defaults.isEmpty(firstName) && !Defaults.isEmpty(lastName) && !Defaults.isEmpty(university)) {
-	PreparedStatement ps = dbConnection.prepareStatement("INSERT INTO users (email, level, firstName, lastName, password, university, classes) VALUES (?, ?, ?, ?, ?, ?, ?)");
+	PreparedStatement ps = Defaults.getDBConnection().prepareStatement("INSERT INTO users (email, level, firstName, lastName, password, university, classes) VALUES (?, ?, ?, ?, ?, ?, ?)");
 	ps.setString(1, email);
 	ps.setString(2, type.toLowerCase());
 	ps.setString(3, firstName);
@@ -22,6 +22,9 @@ if (!Defaults.isEmpty(type) && !Defaults.isEmpty(email) && !Defaults.isEmpty(fir
 	ps.setString(6, university);
 	ps.setString(7, "");
 	ps.executeUpdate();
+
+	ps.close();
+	Defaults.closeDBConnection();
 
 	response.sendRedirect(request.getContextPath() + user.getHome());
 }

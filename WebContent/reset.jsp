@@ -1,7 +1,8 @@
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.MD5Encryption" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated()) {
@@ -14,23 +15,30 @@ String oldPassword = request.getParameter("oldPassword");
 String newPassword = request.getParameter("newPassword");
 if (!Defaults.isEmpty(oldPassword) && !Defaults.isEmpty(newPassword) && newPassword.equals(request.getParameter("confirmPassword"))) {
 	String encryptedPassword = MD5Encryption.encrypt(oldPassword);
-	PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+
+	PreparedStatement ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM users WHERE email = ?");
 	ps.setString(1, user.getEmail());
 	ResultSet results = ps.executeQuery();
 	while (results.next()) {
 		if (!encryptedPassword.equals(results.getString("password")))
 			continue;
 
-		PreparedStatement updatePassword = dbConnection.prepareStatement("UPDATE users SET password = ? WHERE email = ?");
+		PreparedStatement updatePassword = Defaults.getDBConnection().prepareStatement("UPDATE users SET password = ? WHERE email = ?");
 		updatePassword.setString(1, MD5Encryption.encrypt(newPassword));
 		updatePassword.setString(2, user.getEmail());
 		updatePassword.execute();
 
+		results.close();
 		ps.close();
+		Defaults.closeDBConnection();
+
 		response.sendRedirect(request.getContextPath() + user.getHome());
 		return;
 	}
+
+	results.close();
 	ps.close();
+	Defaults.closeDBConnection();
 
 	// Missing/Not-Matching Password
 	invalidPassword = true;

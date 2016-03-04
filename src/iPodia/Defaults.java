@@ -27,6 +27,55 @@ public class Defaults {
 	public static final String dbUsername = "iPodia";
 	public static final String dbPassword = "iPodia";
 
+	public static Connection dbConnection = null;
+
+	public static void openDBConnection() {
+		if (dbConnection != null)
+			return;
+
+		try {
+			Class.forName(dbDriver);
+			dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
+		} catch (SQLException e) {
+		} catch (ClassNotFoundException e) {
+		}
+	}
+
+	public static void closeDBConnection() {
+		if (dbConnection == null)
+			return;
+
+		try {
+			dbConnection.close();
+			dbConnection = null;
+		} catch (SQLException e) {
+		}
+	}
+
+	public static Connection getDBConnection() {
+		if (dbConnection == null)
+			openDBConnection();
+
+		return dbConnection;
+	}
+
+	public static void execute(String query) {
+		PreparedStatement ps = null;
+		try {
+			ps = getDBConnection().prepareStatement(query);
+			ps.execute();
+		} catch (SQLException e) {
+		} finally {
+			if (ps != null) {
+				try {
+					ps.close();
+				} catch (SQLException e) {
+				}
+			}
+		}
+		closeDBConnection();
+	}
+
 	public static final String inClassMatching = "inClassMatching";
 	public static final String beforeClassMatching = "beforeClassMatching";
 
@@ -101,27 +150,38 @@ public class Defaults {
 		if (isEmpty(classId))
 			return null;
 
+		HashMap<String, User> students = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			Class.forName(dbDriver);
-			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
-			HashMap<String, User> students = new HashMap<String, User>();
-			ResultSet users = dbConnection.prepareStatement("SELECT * FROM users").executeQuery();
-			while (users.next()) {
-				String classes = users.getString("classes");
+			students = new HashMap<String, User>();
+			ps = getDBConnection().prepareStatement("SELECT * FROM users");
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				String classes = rs.getString("classes");
 				if (!isEmpty(classes) && !classes.contains(classId))
 					continue;
 
-				User u = new User(users);
+				User u = new User(rs);
 				if (u.isStudent())
 					students.put(u.getSafeEmail(), u);
 			}
 
-			return students;
+			rs.close();
+			ps.close();
 		} catch (SQLException e) {
-		} catch (ClassNotFoundException e) {
+		} finally {
+			try {
+				if (rs != null && !rs.isClosed())
+					rs.close();
+
+				if (ps != null && !ps.isClosed())
+					ps.close();
+			} catch (SQLException e) {
+			}
 		}
-		return null;
+		closeDBConnection();
+		return students;
 	}
 
 	public static HashSet<String> getEmailsFromResultSet(ResultSet rs) {
@@ -155,19 +215,19 @@ public class Defaults {
 		if (isEmpty(classId) || isEmpty(weekId))
 			return null;
 
+		HashMap<Integer, HashSet<String>> groups = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			Class.forName(dbDriver);
-			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
-			PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + "_matching WHERE id = ?");
+			ps = getDBConnection().prepareStatement("SELECT * FROM class_" + classId + "_matching WHERE id = ?");
 			ps.setString(1, weekId);
-			ResultSet results = ps.executeQuery();
+			rs = ps.executeQuery();
 
-			HashSet<String> listOfStudents = getEmailsFromResultSet(results);
-			HashMap<Integer, HashSet<String>> groups = new HashMap<Integer, HashSet<String>>();
-			while (results.next()) {
+			HashSet<String> listOfStudents = getEmailsFromResultSet(rs);
+			groups = new HashMap<Integer, HashSet<String>>();
+			while (rs.next()) {
 				for (String email : listOfStudents) {
-					String group = results.getString(email);
+					String group = rs.getString(email);
 					if (isEmpty(group))
 						continue;
 
@@ -179,46 +239,66 @@ public class Defaults {
 				}
 			}
 
-			return groups;
+			rs.close();
+			ps.close();
 		} catch (SQLException e) {
-		} catch (ClassNotFoundException e) {
+		} finally {
+			try {
+				if (rs != null && !rs.isClosed())
+					rs.close();
+
+				if (ps != null && !ps.isClosed())
+					ps.close();
+			} catch (SQLException e) {
+			}
 		}
-		return null;
+		closeDBConnection();
+		return groups;
 	}
 
 	public static HashMap<String, Integer> getStudentScores(String classId, String questionId) {
 		if (isEmpty(classId) || isEmpty(questionId))
 			return null;
 
+		HashMap<String, Integer> map = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			Class.forName(dbDriver);
-			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
-			PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
+			ps = getDBConnection().prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
 			ps.setString(1, questionId + "%");
-			ResultSet results = ps.executeQuery();
+			rs = ps.executeQuery();
 
-			HashSet<String> listOfStudents = getEmailsFromResultSet(results);
-			HashMap<String, Integer> map = new HashMap<String, Integer>();
-			while (results.next()) {
-				String correctAnswer = results.getString("correctAnswer");
+			HashSet<String> listOfStudents = getEmailsFromResultSet(rs);
+			map = new HashMap<String, Integer>();
+			while (rs.next()) {
+				String correctAnswer = rs.getString("correctAnswer");
 				for (String email : listOfStudents) {
 					String safeEmail = email.replace(beforeMatching, "");
 					// initialize the user's email in the map with a score of 0
 					if (!map.containsKey(safeEmail))
 						map.put(safeEmail, 0);
 
-					String studentAnswer = results.getString(email);
+					String studentAnswer = rs.getString(email);
 					if (!isEmpty(studentAnswer) && studentAnswer.equals(correctAnswer))
 						map.put(safeEmail, map.get(safeEmail) + 1);
 				}
 			}
 
-			return map;
+			rs.close();
+			ps.close();
 		} catch (SQLException e) {
-		} catch (ClassNotFoundException e) {
+		} finally {
+			try {
+				if (rs != null && !rs.isClosed())
+					rs.close();
+
+				if (ps != null && !ps.isClosed())
+					ps.close();
+			} catch (SQLException e) {
+			}
 		}
-		return null;
+		closeDBConnection();
+		return map;
 	}
 
 	public static LinkedList<HashMap.Entry<String, Integer>> buildSortedList(String classId, String questionId) {
@@ -255,47 +335,63 @@ public class Defaults {
 		if (isEmpty(classId) || isEmpty(week))
 			return null;
 
+		HashSet<QuizQuestion> results = null;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
 		try {
-			Class.forName(dbDriver);
-			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
-			HashSet<QuizQuestion> results = new HashSet<QuizQuestion>();
-			PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
+			ps = getDBConnection().prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
 			ps.setString(1, "Week" + week + "Topic%");
-			ResultSet questions = ps.executeQuery();
-			while (questions.next()) {
-				QuizQuestion q = new QuizQuestion(questions);
+			rs = ps.executeQuery();
+
+			results = new HashSet<QuizQuestion>();
+			while (rs.next()) {
+				QuizQuestion q = new QuizQuestion(rs);
 				if (q.isValid())
 					results.add(q);
 			}
 
-			return results;
+			rs.close();
+			ps.close();
 		} catch (SQLException e) {
-		} catch (ClassNotFoundException e) {
+		} finally {
+			try {
+				if (rs != null && !rs.isClosed())
+					rs.close();
+
+				if (ps != null && !ps.isClosed())
+					ps.close();
+			} catch (SQLException e) {
+			}
 		}
-		return null;
+		closeDBConnection();
+		return results;
 	}
 
 	public static void saveGroupNumbers(LinkedList<HashSet<String>> groups, String classId, String week) {
 		if (isEmpty(classId) || isEmpty(week))
 			return;
 
+		PreparedStatement ps = null;
 		try {
-			Class.forName(dbDriver);
-			final Connection dbConnection = DriverManager.getConnection(dbURL, dbUsername, dbPassword);
-
 			for (int i = 0; i < groups.size(); ++i) {
 				for (String email : groups.get(i)) {
 					String safeEmail = email.replace(beforeMatching, "").replace(afterMatching, "");
-					PreparedStatement ps = dbConnection.prepareStatement("UPDATE class_" + classId + "_matching SET " + safeEmail + " = ? WHERE id = ?");
+					ps = getDBConnection().prepareStatement("UPDATE class_" + classId + "_matching SET " + safeEmail + " = ? WHERE id = ?");
 					ps.setString(1, Integer.toString(i + 1));
 					ps.setString(2, "Week" + week);
 					ps.executeUpdate();
+					ps.close();
 				}
 			}
 		} catch (SQLException e) {
-		} catch (ClassNotFoundException e) {
+		} finally {
+			try {
+				if (ps != null && !ps.isClosed())
+					ps.close();
+			} catch (SQLException e) {
+			}
 		}
+		closeDBConnection();
 	}
 
 	public static String urlEncode(String url) {

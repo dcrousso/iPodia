@@ -1,6 +1,7 @@
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="iPodia.Defaults" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isRegistrar()) {
@@ -12,12 +13,12 @@ String newClass = request.getParameter("newClass");
 if (!Defaults.isEmpty(newClass)) {
 	PreparedStatement ps;
 
-	String query = "INSERT into classListing (name) values (?)";
-	ps = dbConnection.prepareStatement(query);
+	ps = Defaults.getDBConnection().prepareStatement("INSERT into classListing (name) values (?)");
 	ps.setString(1, newClass);
 	ps.executeUpdate();
+	ps.close();
 
-	ps = dbConnection.prepareStatement("SELECT * FROM classListing WHERE name = ?");
+	ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM classListing WHERE name = ?");
 	ps.setString(1, newClass);
 	ResultSet classes = ps.executeQuery();
 	while (classes.next()) {
@@ -26,7 +27,7 @@ if (!Defaults.isEmpty(newClass)) {
 
 		int newClassId = classes.getInt("id");
 		user.addClass(newClassId, newClass);
-		dbConnection.prepareStatement("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId
+		Defaults.execute("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId
 			+ " ("
 				+ "id varchar(255),"
 				+ "question varchar(255),"
@@ -39,18 +40,25 @@ if (!Defaults.isEmpty(newClass)) {
 				+ "topic varchar(255),"
 				+ "PRIMARY KEY (id)"
 			+ ");"
-		).execute();
+		);
 
-		dbConnection.prepareStatement("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId + "_matching"
+		Defaults.execute("CREATE TABLE IF NOT EXISTS " + "class_" + newClassId + "_matching"
 			+ " ("
 				+ "id varchar(255),"
 				+ "PRIMARY KEY (id)"
 			+ ");"
-		).execute();
+		);
+
+		classes.close();
+		ps.close();
 
 		response.sendRedirect(request.getContextPath() + "/registrar/class?id=" + newClassId);
 		return;
 	}
+
+	classes.close();
+	ps.close();
+	Defaults.closeDBConnection();
 }
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">

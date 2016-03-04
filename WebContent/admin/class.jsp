@@ -1,7 +1,8 @@
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.regex.Matcher" %>
 <%@ page import="iPodia.Defaults" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isAdmin()) {
@@ -22,7 +23,8 @@ if (Defaults.isEmpty(className)) {
 }
 
 int numWeeks = 0;
-ResultSet rs = dbConnection.prepareStatement("SELECt * FROM class_" + classId).executeQuery();
+PreparedStatement ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM class_" + classId);
+ResultSet rs = ps.executeQuery();
 while (rs.next()) {
 	String id = rs.getString("id");
 	Matcher m = Defaults.WEEK_PATTERN.matcher(id);
@@ -31,6 +33,10 @@ while (rs.next()) {
 		numWeeks = Math.max(numWeeks, Integer.valueOf(m.group(2)));
 	}
 }
+
+rs.close();
+ps.close();
+Defaults.closeDBConnection();
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="admin"/>

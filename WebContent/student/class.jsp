@@ -1,11 +1,12 @@
 <%@ page import="java.io.File" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.HashMap" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.QuizQuestion" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isStudent()) {
@@ -28,21 +29,25 @@ if (Defaults.isEmpty(className)) {
 ArrayList<QuizQuestion> questions = new ArrayList<QuizQuestion>();
 HashMap<String, String> existing = new HashMap<String, String>();
 HashMap<String, String> groups = new HashMap<String, String>();
-ResultSet results = dbConnection.prepareStatement("SELECT * FROM class_" + classId).executeQuery();
+
+PreparedStatement ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM class_" + classId);
+ResultSet results = ps.executeQuery();
 while (results.next()) {
 	QuizQuestion question = new QuizQuestion(results);
 	if (!question.isValid() || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.beforeMatching) || !Defaults.columnExists(results, user.getSafeEmail() + Defaults.afterMatching))
 		continue;
 
 	if (!groups.containsKey(question.getWeekId())) {
-		PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + "_matching where id = ?");
-		ps.setString(1, question.getWeekId());
-		ResultSet matches = ps.executeQuery();
+		PreparedStatement getMatch = Defaults.getDBConnection().prepareStatement("SELECT * FROM class_" + classId + "_matching where id = ?");
+		getMatch.setString(1, question.getWeekId());
+		ResultSet matches = getMatch.executeQuery();
 		while (matches.next() && Defaults.columnExists(matches, user.getSafeEmail())) {
 			String groupId = matches.getString(user.getSafeEmail());
 			if (!Defaults.isEmpty(groupId))
 				groups.put(question.getWeekId(), groupId);
 		}
+		matches.close();
+		getMatch.close();
 	}
 
 	String userAnswer = null;
@@ -54,6 +59,7 @@ while (results.next()) {
 	questions.add(question);
 	existing.put(question.getId(), Defaults.isEmpty(userAnswer) ? "" : userAnswer);
 }
+
 HashMap<String, User> allStudents = Defaults.getStudentsBySafeEmailForClass(classId);
 HashMap<String, HashSet<User>> members = new HashMap<String, HashSet<User>>();
 for (HashMap.Entry<String, String> entry : groups.entrySet()) {
@@ -69,6 +75,10 @@ for (HashMap.Entry<String, String> entry : groups.entrySet()) {
 		members.put(entry.getKey(), emails);
 }
 Collections.sort(questions);
+
+results.close();
+ps.close();
+Defaults.closeDBConnection();
 %>
 <jsp:include page="/WEB-INF/templates/head.jsp">
 	<jsp:param name="pagetype" value="student"/>

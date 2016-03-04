@@ -1,7 +1,8 @@
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.HashSet" %>
 <%@ page import="iPodia.Defaults" %>
 <%@ page import="iPodia.MD5Encryption" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
 <%
 if (user.isAuthenticated()) {
@@ -14,7 +15,7 @@ String email = request.getParameter("email");
 String password = request.getParameter("password");
 if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 	String encryptedPassword = MD5Encryption.encrypt(password);
-	PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM users WHERE email = ?");
+	PreparedStatement ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM users WHERE email = ?");
 	ps.setString(1, email);
 	ResultSet results = ps.executeQuery();
 	while (results.next()) {
@@ -23,18 +24,29 @@ if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 
 		user.initializeFromResultSet(results);
 		HashSet<String> classes = Defaults.arrayToHashSet(results.getString("classes").split(Defaults.CSV_REGEXP));
-		results = dbConnection.prepareStatement("SELECT * FROM classListing").executeQuery();
+
+		results.close();
+		ps.close();
+
+		ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM classListing");
+		results = ps.executeQuery();
 		while (results.next()) {
 			String classId = results.getString("id");
 			if (user.isRegistrar() || classes.contains(classId))
 				user.addClass(classId, results.getString("name"));
 		}
 
+		results.close();
 		ps.close();
+		Defaults.closeDBConnection();
+
 		response.sendRedirect(request.getContextPath() + user.getHome());
 		return;
 	}
+
+	results.close();
 	ps.close();
+	Defaults.closeDBConnection();
 
 	// User not found
 	invalidCredentials = true;

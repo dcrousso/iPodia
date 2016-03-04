@@ -1,4 +1,6 @@
 <%@ page import="java.io.File" %>
+<%@ page import="java.sql.ResultSet" %>
+<%@ page import="java.sql.PreparedStatement" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.Collections" %>
 <%@ page import="java.util.HashMap" %>
@@ -7,7 +9,6 @@
 <%@ page import="iPodia.ProcessForm" %>
 <%@ page import="iPodia.QuizQuestion" %>
 <%@ include file="/WEB-INF/Session.jsp" %>
-<%@ include file="/WEB-INF/Database.jsp" %>
 <%
 if (!user.isAuthenticated() || !user.isAdmin()) {
 	response.sendRedirect(request.getContextPath() + "/");
@@ -41,11 +42,15 @@ if (request.getMethod().equals("POST")) {
 }
 
 ArrayList<QuizQuestion> existing = new ArrayList<QuizQuestion>();
-PreparedStatement ps = dbConnection.prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
+PreparedStatement ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM class_" + classId + " WHERE id LIKE ?");
 ps.setString(1, "Week" + week + "%");
 ResultSet results = ps.executeQuery();
 while (results.next())
 	existing.add(new QuizQuestion(results));
+
+results.close();
+ps.close();
+Defaults.closeDBConnection();
 
 Collections.sort(existing);
 boolean hasInClass = Defaults.contains(existing, question -> question.isInClass());
