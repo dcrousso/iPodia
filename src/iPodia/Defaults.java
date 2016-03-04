@@ -75,9 +75,6 @@ public class Defaults {
 		}
 	}
 
-	public static final String inClassMatching = "inClassMatching";
-	public static final String beforeClassMatching = "beforeClassMatching";
-
 	public static final String beforeMatching = "__before";
 	public static final String afterMatching = "__after";
 	public static final String chatURL = "https://appear.in/iPodia/";
@@ -183,29 +180,13 @@ public class Defaults {
 		return students;
 	}
 
-	public static HashSet<String> getEmailsFromResultSet(ResultSet rs) {
+	public static HashSet<String> getEmailsFromResultSet(ResultSet rs, Predicate<String> callback) throws SQLException {
 		HashSet<String> students = new HashSet<String>();
-		try {
-			ResultSetMetaData rsmd = rs.getMetaData();
-			for (int i = 1; i <= rsmd.getColumnCount(); ++i) { // SQL columns start at index 1
-				String name = rsmd.getColumnName(i);
-				if (name.equals("id")
-				 || name.equals("question")
-				 || name.equals("answerA")
-				 || name.equals("answerB")
-				 || name.equals("answerC")
-				 || name.equals("answerD")
-				 || name.equals("answerE")
-				 || name.equals("correctAnswer")
-				 || name.equals("dueDate")
-				 || name.equals("topic")
-				 || name.contains(afterMatching) // only match based on answer before matching
-				) {
-					continue;
-				}
+		ResultSetMetaData rsmd = rs.getMetaData();
+		for (int i = 1; i <= rsmd.getColumnCount(); ++i) { // SQL columns start at index 1
+			String name = rsmd.getColumnName(i);
+			if (callback.test(name))
 				students.add(name);
-			}
-		} catch (SQLException e) {
 		}
 		return students;
 	}
@@ -222,7 +203,7 @@ public class Defaults {
 			ps.setString(1, weekId);
 			rs = ps.executeQuery();
 
-			HashSet<String> listOfStudents = getEmailsFromResultSet(rs);
+			HashSet<String> listOfStudents = getEmailsFromResultSet(rs, item -> !item.equals("id"));
 			groups = new HashMap<Integer, HashSet<String>>();
 			while (rs.next()) {
 				for (String email : listOfStudents) {
@@ -234,7 +215,7 @@ public class Defaults {
 					if (!groups.containsKey(i))
 						groups.put(i, new HashSet<String>());
 
-					groups.get(i).add(email.replace(beforeMatching, ""));
+					groups.get(i).add(email.replace(beforeMatching, "").replace(afterMatching, ""));
 				}
 			}
 
@@ -255,7 +236,7 @@ public class Defaults {
 		return groups;
 	}
 
-	public static HashMap<String, Integer> getStudentScores(String classId, String questionId) {
+	public static HashMap<String, Integer> getStudentScores(String classId, String questionId, String type) {
 		if (isEmpty(classId) || isEmpty(questionId))
 			return null;
 
@@ -267,12 +248,12 @@ public class Defaults {
 			ps.setString(1, questionId + "%");
 			rs = ps.executeQuery();
 
-			HashSet<String> listOfStudents = getEmailsFromResultSet(rs);
+			HashSet<String> listOfStudents = getEmailsFromResultSet(rs, item -> item.contains(type));
 			map = new HashMap<String, Integer>();
 			while (rs.next()) {
 				String correctAnswer = rs.getString("correctAnswer");
 				for (String email : listOfStudents) {
-					String safeEmail = email.replace(beforeMatching, "");
+					String safeEmail = email.replace(beforeMatching, "").replace(afterMatching, "");
 					// initialize the user's email in the map with a score of 0
 					if (!map.containsKey(safeEmail))
 						map.put(safeEmail, 0);
@@ -301,7 +282,7 @@ public class Defaults {
 	}
 
 	public static LinkedList<HashMap.Entry<String, Integer>> buildSortedList(String classId, String questionId) {
-		HashMap<String, Integer> scores = getStudentScores(classId, questionId);
+		HashMap<String, Integer> scores = getStudentScores(classId, questionId, beforeMatching);
 		if (scores == null)
 			return null;
 

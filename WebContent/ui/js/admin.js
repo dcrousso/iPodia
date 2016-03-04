@@ -158,7 +158,7 @@
 				return;
 			}
 
-			createResponseTable(response, ["Group", "Email", "Name", "1", "2", "3", "4"], function(item, index) {
+			createResponseTable(response, ["Group", "Email", "Name", "1b", "1a", "2b", "2a", "3b", "3a", "4b", "4a"], function(item, index) {
 				for (var key in item) {
 					var row = this.appendChild(document.createElement("tr"));
 
@@ -171,17 +171,29 @@
 					var name = row.appendChild(document.createElement("td"));
 					name.textContent = item[key].name;
 
-					var topic1 = row.appendChild(document.createElement("td"));
-					topic1.textContent = item[key].topic1;
+					var topic1Before = row.appendChild(document.createElement("td"));
+					topic1Before.textContent = item[key].topic1.before;
 
-					var topic2 = row.appendChild(document.createElement("td"));
-					topic2.textContent = item[key].topic2;
+					var topic2Before = row.appendChild(document.createElement("td"));
+					topic2Before.textContent = item[key].topic2.before;
 
-					var topic3 = row.appendChild(document.createElement("td"));
-					topic3.textContent = item[key].topic3;
+					var topic3Before = row.appendChild(document.createElement("td"));
+					topic3Before.textContent = item[key].topic3.before;
 
-					var topic4 = row.appendChild(document.createElement("td"));
-					topic4.textContent = item[key].topic4;
+					var topic4Before = row.appendChild(document.createElement("td"));
+					topic4Before.textContent = item[key].topic4.before;
+
+					var topic1After = row.appendChild(document.createElement("td"));
+					topic1After.textContent = item[key].topic1.after;
+
+					var topic2After = row.appendChild(document.createElement("td"));
+					topic2After.textContent = item[key].topic2.after;
+
+					var topic3After = row.appendChild(document.createElement("td"));
+					topic3After.textContent = item[key].topic3.after;
+
+					var topic4After = row.appendChild(document.createElement("td"));
+					topic4After.textContent = item[key].topic4.after;
 				}
 			});
 		};

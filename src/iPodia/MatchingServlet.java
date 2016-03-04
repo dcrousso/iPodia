@@ -46,9 +46,9 @@ public class MatchingServlet extends HttpServlet {
 		}
 
 		LinkedList<HashSet<String>> groups = null;
-		if (type.equals(Defaults.inClassMatching))
+		if (type.equals("inClassMatching"))
 			groups = InClassMatching.match(classId, week);
-		else if (type.equals(Defaults.beforeClassMatching)) {
+		else if (type.equals("beforeClassMatching")) {
 			groups = QuizMatching.match(classId, week);
 			Defaults.saveGroupNumbers(groups, classId, week);
 		} else {

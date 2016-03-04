@@ -27,7 +27,7 @@ public class AnalyticsServlet extends HttpServlet {
 		}
 
 		String week = request.getParameter("num");
-		if (Defaults.isEmpty(classId)) {
+		if (Defaults.isEmpty(week)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -39,32 +39,49 @@ public class AnalyticsServlet extends HttpServlet {
 		}
 
 		HashMap<Integer, HashSet<String>> groups = Defaults.getStudentGroups(classId, "Week" + week);
-		if (groups.isEmpty()) {
+		if (groups == null) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
 
-		HashMap<String, Integer> topic1 = Defaults.getStudentScores(classId, "Week" + week + "Topic1%");
-		HashMap<String, Integer> topic2 = Defaults.getStudentScores(classId, "Week" + week + "Topic2%");
-		HashMap<String, Integer> topic3 = Defaults.getStudentScores(classId, "Week" + week + "Topic3%");
-		HashMap<String, Integer> topic4 = Defaults.getStudentScores(classId, "Week" + week + "Topic4%");
+		HashMap<String, Integer> topic1Before = Defaults.getStudentScores(classId, "Week" + week + "Topic1%", Defaults.beforeMatching);
+		HashMap<String, Integer> topic2Before = Defaults.getStudentScores(classId, "Week" + week + "Topic2%", Defaults.beforeMatching);
+		HashMap<String, Integer> topic3Before = Defaults.getStudentScores(classId, "Week" + week + "Topic3%", Defaults.beforeMatching);
+		HashMap<String, Integer> topic4Before = Defaults.getStudentScores(classId, "Week" + week + "Topic4%", Defaults.beforeMatching);
+
+		HashMap<String, Integer> topic1After = Defaults.getStudentScores(classId, "Week" + week + "Topic1%", Defaults.afterMatching);
+		HashMap<String, Integer> topic2After = Defaults.getStudentScores(classId, "Week" + week + "Topic2%", Defaults.afterMatching);
+		HashMap<String, Integer> topic3After = Defaults.getStudentScores(classId, "Week" + week + "Topic3%", Defaults.afterMatching);
+		HashMap<String, Integer> topic4After = Defaults.getStudentScores(classId, "Week" + week + "Topic4%", Defaults.afterMatching);
 
 		JsonArrayBuilder result = Json.createArrayBuilder();
 		for (HashMap.Entry<Integer, HashSet<String>> entry : groups.entrySet()) {
 			JsonObjectBuilder info = Json.createObjectBuilder();
 			for (String student : entry.getValue()) {
-				User u = students.get(student);
-				if (u != null) {
-					info.add(u.getEmail(), Json.createObjectBuilder()
-						.add("name", u.getName())
-						.add("topic1", topic1.get(student))
-						.add("topic2", topic2.get(student))
-						.add("topic3", topic3.get(student))
-						.add("topic4", topic4.get(student))
-					);
-				}
+				if (!students.containsKey(student))
+					continue;
+
+				info.add(students.get(student).getEmail(), Json.createObjectBuilder()
+					.add("name", students.get(student).getName())
+					.add("topic1", Json.createObjectBuilder()
+						.add("before", topic1Before.get(student))
+						.add("after", topic1After.get(student))
+					.build())
+					.add("topic2", Json.createObjectBuilder()
+						.add("before", topic2Before.get(student))
+						.add("after", topic2After.get(student))
+					.build())
+					.add("topic3", Json.createObjectBuilder()
+						.add("before", topic3Before.get(student))
+						.add("after", topic3After.get(student))
+					.build())
+					.add("topic4", Json.createObjectBuilder()
+						.add("before", topic4Before.get(student))
+						.add("after", topic4After.get(student))
+					.build())
+				.build());
 			}
-			result.add(info);
+			result.add(info.build());
 		}
 
 		response.getWriter().write(result.build().toString());
