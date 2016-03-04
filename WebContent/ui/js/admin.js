@@ -4,11 +4,19 @@
 	var resultSection = document.querySelector("section.results");
 
 	function addFileUpload(event) {
+		if (this.files && this.files[0].size > 1024 * 1024 * 50) {
+			alert("Error: file over 50MB");
+			this.value = null;
+		}
+
 		if (this.nextElementSibling) {
 			if (!this.value)
 				this.remove();
 			return;
 		}
+
+		if (!this.value)
+			return;
 
 		var input = document.createElement("input");
 		input.type = "file";
