@@ -140,7 +140,7 @@
 				}
 			});
 		};
-		xhr.open("POST", "/iPodia/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
+		xhr.open("POST", "/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
 	});
 	
@@ -158,7 +158,7 @@
 				return;
 			}
 
-			createResponseTable(response, ["Group", "Email", "Name", "Topic 1", "Topic 2", "Topic 3", "Topic 4"], function(item, index) {
+			createResponseTable(response, ["Group", "Email", "Name", "1", "2", "3", "4"], function(item, index) {
 				for (var key in item) {
 					var row = this.appendChild(document.createElement("tr"));
 
@@ -185,7 +185,7 @@
 				}
 			});
 		};
-		xhr.open("POST", "/iPodia/admin/analytics?id=" + parameters.id + "&num=" + parameters.num, true);
+		xhr.open("POST", "/admin/analytics?id=" + parameters.id + "&num=" + parameters.num, true);
 		xhr.send();
 	});
 

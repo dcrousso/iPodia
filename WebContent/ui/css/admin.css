@@ -43,3 +43,7 @@ main > .results > table * {
 	text-align: center;
 	border: 1px solid black;
 }
+
+main > .results > table > tr > td {
+	font-size: 75%;
+}
