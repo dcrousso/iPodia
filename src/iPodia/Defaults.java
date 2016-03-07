@@ -374,6 +374,17 @@ public class Defaults {
 		closeDBConnection();
 	}
 
+	public static String getGroupEmail(HashSet<User> members) {
+		String result = "";
+		int count = 0;
+		for (User u : members) {
+			result += u.getEmail();
+			if (count++ < members.size() - 1)
+				result += ",";
+		}
+		return result;
+	}
+
 	public static String urlEncode(String url) {
 		if (isEmpty(url))
 			return url;
