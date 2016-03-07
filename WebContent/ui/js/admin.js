@@ -166,12 +166,12 @@
 				return;
 			}
 
-			createResponseTable(response, ["Group", "Email", "Name", "1b", "1a", "2b", "2a", "3b", "3a", "4b", "4a"], function(item, index) {
+			createResponseTable(response, ["Group", "Email", "Name", "1b", "2b", "3b", "4b", "1a", "2a", "3a", "4a"], function(item, index) {
 				for (var key in item) {
 					var row = this.appendChild(document.createElement("tr"));
 
 					var groupNumber = row.appendChild(document.createElement("td"));
-					groupNumber.textContent = index;
+					groupNumber.textContent = index + 1;
 
 					var email = row.appendChild(document.createElement("td"));
 					email.textContent = key;
