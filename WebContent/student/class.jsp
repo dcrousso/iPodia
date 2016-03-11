@@ -131,7 +131,7 @@ Defaults.closeDBConnection();
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
 <% if (members.containsKey(question.getWeekId())) { %>
 				<p>
-					Teammates (<a href="mailto:<%= Defaults.getGroupEmail(members.get(question.getWeekId())) %>?subject=<%= className %> Week <%= question.getWeekNumber()) %>" title="Email group" target="_blank">message all</a>):
+					Teammates (<a href="mailto:<%= Defaults.getGroupEmail(members.get(question.getWeekId())) %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email group" target="_blank">message all</a>):
 <% int count = 0; for (User teammate : members.get(question.getWeekId())) { %>
 					<a href="mailto:<%= teammate.getEmail() %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email <%= teammate.getName() %>" target="_blank"><%= teammate.getName() %></a><%= (count < members.get(question.getWeekId()).size() - 1 ? ", " : "") %>
 <% ++count; } %>

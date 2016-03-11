@@ -347,7 +347,7 @@ public class Defaults {
 		return results;
 	}
 
-	public static void saveGroupNumbers(LinkedList<HashSet<String>> groups, String classId, String week) {
+	public static void saveGroupNumbers(LinkedList<HashSet<String>> groups, String classId, String week, String typeOfQuiz) {
 		if (isEmpty(classId) || isEmpty(week))
 			return;
 
@@ -358,7 +358,7 @@ public class Defaults {
 					String safeEmail = email.replace(beforeMatching, "").replace(afterMatching, "");
 					ps = getDBConnection().prepareStatement("UPDATE class_" + classId + "_matching SET " + safeEmail + " = ? WHERE id = ?");
 					ps.setString(1, Integer.toString(i + 1));
-					ps.setString(2, "Week" + week);
+					ps.setString(2, "Week" + week + typeOfQuiz);
 					ps.executeUpdate();
 					ps.close();
 				}
