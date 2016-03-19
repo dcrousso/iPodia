@@ -38,13 +38,13 @@ while (results.next()) {
 		continue;
 
 	if (!groups.containsKey(question.getWeekId())) {
-		PreparedStatement getMatch = Defaults.getDBConnection().prepareStatement("SELECT * FROM class_" + classId + "_matching where id = ?");
-		getMatch.setString(1, question.getWeekId());
+		PreparedStatement getMatch = Defaults.getDBConnection().prepareStatement("SELECT * FROM class_" + classId + "_matching where id LIKE ?");
+		getMatch.setString(1, question.getWeekId() + "%");
 		ResultSet matches = getMatch.executeQuery();
 		while (matches.next() && Defaults.columnExists(matches, user.getSafeEmail())) {
 			String groupId = matches.getString(user.getSafeEmail());
 			if (!Defaults.isEmpty(groupId))
-				groups.put(question.getWeekId(), groupId);
+				groups.put(matches.getString("id"), groupId);
 		}
 		matches.close();
 		getMatch.close();
@@ -98,6 +98,17 @@ Defaults.closeDBConnection();
 					In-Class Questions
 					<div title="Toggle Questions" class="chevron up"></div>
 				</h4>
+<% if (groups.containsKey(question.getWeekId() + "InClass")) { String chatId = Defaults.chatURL + Defaults.urlEncode(className) + "/" + question.getWeekId() + "-InClass/" + groups.get(question.getWeekId() + "InClass"); %>
+				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
+<% if (members.containsKey(question.getWeekId() + "InClass")) { %>
+				<p>
+					Teammates (<a href="mailto:<%= Defaults.getGroupEmail(members.get(question.getWeekId() + "InClass")) %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email group" target="_blank">message all</a>):
+<% int count = 0; for (User teammate : members.get(question.getWeekId() + "InClass")) { %>
+					<a href="mailto:<%= teammate.getEmail() %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email <%= teammate.getName() %>" target="_blank"><%= teammate.getName() %></a><%= (count < members.get(question.getWeekId() + "InClass").size() - 1 ? ", " : "") %>
+<% ++count; } %>
+				</p>
+<% } %>
+<% } %>
 				<form class="container" method="post" action="${pageContext.request.contextPath}/student/submitAnswers">
 					<input type="text" name="id" value="${param.id}" hidden>
 					<input type="text" name="user" value="${user.getSafeEmail()}<%= Defaults.beforeMatching %>" hidden>
