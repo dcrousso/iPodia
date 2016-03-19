@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.util.regex.Matcher;
 
 public class ProcessForm {
-	public static void processQuizUpload(QuizQuestion question, String classId) {
+	public static void processQuizUpload(QuizQuestion question, String classId, String typeOfQuiz) {
 		if (question == null || !question.isValid())
 			return;
 
@@ -26,12 +26,7 @@ public class ProcessForm {
 			ps.close();
 
 			ps = Defaults.getDBConnection().prepareStatement("REPLACE INTO class_" + classId + "_matching (id) VALUES (?)");
-			ps.setString(1, question.getWeekId());
-			ps.executeUpdate();
-			ps.close();
-			
-			ps = Defaults.getDBConnection().prepareStatement("REPLACE INTO class_" + classId + "_matching (id) VALUES (?)");
-			ps.setString(1, question.getWeekId() + "InClass");
+			ps.setString(1, question.getWeekId() + typeOfQuiz);
 			ps.executeUpdate();
 			ps.close();
 		} catch (SQLException e) {

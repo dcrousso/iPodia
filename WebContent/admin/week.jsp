@@ -38,7 +38,7 @@ if (request.getMethod().equals("POST")) {
 	for (Map.Entry<String, String[]> entry : request.getParameterMap().entrySet())
 		QuizQuestion.processRequestItem(inClass, entry.getKey(), entry.getValue()[0]); // Only should be one value per entry
 	for (QuizQuestion question : inClass.values())
-		ProcessForm.processQuizUpload(question, classId);
+		ProcessForm.processQuizUpload(question, classId, "InClass");
 }
 
 ArrayList<QuizQuestion> existing = new ArrayList<QuizQuestion>();

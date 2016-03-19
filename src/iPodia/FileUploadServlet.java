@@ -81,7 +81,7 @@ public class FileUploadServlet extends HttpServlet {
 		HashSet<QuizQuestion> existing = Defaults.getQuestionsForWeekTopic(classId, week);
 		for (QuizQuestion question : questionMap.values()) {
 			if (existing == null || !Defaults.contains(existing, item -> item.equalTo(question)))
-				ProcessForm.processQuizUpload(question, classId);
+				ProcessForm.processQuizUpload(question, classId, "");
 		}
 
 		Defaults.createFolderIfNotExists(Defaults.DATA_DIRECTORY + classId);
