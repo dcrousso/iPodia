@@ -98,13 +98,13 @@ Defaults.closeDBConnection();
 					In-Class Questions
 					<div title="Toggle Questions" class="chevron up"></div>
 				</h4>
-<% if (groups.containsKey(question.getWeekId() + "InClass")) { String chatId = Defaults.chatURL + Defaults.urlEncode(className) + "/" + question.getWeekId() + "-InClass/" + groups.get(question.getWeekId() + "InClass"); %>
+<% if (groups.containsKey(question.getWeekId() + "InClass")) { String chatId = Defaults.chatURL + Defaults.urlEncode(className) + "/" + question.getWeekId() + "InClass/" + groups.get(question.getWeekId() + "InClass"); %>
 				<a href="<%= chatId %>" title="Week <%= question.getWeekNumber() %> Group" target="_blank"><%= chatId %></a>
 <% if (members.containsKey(question.getWeekId() + "InClass")) { %>
 				<p>
-					Teammates (<a href="mailto:<%= Defaults.getGroupEmail(members.get(question.getWeekId() + "InClass")) %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email group" target="_blank">message all</a>):
+					Teammates (<a href="mailto:<%= Defaults.getGroupEmail(members.get(question.getWeekId() + "InClass")) %>?subject=<%= className %> Week <%= question.getWeekNumber() %> In Class" title="Email group" target="_blank">message all</a>):
 <% int count = 0; for (User teammate : members.get(question.getWeekId() + "InClass")) { %>
-					<a href="mailto:<%= teammate.getEmail() %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email <%= teammate.getName() %>" target="_blank"><%= teammate.getName() %></a><%= (count < members.get(question.getWeekId() + "InClass").size() - 1 ? ", " : "") %>
+					<a href="mailto:<%= teammate.getEmail() %>?subject=<%= className %> Week <%= question.getWeekNumber() %> In Class" title="Email <%= teammate.getName() %>" target="_blank"><%= teammate.getName() %></a><%= (count < members.get(question.getWeekId() + "InClass").size() - 1 ? ", " : "") %>
 <% ++count; } %>
 				</p>
 <% } %>
