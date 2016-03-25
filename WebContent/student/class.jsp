@@ -68,8 +68,10 @@ for (HashMap.Entry<String, String> entry : groups.entrySet()) {
 		continue;
 
 	HashSet<User> emails = new HashSet<User>();
-	for (String email : matched.get(Integer.parseInt(entry.getValue())))
-		emails.add(allStudents.get(email));
+	for (String email : matched.get(Integer.parseInt(entry.getValue()))) {
+		if (!email.equals(user.getSafeEmail()))
+			emails.add(allStudents.get(email));
+	}
 
 	if (!emails.isEmpty())
 		members.put(entry.getKey(), emails);
