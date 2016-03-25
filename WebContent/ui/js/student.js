@@ -7,4 +7,10 @@
 			item.lastElementChild.classList.toggle("up");
 		});
 	});
+
+	Array.prototype.forEach.call(document.querySelectorAll("form[method=\"post\"] > .item > .answer > p"), function(item) {
+		item.addEventListener("click", function(event) {
+			item.previousElementSibling.click();
+		});
+	});
 })();
