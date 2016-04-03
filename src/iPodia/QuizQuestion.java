@@ -215,6 +215,12 @@ public class QuizQuestion implements Comparable<QuizQuestion> {
 	public int compareTo(QuizQuestion other) {
 		// Ensures that questions in sooner weeks (meaning higher week numbers)
 		// are first in the list, but questions in that week are ordered normally
-		return m_id.compareTo(other.getId()) * (getWeekId().equals(other.getWeekId()) ? 1 : -1);
+		int left = Integer.parseInt(getWeekNumber());
+		int right = Integer.parseInt(other.getWeekNumber());
+		if (left < right)
+			return 1;
+		if (left > right)
+			return -1;
+		return 0;
 	}
 }
