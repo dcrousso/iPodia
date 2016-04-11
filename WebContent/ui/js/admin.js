@@ -119,38 +119,48 @@
 		resultSection.hidden = false;
 	}
 
-	document.querySelector("button.match").addEventListener("click", function() {
-		var type = this.classList.contains("in-class") ? "inClassMatching" : "beforeClassMatching";
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState != 4 || xhr.status != 200)
-				return;
-
-			var response = JSON.parse(xhr.responseText);
-			if (!resultSection) {
-				console.log(response);
-				alert("Error!  Missing result section!\nOpen console to see data.");
-				return;
-			}
-
-			createResponseTable(response, ["Group", "Email", "Name"], function(item, index) {
-				for (var key in item) {
-					var row = this.appendChild(document.createElement("tr"));
-
-					var groupNumber = row.appendChild(document.createElement("td"));
-					groupNumber.textContent = index;
-
-					var email = row.appendChild(document.createElement("td"));
-					email.textContent = key;
-
-					var name = row.appendChild(document.createElement("td"));
-					name.textContent = item[key];
+	var matchingElements = document.querySelectorAll("button.match");
+	for (var i = 0; i < matchingElements.length; ++i) {
+		matchingElements[i].addEventListener("click", function() {
+			var type = this.classList.contains("in-class") ? "inClassMatching" : "beforeClassMatching";
+			var algorithm = this.classList.contains("most-fair-algorithm") ? "mostFair": "recommendation";
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState != 4 || xhr.status != 200)
+					return;
+	
+				var response = JSON.parse(xhr.responseText);
+				if (!resultSection) {
+					console.log(response);
+					alert("Error!  Missing result section!\nOpen console to see data.");
+					return;
 				}
-			});
-		};
-		xhr.open("POST", "/admin/matching?type=" + type + "&id=" + parameters.id + "&num=" + parameters.num, true);
-		xhr.send();
-	});
+	
+				createResponseTable(response, ["Group", "Email", "Name"], function(item, index) {
+					for (var key in item) {
+						var row = this.appendChild(document.createElement("tr"));
+	
+						var groupNumber = row.appendChild(document.createElement("td"));
+						groupNumber.textContent = index;
+	
+						var email = row.appendChild(document.createElement("td"));
+						email.textContent = key;
+	
+						var name = row.appendChild(document.createElement("td"));
+						name.textContent = item[key];
+ 
+					}
+				});
+			};
+			xhr.open("POST", "/admin/matching?type=" + type + "&algorithm=" + algorithm + "&id=" + parameters.id + "&num=" + parameters.num, true);
+			xhr.send();
+		});
+	}
+	
+//	document.querySelector("button.generate-analytics").addEventListener("click", function() {
+//	});
+	
+	
 	
 	
 	document.querySelector("button.view-student-scores").addEventListener("click", function() {

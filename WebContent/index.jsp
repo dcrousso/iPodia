@@ -21,21 +21,24 @@ if (!Defaults.isEmpty(email) && !Defaults.isEmpty(password)) {
 	while (results.next()) {
 		if (!encryptedPassword.equals(results.getString("password")))
 			continue;
-
+		
 		user.initializeFromResultSet(results);
-		HashSet<String> classes = Defaults.arrayToHashSet(results.getString("classes").split(Defaults.CSV_REGEXP));
+		
+		//fixes null pointer issue if user has no classes like the registrar user
+		if (results.getString("classes") != null){
+			HashSet<String> classes = Defaults.arrayToHashSet(results.getString("classes").split(Defaults.CSV_REGEXP));
 
-		results.close();
-		ps.close();
-
-		ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM classListing");
-		results = ps.executeQuery();
-		while (results.next()) {
-			String classId = results.getString("id");
-			if (user.isRegistrar() || classes.contains(classId))
-				user.addClass(classId, results.getString("name"));
+			results.close();
+			ps.close();
+			ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM classListing");
+			results = ps.executeQuery();
+			while (results.next()) {
+				String classId = results.getString("id");
+				if (user.isRegistrar() || classes.contains(classId))
+					user.addClass(classId, results.getString("name"));
+			}
 		}
-
+		
 		results.close();
 		ps.close();
 		Defaults.closeDBConnection();

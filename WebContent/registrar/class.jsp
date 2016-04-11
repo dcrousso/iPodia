@@ -30,8 +30,12 @@ ps = Defaults.getDBConnection().prepareStatement("SELECT * FROM users");
 results = ps.executeQuery();
 while (results.next()) {
 	String classes = results.getString("classes");
-	if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
-		enrolled.add(new User(results));
+	//fixes null pointer error if a user doesn't have any classes
+	if (classes != null){
+		if (Arrays.asList(classes.split(Defaults.CSV_REGEXP)).contains(classId))
+			enrolled.add(new User(results));
+	}
+	
 }
 ps.close();
 results.close();

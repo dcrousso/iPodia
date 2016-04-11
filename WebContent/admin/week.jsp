@@ -70,9 +70,12 @@ boolean hasAllTopics = Defaults.contains(existing, question -> question.getTopic
 			<h1><a href="${pageContext.request.contextPath}/admin/class?id=${param.id}" title="Back to Class Page"><%= className %></a> - Week ${param.num}</h1>
 			<div class="options">
 				<%-- If there are in-class questions, we have already passed the point where matches could be made for that week's groupings --%>
-				<button class="match<%= (hasInClass ? " in-class" : "") %>" title="<%= (!hasInClass && !hasAllTopics ? "Must have a question for each topic" : (hasInClass ? "In Class Matching" : "Before Class Matching")) %>"<%= (!hasInClass && !hasAllTopics ? " disabled" : "") %>>Match Students</button>
+				<button class="most-fair-algorithm match<%= (hasInClass ? " in-class" : "") %>" title="<%= (!hasInClass && !hasAllTopics ? "Must have a question for each topic" : (hasInClass ? "In Class Matching" : "Before Class Matching")) %>"<%= (!hasInClass && !hasAllTopics ? " disabled" : "") %>>Optimal Match</button>
+				<button class="recommendation-algorithm match<%= (hasInClass ? " in-class" : "") %>" title="<%= (!hasInClass && !hasAllTopics ? "Must have a question for each topic" : (hasInClass ? "In Class Matching" : "Before Class Matching")) %>"<%= (!hasInClass && !hasAllTopics ? " disabled" : "") %>>Recommendation Match</button>
 				<button class="add-in-class-question">Add In-Class Question</button>
 				<button class="view-student-scores">View Student Scores</button>
+				<button class="generate-analytics">Generate Analytics</button>
+				
 			</div>
 			<section class="results" hidden></section>
 			<form class="in-class-questions" method="post"<%= (!hasInClass ? " hidden" : "") %>>

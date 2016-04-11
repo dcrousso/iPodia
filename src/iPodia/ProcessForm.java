@@ -29,6 +29,13 @@ public class ProcessForm {
 			ps.setString(1, question.getWeekId() + typeOfQuiz);
 			ps.executeUpdate();
 			ps.close();
+			
+			ps = Defaults.getDBConnection().prepareStatement("REPLACE INTO class_" + classId + "_matching (id) VALUES (?)");
+			ps.setString(1, question.getWeekId() + typeOfQuiz + "Recommendation");
+			ps.executeUpdate();
+			ps.close();
+			
+			
 		} catch (SQLException e) {
 		} finally {
 			try {

@@ -6,14 +6,29 @@ import java.util.LinkedList;
 import java.util.ArrayList;
 
 public class QuizMatching {
-	public static LinkedList<HashSet<String>> match(String classId, String week) {
+	public static LinkedList<HashSet<String>> recommendationMatch(String classId, String week) {
+
+		//when doing a recommendation match, you don't want to sort the students based on their scores so you 
+		//generate random groups and then can provide a recommendation for each specific group
+		LinkedList<HashMap.Entry<String, Integer>> listOfStudents = Defaults.buildListOfStudents(classId, "Week" + week + "Topic1" , false);
+		LinkedList<String> listOfStudentsEmails = new LinkedList<String>();
+
+		for (HashMap.Entry<String, Integer> student : listOfStudents) {
+			String email = student.getKey();
+			listOfStudentsEmails.add(email);	
+		}
+		LinkedList<HashSet<String>> groups = Defaults.buildGroupsFromListOfStudentsEmails(listOfStudentsEmails);
+		return groups;
+	}
+	
+	public static LinkedList<HashSet<String>> mostFairMatch(String classId, String week) {
 		LinkedList<LinkedList<String>> allSortedLists = new LinkedList<LinkedList<String>>(); 
 		ArrayList<Double> listOfAverageScores = new ArrayList<Double>();
 		HashMap<String, ArrayList<Integer>> studentScoresForEachTopic = new HashMap<String, ArrayList<Integer>>();
 
 		String [] topicNums = {"1", "2", "3", "4"};	
 		for (int i = 0; i < 4; ++i) {
-			LinkedList<HashMap.Entry<String, Integer>> sortedListForTopic = Defaults.buildSortedList(classId, "Week" + week + "Topic" + topicNums[i]);
+			LinkedList<HashMap.Entry<String, Integer>> sortedListForTopic = Defaults.buildListOfStudents(classId, "Week" + week + "Topic" + topicNums[i], true);
 			LinkedList<String> sortedListForTopicKeys = new LinkedList<String>();
 
 			for (HashMap.Entry<String, Integer> student : sortedListForTopic) {
@@ -39,7 +54,7 @@ public class QuizMatching {
 		for (HashSet<String> group : optimalGrouping)
 			optimalGroupingInitialDeviationForEntireSet += overallDeviationPerGroup(group, studentScoresForEachTopic, listOfAverageScores);
 
-		System.out.println("initial deviation for optimal = " + optimalGroupingInitialDeviationForEntireSet);
+		/*System.out.println("initial deviation for optimal = " + optimalGroupingInitialDeviationForEntireSet);
 		for (int i = 0; i < optimalGrouping.size(); ++i) {
 			System.out.println("Group " + (i + 1)+ ":");
 			HashSet<String> group = optimalGrouping.get(i);
@@ -52,7 +67,7 @@ public class QuizMatching {
 				}
 			}
 			System.out.println();
-		}
+		}*/
 
 		for (int i = 0; i < 10000; ++i) {
 			// if no groups swapped at all, end the for loop because already found the optimal grouping
@@ -64,7 +79,7 @@ public class QuizMatching {
 		for (HashSet<String> group : optimalGrouping)
 			deviationForEntireSet += overallDeviationPerGroup(group, studentScoresForEachTopic, listOfAverageScores);
 
-		System.out.println("After swaps " + deviationForEntireSet);
+		/*System.out.println("After swaps " + deviationForEntireSet);
 		for (int i = 0; i < optimalGrouping.size(); ++i){
 			System.out.println("Group " + (i + 1)+ ":");
 			HashSet<String> group = optimalGrouping.get(i);
@@ -77,7 +92,7 @@ public class QuizMatching {
 				}
 			}
 			System.out.println();
-		}
+		}*/
 
 		return optimalGrouping;
 	}
@@ -138,7 +153,7 @@ public class QuizMatching {
 		for (HashSet<String> group : optimalGrouping)
 			deviationForEntireSet += overallDeviationPerGroup(group, studentScoresForEachTopic, listOfAverageScores);
 
-		System.out.println("Entire deviation for set = " + deviationForEntireSet);
+		//System.out.println("Entire deviation for set = " + deviationForEntireSet);
 		return anySwapOccured;
 	}
 
@@ -172,7 +187,7 @@ public class QuizMatching {
 
 			// need to find avgScore before forming groups for the topic, because when you form groups, you remove items from the list
 			double avgScore = listOfAverageScores.get(i);
-			LinkedList<HashSet<String>> groupsForTopic = Defaults.buildGroupsFromSortedList(sortedListForTopicKeys);
+			LinkedList<HashSet<String>> groupsForTopic = Defaults.buildGroupsFromListOfStudentsEmails(sortedListForTopicKeys);
 
 			double overallDeviationForTopic = 0.0;
 			for (HashSet<String> group : groupsForTopic) {

@@ -11,15 +11,22 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
+
+import javax.json.Json;
+import javax.json.JsonArrayBuilder;
+import javax.json.JsonObjectBuilder;
+import javax.servlet.http.HttpServletResponse;
 
 public class Defaults {
 	public static final String dbDriver = "com.mysql.jdbc.Driver";
@@ -281,32 +288,37 @@ public class Defaults {
 		return map;
 	}
 
-	public static LinkedList<HashMap.Entry<String, Integer>> buildSortedList(String classId, String questionId) {
+	public static LinkedList<HashMap.Entry<String, Integer>> buildListOfStudents(String classId, String questionId, boolean shouldSort) {
 		HashMap<String, Integer> scores = getStudentScores(classId, questionId, beforeMatching);
 		if (scores == null)
 			return null;
 
 		LinkedList<HashMap.Entry<String, Integer>> list = new LinkedList<HashMap.Entry<String, Integer>>(scores.entrySet());
-		Collections.sort(list, (left, right) -> left.getValue().compareTo(right.getValue()));
+		
+		//if doing the most-fair algorithm, need to sort the list of students so they are ordered in the list by their score
+		//if you are doing the recommendation algorithm, you want random groups so don't sort the list
+		if (shouldSort) {
+			Collections.sort(list, (left, right) -> left.getValue().compareTo(right.getValue()));
+		}
 		return list;
 	}
 
-	public static LinkedList<HashSet<String>> buildGroupsFromSortedList(LinkedList<String> sortedList) {
+	public static LinkedList<HashSet<String>> buildGroupsFromListOfStudentsEmails(LinkedList<String> listOfStudentsEmails) {
 		LinkedList<HashSet<String>> groups = new LinkedList<HashSet<String>>();
-		while (!sortedList.isEmpty()) {
+		while (!listOfStudentsEmails.isEmpty()) {
 			HashSet<String> group = new HashSet<String>();
 			groups.add(group);
 
-			group.add(sortedList.removeFirst());
-			group.add(sortedList.removeLast());
-			if (sortedList.size() < 4) { // 5 or less students left, so make a group of everyone
-				while (!sortedList.isEmpty())
-					group.add(sortedList.removeFirst());
-			} else if (sortedList.size() > 4) { // 7+ students left, so take out 4 and make a group
-				group.add(sortedList.removeFirst());
-				group.add(sortedList.removeLast());
+			group.add(listOfStudentsEmails.removeFirst());
+			group.add(listOfStudentsEmails.removeLast());
+			if (listOfStudentsEmails.size() < 4) { // 5 or less students left, so make a group of everyone
+				while (!listOfStudentsEmails.isEmpty())
+					group.add(listOfStudentsEmails.removeFirst());
+			} else if (listOfStudentsEmails.size() > 4) { // 7+ students left, so take out 4 and make a group
+				group.add(listOfStudentsEmails.removeFirst());
+				group.add(listOfStudentsEmails.removeLast());
 			} else // 6 students left, so split into 3 and 3
-				group.add(sortedList.removeFirst());
+				group.add(listOfStudentsEmails.removeFirst());
 		}
 		return groups;
 	}
@@ -362,6 +374,83 @@ public class Defaults {
 					ps.executeUpdate();
 					ps.close();
 				}
+			}
+		} catch (SQLException e) {
+		} finally {
+			try {
+				if (ps != null && !ps.isClosed())
+					ps.close();
+			} catch (SQLException e) {
+			}
+		}
+		closeDBConnection();
+	}
+
+	public static HashMap<String, Integer> recommendTopicsForBeforeClassQuestions (LinkedList<HashSet<String>> groups, String classId, String week, String typeOfQuiz) {
+		HashMap<String, User> students = getStudentsBySafeEmailForClass(classId);
+		if (students == null) {
+			return null;
+		}
+
+		HashMap<String, Integer> topic1Before = getStudentScores(classId, "Week" + week + "Topic1%", beforeMatching);
+		HashMap<String, Integer> topic2Before = getStudentScores(classId, "Week" + week + "Topic2%", beforeMatching);
+		HashMap<String, Integer> topic3Before = getStudentScores(classId, "Week" + week + "Topic3%", beforeMatching);
+		HashMap<String, Integer> topic4Before = getStudentScores(classId, "Week" + week + "Topic4%", beforeMatching);
+		HashMap<String, Integer> recommendations = new HashMap<String, Integer>();
+
+		for (HashSet<String> group : groups) {
+			
+			int[] topicScoresForGroup = new int[4];
+			for (int i = 0; i < 4; i ++) {
+				topicScoresForGroup[i] = 0;
+			}
+
+			for (String student : group) {
+				if (!students.containsKey(student))
+					continue;
+				
+				topicScoresForGroup[0] += topic1Before.get(student);
+				topicScoresForGroup[1] += topic2Before.get(student);
+				topicScoresForGroup[2] += topic3Before.get(student);
+				topicScoresForGroup[3] += topic4Before.get(student);	
+			}
+			
+			//calculate the topic that this group did the worst on
+			int minTopicScore = topicScoresForGroup[0];
+			int recommendedTopicNumForGroup = 1;
+			for (int i = 1; i < 4; ++i) {
+				if (topicScoresForGroup[i] < minTopicScore) {
+					minTopicScore = topicScoresForGroup[i];
+					recommendedTopicNumForGroup = i+1;
+				}
+			}
+			
+			for (String student : group) {
+				if (!students.containsKey(student)) {
+					continue;
+				}
+				
+				//for each student in this group, give them the recommended topic that they should discuss
+				recommendations.put(student, recommendedTopicNumForGroup);
+				//System.out.println("student: " + student + " recommendation num = " +recommendedTopicNumForGroup);
+			}	
+		}	
+		saveRecommendations (recommendations, classId, week, typeOfQuiz);
+		return recommendations;
+	}
+	
+	private static void saveRecommendations (HashMap<String, Integer> recommendations, String classId, String week, String typeOfQuiz) {
+		if (isEmpty(classId) || isEmpty(week))
+			return;
+
+		PreparedStatement ps = null;
+		try {
+			for (Entry<String, Integer> entry : recommendations.entrySet()) {
+				ps = getDBConnection().prepareStatement("UPDATE class_" + classId + "_matching SET " + entry.getKey() + " = ? WHERE id = ?");
+				ps.setString(1, Integer.toString(entry.getValue()));
+				ps.setString(2, "Week" + week + typeOfQuiz + "Recommendation");
+				ps.executeUpdate();
+				ps.close();
 			}
 		} catch (SQLException e) {
 		} finally {

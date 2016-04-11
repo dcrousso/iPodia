@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -23,6 +24,12 @@ public class MatchingServlet extends HttpServlet {
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String type = request.getParameter("type");
 		if (Defaults.isEmpty(type)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+		
+		String algorithm = request.getParameter("algorithm");
+		if (Defaults.isEmpty(algorithm)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
@@ -46,12 +53,33 @@ public class MatchingServlet extends HttpServlet {
 		}
 
 		LinkedList<HashSet<String>> groups = null;
+		HashMap<String,Integer> recommendations = null;
+		boolean recommendTopic = false;
 		if (type.equals("inClassMatching")) {
-			groups = InClassMatching.match(classId, week);
-			Defaults.saveGroupNumbers(groups, classId, week, "InClass");
+			if (algorithm.equals("mostFair")){
+				groups = InClassMatching.mostFairMatch(classId, week);
+				Defaults.saveGroupNumbers(groups, classId, week, "InClass");
+			} else if (algorithm.equals("recommendation")){
+				//don't need to provide recommendations for in class questions because there is really only one topic
+				//for in class questions.  So this will just generate random groups, not optimal groups
+				groups = InClassMatching.recommendationMatch(classId, week);
+				Defaults.saveGroupNumbers(groups, classId, week, "InClass");
+			}
+			
 		} else if (type.equals("beforeClassMatching")) {
-			groups = QuizMatching.match(classId, week);
-			Defaults.saveGroupNumbers(groups, classId, week, "");
+			if (algorithm.equals("mostFair")){
+				groups = QuizMatching.mostFairMatch(classId, week);
+				Defaults.saveGroupNumbers(groups, classId, week, "");
+			} else if (algorithm.equals("recommendation")) {
+				groups = QuizMatching.recommendationMatch(classId, week);
+				Defaults.saveGroupNumbers(groups, classId, week, "");
+				
+				//only need to provide a recommendation for before class questions because there are multiple topics
+				//for before class questions but not for in class questions
+				recommendations = Defaults.recommendTopicsForBeforeClassQuestions(groups, classId, week, "");
+				recommendTopic = true;
+			}
+			
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
@@ -62,12 +90,12 @@ public class MatchingServlet extends HttpServlet {
 			JsonObjectBuilder info = Json.createObjectBuilder();
 			for (String safeEmail : group) {
 				User u = students.get(safeEmail);
-				if (u != null)
+				if (u != null) {
 					info.add(u.getEmail(), u.getName());
+				}
 			}
 			result.add(info);
 		}
-
 		response.getWriter().write(result.build().toString());
 	}
 }

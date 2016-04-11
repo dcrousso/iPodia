@@ -10,6 +10,7 @@ if (!user.isAuthenticated() || !user.isRegistrar()) {
 }
 
 String newClass = request.getParameter("newClass");
+
 if (!Defaults.isEmpty(newClass)) {
 	PreparedStatement ps;
 
@@ -51,10 +52,11 @@ if (!Defaults.isEmpty(newClass)) {
 
 		classes.close();
 		ps.close();
-
+		
 		response.sendRedirect(request.getContextPath() + "/registrar/class?id=" + newClassId);
 		return;
 	}
+	
 
 	classes.close();
 	ps.close();
