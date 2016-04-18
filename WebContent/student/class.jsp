@@ -149,6 +149,12 @@ Defaults.closeDBConnection();
 					<a href="mailto:<%= teammate.getEmail() %>?subject=<%= className %> Week <%= question.getWeekNumber() %>" title="Email <%= teammate.getName() %>" target="_blank"><%= teammate.getName() %></a><%= (count < members.get(question.getWeekId()).size() - 1 ? ", " : "") %>
 <% ++count; } %>
 				</p>
+<% String recommendationTopicNum = groups.get(question.getWeekId() + "Recommendation");
+	if (!Defaults.isEmpty(recommendationTopicNum)) { %>
+<p> Recommended Discussion Topic Number: <b><%= recommendationTopicNum %>  </b></p>
+
+<% } %>
+
 <% } %>
 <% } %>
 <% } %>

@@ -16,6 +16,7 @@ public class User {
 	private String m_name;
 	private String m_university;
 	private HashMap<Integer, String> m_classes;
+	private String recommendedTopicNum;
 
 	public User() {
 		m_type = null;
@@ -23,6 +24,7 @@ public class User {
 		m_name = null;
 		m_university = null;
 		m_classes = new HashMap<Integer, String>();
+		recommendedTopicNum = "";
 	}
 
 	public User(ResultSet rs) throws SQLException {
@@ -133,5 +135,13 @@ public class User {
 
 	public String getClassName(String classId) {
 		return getClassName(Integer.parseInt(classId));
+	}
+	
+	public void setRecommendedTopicNum (String num) {
+		recommendedTopicNum = num;
+	}
+	
+	public String getRecommendedTopicNum() {
+		return recommendedTopicNum;
 	}
 }
