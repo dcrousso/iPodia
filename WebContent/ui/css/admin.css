@@ -47,3 +47,13 @@ main > .results > table * {
 main > .results > table > tr > td {
 	font-size: 75%;
 }
+
+main > form > section button.ajax-delete {
+	display: inline-block;
+	height: auto;
+	margin: 0;
+	padding: 1px 4px;
+	font-size: x-small;
+	line-height: normal;
+	vertical-align: 2px;
+}

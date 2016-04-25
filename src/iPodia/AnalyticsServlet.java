@@ -16,10 +16,6 @@ public class AnalyticsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect(request.getContextPath() + "/");
-	}
-
-	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String classId = request.getParameter("id");
 		if (Defaults.isEmpty(classId)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -85,5 +81,9 @@ public class AnalyticsServlet extends HttpServlet {
 		}
 
 		response.getWriter().write(result.build().toString());
+	}
+
+	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.sendRedirect(request.getContextPath() + "/");
 	}
 }

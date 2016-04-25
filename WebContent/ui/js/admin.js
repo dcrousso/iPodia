@@ -1,6 +1,19 @@
 (function() {
 	"use strict";
 
+	function ajax(method, url, callback) {
+		var xhr = new XMLHttpRequest();
+		xhr.onreadystatechange = function() {
+			if (xhr.readyState !== 4 || xhr.status !== 200)
+				return;
+
+			if (typeof callback === "function")
+				callback(xhr);
+		};
+		xhr.open(method, url, true);
+		xhr.send();
+	}
+
 	var resultSection = document.querySelector("section.results");
 
 	function addFileUpload(event) {
@@ -24,8 +37,24 @@
 		input.addEventListener("change", addFileUpload);
 		this.parentElement.appendChild(input);
 	}
-	Array.prototype.forEach.call(document.querySelectorAll("input[type=\"file\"]"), function(item) {
-		item.addEventListener("change", addFileUpload);
+	Array.prototype.forEach.call(document.querySelectorAll("input[type=\"file\"]"), function(element) {
+		element.addEventListener("change", addFileUpload);
+	});
+
+	function deleteFile(event) {
+		var sibling = this.previousElementSibling;
+		if (sibling) {
+			if (sibling.textContent)
+				ajax("GET", "/admin/uploadWeekData?" + "id=" + parameters.id + "&num=" + parameters.num + "&file=" + sibling.textContent);
+
+			sibling.remove();
+		}
+
+		this.parentElement.remove();
+		this.remove();
+	}
+	Array.prototype.forEach.call(document.querySelectorAll("button.ajax-delete"), function(element) {
+		element.addEventListener("click", deleteFile);
 	});
 
 	function addQuestion(event) {
@@ -124,11 +153,7 @@
 		matchingElements[i].addEventListener("click", function() {
 			var type = this.classList.contains("in-class") ? "inClassMatching" : "beforeClassMatching";
 			var algorithm = this.classList.contains("most-fair-algorithm") ? "mostFair": "recommendation";
-			var xhr = new XMLHttpRequest();
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState != 4 || xhr.status != 200)
-					return;
-	
+			ajax("POST", "/admin/matching?type=" + type + "&algorithm=" + algorithm + "&id=" + parameters.id + "&num=" + parameters.num, function(xhr) {
 				var response = JSON.parse(xhr.responseText);
 				if (!resultSection) {
 					console.log(response);
@@ -151,24 +176,12 @@
  
 					}
 				});
-			};
-			xhr.open("POST", "/admin/matching?type=" + type + "&algorithm=" + algorithm + "&id=" + parameters.id + "&num=" + parameters.num, true);
-			xhr.send();
+			});
 		});
 	}
-	
-//	document.querySelector("button.generate-analytics").addEventListener("click", function() {
-//	});
-	
-	
-	
-	
-	document.querySelector("button.view-student-scores").addEventListener("click", function() {
-		var xhr = new XMLHttpRequest();
-		xhr.onreadystatechange = function() {
-			if (xhr.readyState != 4 || xhr.status != 200)
-				return;
 
+	document.querySelector("button.view-student-scores").addEventListener("click", function() {
+		ajax("GET", "/admin/analytics?id=" + parameters.id + "&num=" + parameters.num, function(xhr) {
 			var response = JSON.parse(xhr.responseText);
 			if (!resultSection) {
 				console.log(response);
@@ -214,9 +227,7 @@
 					topic4After.textContent = item[key].topic4.after;
 				}
 			});
-		};
-		xhr.open("POST", "/admin/analytics?id=" + parameters.id + "&num=" + parameters.num, true);
-		xhr.send();
+		});
 	});
 
 	var inClassQuestions = document.querySelector(".in-class-questions");

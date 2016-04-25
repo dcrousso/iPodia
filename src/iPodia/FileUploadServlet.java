@@ -22,10 +22,42 @@ public class FileUploadServlet extends HttpServlet {
 	private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50; // 50MB
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		response.sendRedirect(request.getContextPath() + "/");
+		User user = ((User) request.getSession().getAttribute("user"));
+		if (user == null || !user.isAdmin())
+			return;
+
+		String classId = request.getParameter("id");
+		if (Defaults.isEmpty(classId)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		String week = request.getParameter("num");
+		if (Defaults.isEmpty(classId)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		String filename = request.getParameter("file");
+		if (Defaults.isEmpty(filename)) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		File file = new File(Defaults.DATA_DIRECTORY + classId + "/" + week + "/" + filename);
+		if (!file.exists()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
+		file.delete();
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = ((User) request.getSession().getAttribute("user"));
+		if (user == null || !user.isAdmin())
+			return;
+
 		// Check that we have a file upload request
 		if (!ServletFileUpload.isMultipartContent(request))
 			return;

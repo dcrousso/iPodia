@@ -98,7 +98,10 @@ boolean hasAllTopics = Defaults.contains(existing, question -> question.getTopic
 <% if (folder.exists() && folder.isDirectory()) { %>
 					<ul>
 <% for (File f : folder.listFiles()) { %>
-						<li><a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a></li>
+						<li>
+							<a href="${pageContext.request.contextPath}/data?class=${param.id}&week=${param.num}&file=<%= Defaults.urlEncode(f.getName()) %>" target="_blank" title="<%= f.getName() %>"><%= f.getName() %></a>
+							<button class="ajax-delete" title="Remove">X</button>
+						</li>
 <% } %>
 					</ul>
 <% } %>
