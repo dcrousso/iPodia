@@ -7,7 +7,6 @@ import java.util.ArrayList;
 
 public class QuizMatching {
 	public static LinkedList<HashSet<String>> recommendationMatch(String classId, String week) {
-
 		//when doing a recommendation match, you don't want to sort the students based on their scores so you 
 		//generate random groups and then can provide a recommendation for each specific group
 		LinkedList<HashMap.Entry<String, Integer>> listOfStudents = Defaults.buildListOfStudents(classId, "Week" + week + "Topic1" , false);
@@ -17,8 +16,8 @@ public class QuizMatching {
 			String email = student.getKey();
 			listOfStudentsEmails.add(email);	
 		}
-		LinkedList<HashSet<String>> groups = Defaults.buildGroupsFromListOfStudentsEmails(listOfStudentsEmails);
-		return groups;
+
+		return Defaults.buildGroupsFromListOfStudentsEmails(listOfStudentsEmails);
 	}
 	
 	public static LinkedList<HashSet<String>> mostFairMatch(String classId, String week) {
@@ -49,50 +48,12 @@ public class QuizMatching {
 			listOfAverageScores.add(avgScore);
 		}
 
-		double optimalGroupingInitialDeviationForEntireSet = 0.0;
 		LinkedList<HashSet<String>> optimalGrouping = findOptimalInitialGrouping(allSortedLists, studentScoresForEachTopic, listOfAverageScores);
-		for (HashSet<String> group : optimalGrouping)
-			optimalGroupingInitialDeviationForEntireSet += overallDeviationPerGroup(group, studentScoresForEachTopic, listOfAverageScores);
-
-		/*System.out.println("initial deviation for optimal = " + optimalGroupingInitialDeviationForEntireSet);
-		for (int i = 0; i < optimalGrouping.size(); ++i) {
-			System.out.println("Group " + (i + 1)+ ":");
-			HashSet<String> group = optimalGrouping.get(i);
-			for (String email : group) {
-				System.out.println(email + "---");
-				ArrayList<Integer> studentScoreList = studentScoresForEachTopic.get(email);
-				for (int k = 0; k < studentScoreList.size(); ++k) {
-					System.out.print("Topic " + (k + 1) +": " + studentScoreList.get(k) + " ");
-					System.out.println();
-				}
-			}
-			System.out.println();
-		}*/
-
 		for (int i = 0; i < 10000; ++i) {
 			// if no groups swapped at all, end the for loop because already found the optimal grouping
 			if (!performSwap(optimalGrouping, studentScoresForEachTopic, listOfAverageScores))
 				break;
 		}
-
-		double deviationForEntireSet = 0.0;
-		for (HashSet<String> group : optimalGrouping)
-			deviationForEntireSet += overallDeviationPerGroup(group, studentScoresForEachTopic, listOfAverageScores);
-
-		/*System.out.println("After swaps " + deviationForEntireSet);
-		for (int i = 0; i < optimalGrouping.size(); ++i){
-			System.out.println("Group " + (i + 1)+ ":");
-			HashSet<String> group = optimalGrouping.get(i);
-			for (String email : group) {
-				System.out.println(email + "---");
-				ArrayList<Integer> studentScoreList = studentScoresForEachTopic.get(email);
-				for (int k = 0; k < studentScoreList.size(); ++k) {
-					System.out.print("Topic " + (k + 1) +": " + studentScoreList.get(k) + "   ");
-					System.out.println();
-				}
-			}
-			System.out.println();
-		}*/
 
 		return optimalGrouping;
 	}
@@ -149,11 +110,6 @@ public class QuizMatching {
 			}
 		}
 
-		double deviationForEntireSet = 0.0;
-		for (HashSet<String> group : optimalGrouping)
-			deviationForEntireSet += overallDeviationPerGroup(group, studentScoresForEachTopic, listOfAverageScores);
-
-		//System.out.println("Entire deviation for set = " + deviationForEntireSet);
 		return anySwapOccured;
 	}
 

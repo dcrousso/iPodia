@@ -11,7 +11,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,11 +21,6 @@ import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
-
-import javax.json.Json;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObjectBuilder;
-import javax.servlet.http.HttpServletResponse;
 
 public class Defaults {
 	public static final String dbDriver = "com.mysql.jdbc.Driver";
@@ -294,12 +288,14 @@ public class Defaults {
 			return null;
 
 		LinkedList<HashMap.Entry<String, Integer>> list = new LinkedList<HashMap.Entry<String, Integer>>(scores.entrySet());
-		
-		//if doing the most-fair algorithm, need to sort the list of students so they are ordered in the list by their score
-		//if you are doing the recommendation algorithm, you want random groups so don't sort the list
-		if (shouldSort) {
+
+		// if doing the most-fair algorithm, need to sort the list of students so they are ordered in the list by their score
+		// if you are doing the recommendation algorithm, you want random groups so don't sort the list
+		if (shouldSort)
 			Collections.sort(list, (left, right) -> left.getValue().compareTo(right.getValue()));
-		}
+		else
+			Collections.shuffle(list);
+
 		return list;
 	}
 
@@ -388,9 +384,8 @@ public class Defaults {
 
 	public static HashMap<String, Integer> recommendTopicsForBeforeClassQuestions (LinkedList<HashSet<String>> groups, String classId, String week, String typeOfQuiz) {
 		HashMap<String, User> students = getStudentsBySafeEmailForClass(classId);
-		if (students == null) {
+		if (students == null)
 			return null;
-		}
 
 		HashMap<String, Integer> topic1Before = getStudentScores(classId, "Week" + week + "Topic1%", beforeMatching);
 		HashMap<String, Integer> topic2Before = getStudentScores(classId, "Week" + week + "Topic2%", beforeMatching);
@@ -399,22 +394,20 @@ public class Defaults {
 		HashMap<String, Integer> recommendations = new HashMap<String, Integer>();
 
 		for (HashSet<String> group : groups) {
-			
 			int[] topicScoresForGroup = new int[4];
-			for (int i = 0; i < 4; i ++) {
+			for (int i = 0; i < 4; i ++)
 				topicScoresForGroup[i] = 0;
-			}
 
 			for (String student : group) {
 				if (!students.containsKey(student))
 					continue;
-				
+
 				topicScoresForGroup[0] += topic1Before.get(student);
 				topicScoresForGroup[1] += topic2Before.get(student);
 				topicScoresForGroup[2] += topic3Before.get(student);
 				topicScoresForGroup[3] += topic4Before.get(student);	
 			}
-			
+
 			//calculate the topic that this group did the worst on
 			int minTopicScore = topicScoresForGroup[0];
 			int recommendedTopicNumForGroup = 1;
@@ -424,18 +417,17 @@ public class Defaults {
 					recommendedTopicNumForGroup = i+1;
 				}
 			}
-			
+
 			for (String student : group) {
-				if (!students.containsKey(student)) {
+				if (!students.containsKey(student))
 					continue;
-				}
-				
+
 				//for each student in this group, give them the recommended topic that they should discuss
 				recommendations.put(student, recommendedTopicNumForGroup);
-				//System.out.println("student: " + student + " recommendation num = " +recommendedTopicNumForGroup);
-			}	
-		}	
-		saveRecommendations (recommendations, classId, week, typeOfQuiz);
+			}
+		}
+
+		saveRecommendations(recommendations, classId, week, typeOfQuiz);
 		return recommendations;
 	}
 	

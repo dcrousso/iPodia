@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.Map.Entry;
 
 import javax.json.Json;
 import javax.json.JsonArrayBuilder;
@@ -59,8 +58,6 @@ public class MatchingServlet extends HttpServlet {
 		}
 
 		LinkedList<HashSet<String>> groups = null;
-		HashMap<String,Integer> recommendations = null;
-		boolean recommendTopic = false;
 		if (type.equals("inClassMatching")) {
 			if (algorithm.equals("mostFair")){
 				groups = InClassMatching.mostFairMatch(classId, week);
@@ -71,7 +68,6 @@ public class MatchingServlet extends HttpServlet {
 				groups = InClassMatching.recommendationMatch(classId, week);
 				Defaults.saveGroupNumbers(groups, classId, week, "InClass");
 			}
-			
 		} else if (type.equals("beforeClassMatching")) {
 			if (algorithm.equals("mostFair")){
 				groups = QuizMatching.mostFairMatch(classId, week);
@@ -79,13 +75,11 @@ public class MatchingServlet extends HttpServlet {
 			} else if (algorithm.equals("recommendation")) {
 				groups = QuizMatching.recommendationMatch(classId, week);
 				Defaults.saveGroupNumbers(groups, classId, week, "");
-				
+
 				//only need to provide a recommendation for before class questions because there are multiple topics
 				//for before class questions but not for in class questions
-				recommendations = Defaults.recommendTopicsForBeforeClassQuestions(groups, classId, week, "");
-				recommendTopic = true;
+				Defaults.recommendTopicsForBeforeClassQuestions(groups, classId, week, "");
 			}
-			
 		} else {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
