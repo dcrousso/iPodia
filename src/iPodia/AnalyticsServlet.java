@@ -16,8 +16,14 @@ public class AnalyticsServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = ((User) request.getSession().getAttribute("user"));
+		if (user == null || !user.isAdmin()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
 		String classId = request.getParameter("id");
-		if (Defaults.isEmpty(classId)) {
+		if (Defaults.isEmpty(classId) || !user.hasClass(classId)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}

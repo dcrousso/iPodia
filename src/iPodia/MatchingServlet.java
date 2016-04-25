@@ -22,12 +22,18 @@ public class MatchingServlet extends HttpServlet {
 	}
 
 	public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		User user = ((User) request.getSession().getAttribute("user"));
+		if (user == null || !user.isAdmin()) {
+			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
+			return;
+		}
+
 		String type = request.getParameter("type");
 		if (Defaults.isEmpty(type)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
-		
+
 		String algorithm = request.getParameter("algorithm");
 		if (Defaults.isEmpty(algorithm)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
@@ -35,7 +41,7 @@ public class MatchingServlet extends HttpServlet {
 		}
 
 		String classId = request.getParameter("id");
-		if (Defaults.isEmpty(classId)) {
+		if (Defaults.isEmpty(classId) || !user.hasClass(classId)) {
 			response.sendError(HttpServletResponse.SC_BAD_REQUEST);
 			return;
 		}
